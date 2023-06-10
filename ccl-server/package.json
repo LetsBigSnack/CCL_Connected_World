@@ -1,0 +1,23 @@
+{
+  "name": "ccl-server",
+  "version": "1.0.0",
+  "description": "This is the Backend for the CCL Connected World",
+  "main": "app.js",
+  "scripts": {
+    "dev" : "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LetsBigSnack/CCL_Connected_World.git"
+  },
+  "author": "David Kupert (cc221019)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LetsBigSnack/CCL_Connected_World/issues"
+  },
+  "homepage": "https://github.com/LetsBigSnack/CCL_Connected_World#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^2.0.22"
+  }
+}
