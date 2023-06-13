@@ -2,7 +2,7 @@
 const { validationResult } = require('express-validator');
 //// Models
 const userModel = require("../models/userModel");
-
+const userPictureModel = require("../models/userPictureModel");
 
 //// Functions
 
@@ -143,6 +143,75 @@ function deleteUser(req,res,next){
         });
 }
 
+//TODO change image upload;
+async function uploadImage(req,res,next){
+    console.log(req.files.image);
+    try{
+        if(!req.files){
+            let jsonReturnObject = {
+                success : false,
+                error: "No file was send"
+            }
+            res.status(400);
+            res.send(jsonReturnObject);
+        }else{
+            let image = req.files.image;
+            if(!image){
+                let jsonReturnObject = {
+                    success : false,
+                    error: "No picture was specified"
+                }
+                res.status(400);
+                res.send(jsonReturnObject);
+            }else{
+                const validImageTypes = ['image/gif', 'image/jpeg', 'image/png']
+                if(validImageTypes.includes(image.mimetype)){
+                    //TODO change file extension
+                    let filename = './public/userImages/'+req.params.userID + '.jpg';
+                    image.mv(filename);
+                    console.log('Saved Picture to: '+ filename);
+                    //TODO change horrible code
+                    let userPictureArray = await userPictureModel.getUserPictures();
+                    userPictureModel.uploadPicture(parseInt(req.params.userID), "userImages/"+req.params.userID + ".jpg", userPictureArray)
+                        .then(userPicture => {
+                            res.send({
+                                success : true,
+                                data: {
+                                    name: filename,
+                                    size: image.size
+                                }
+                            });
+                        })
+                        .catch(error => {
+                            let jsonReturnObject = {
+                                success : false,
+                                error: error
+                            }
+                            res.status(500);
+                            res.send(jsonReturnObject);
+                        });
+
+                }else{
+                    let jsonReturnObject = {
+                        success : false,
+                        error: "Picture was the wrong file extension"
+                    }
+                    res.status(400);
+                    res.send(jsonReturnObject);
+                }
+            }
+        }
+    }catch (error){
+        let jsonReturnObject = {
+            success : false,
+            error: error
+        }
+        res.status(500);
+        res.send(jsonReturnObject);
+    }
+
+}
+
 
 //// Exports
 module.exports = {
@@ -150,5 +219,6 @@ module.exports = {
     getUser,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    uploadImage
 };

@@ -31,8 +31,11 @@ let getUsers = () => new Promise((resolve, reject) => {
  * @returns A an object which represents the user
  */
 let getUser = (userID) => new Promise((resolve, reject) => {
-    let sql = "SELECT * FROM users WHERE userID ="+ db.escape(userID);
-
+    let sql = "SELECT * FROM users " +
+                "INNER JOIN userPictures "+
+                "ON users.userID = userPictures.userID "+
+                "WHERE users.userID = "+ db.escape(userID);
+    console.log(sql);
     db.query(sql, function (err, user, fields) {
         if (err) {
             reject({

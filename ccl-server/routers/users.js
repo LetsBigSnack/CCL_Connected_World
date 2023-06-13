@@ -22,5 +22,8 @@ router.route('/:userID')
     .put(userController.updateUser)
     .delete(userController.deleteUser);
 
+router.route('/:userID/picture')
+    .post(userController.uploadImage);
+
 //// Modules
 module.exports = router;
