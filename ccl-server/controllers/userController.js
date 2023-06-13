@@ -170,9 +170,8 @@ async function uploadImage(req,res,next){
                     let filename = './public/userImages/'+req.params.userID + '.jpg';
                     image.mv(filename);
                     console.log('Saved Picture to: '+ filename);
-                    //TODO change horrible code
-                    let userPictureArray = await userPictureModel.getUserPictures();
-                    userPictureModel.uploadPicture(parseInt(req.params.userID), "userImages/"+req.params.userID + ".jpg", userPictureArray)
+                   ;
+                    userPictureModel.uploadPicture(parseInt(req.params.userID), "userImages/"+req.params.userID + ".jpg")
                         .then(userPicture => {
                             res.send({
                                 success : true,

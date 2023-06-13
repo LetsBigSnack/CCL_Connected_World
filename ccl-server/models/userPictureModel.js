@@ -26,32 +26,37 @@ let getUserPictures = () => new Promise((resolve, reject) => {
  * This function access the DB and retrieves all the users
  * @returns A list of all Users within the DB
  */
-let uploadPicture = (userID, picturePath, userPictureArray) => new Promise((resolve, reject) => {
+let uploadPicture = (userID, picturePath) => new Promise((resolve, reject) => {
 
-    console.log(userPictureArray);
-    if(userPictureArray.find(elem => elem.userID === userID)){
-        sql = "UPDATE userPictures " +
-            "SET userPicturePath = "+db.escape(picturePath)+" "+
-            "WHERE userID = "+ db.escape(userID);
-    }else{
-        console.log("false");
-        sql = "INSERT INTO userPictures (userID, userPicturePath)" +
-            " VALUES (" +  db.escape(userID) +
-            "," + db.escape(picturePath) +
-            ")";
-    }
-
-    db.query(sql, function (err, userPictures, fields) {
-        if (err) {
-            reject({
-                status: 500,
-                msg: err
-            });
+    getUserPictures().then(userPictureArray => {
+        if(userPictureArray.find(elem => elem.userID === userID)){
+            sql = "UPDATE userPictures " +
+                "SET userPicturePath = "+db.escape(picturePath)+" "+
+                "WHERE userID = "+ db.escape(userID);
         }else{
-            resolve(userPictures)
+            console.log("false");
+            sql = "INSERT INTO userPictures (userID, userPicturePath)" +
+                " VALUES (" +  db.escape(userID) +
+                "," + db.escape(picturePath) +
+                ")";
         }
-    })
 
+        db.query(sql, function (err, userPictures, fields) {
+            if (err) {
+                reject({
+                    status: 500,
+                    msg: err
+                });
+            }else{
+                resolve(userPictures)
+            }
+        })
+    }).catch(error => {
+        reject({
+            status: 500,
+            msg: error
+        });
+    })
 })
 
 //// Exports
