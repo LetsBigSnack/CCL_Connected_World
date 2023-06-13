@@ -6,6 +6,20 @@ defineProps({
 })
 
 const count = ref(0)
+async function testy(){
+  let test = await fetch('http://127.0.0.1:3000/api/news', {
+    method: 'POST',
+    redirect: 'follow',
+    credentials: 'include',
+    body: JSON.stringify({
+      first_name: 'John',
+      last_name: 'Doe'
+    })
+  });
+  console.log(test);
+}
+testy();
+
 </script>
 
 <template>

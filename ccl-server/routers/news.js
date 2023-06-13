@@ -9,7 +9,16 @@ const router = express.Router();
 
 
 router.route('/')
-    .get(newsController.getNews);
+    .get(newsController.getNews)
+    .post((req,res,next) => {
+        res.cookie("test", "199", {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none'
+        });
+        res.sendStatus(200);
+    });
+
 
 
 //// Modules

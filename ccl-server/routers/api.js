@@ -10,7 +10,7 @@ const patchnotesRouter = require("../routers/patches");
 const newsRouter = require("../routers/news");
 const championsRouter = require("../routers/champions");
 const walletRouter = require("./wallet");
-
+const userChampionsRouter = require("../routers/userChampion")
 
 //// Routes
 const router = express.Router();
@@ -20,6 +20,7 @@ router.use("/patchnotes", patchnotesRouter);
 router.use("/news", newsRouter);
 router.use("/champions", championsRouter);
 router.use("/wallet", walletRouter);
+router.use("/userChampions", userChampionsRouter);
 
 
 //// Exports
