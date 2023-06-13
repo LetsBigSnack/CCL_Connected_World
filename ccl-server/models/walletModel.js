@@ -27,10 +27,10 @@ let getUserWallet = (userID) => new Promise((resolve, reject) => {
     })
 });
 
-let buyChampion = (buyData) => new Promise((resolve, reject) => {
+let changeAmount = (buyData) => new Promise((resolve, reject) => {
     let sql = "UPDATE userWallets " +
-        "SET userWalletAmount = "+ db.escape(buyData.walletAmount)+" "+
-        "WHERE userID = "+ db.escape(buyData.userID);
+        "SET userWalletAmount = "+ db.escape(parseInt(buyData.walletAmount))+" "+
+        "WHERE userID = "+ db.escape(parseInt(buyData.userID));
 
     console.log(sql);
     db.query(sql, function (err, result, fields){
@@ -45,8 +45,28 @@ let buyChampion = (buyData) => new Promise((resolve, reject) => {
     })
 });
 
+let createWallet = (userID) => new Promise((resolve, reject) => {
+    let sql = "INSERT INTO userWallets " +
+        "(userID, userWalletAmount) " +
+        "VALUES ("+db.escape(userID)+", 500);"
+
+    console.log(sql);
+    db.query(sql, function (err, result, fields){
+        if(err) {
+            reject({
+                status: 500,
+                msg: err
+            });
+        }else{
+            resolve(result);
+        }
+    })
+});
+
+
 //// Exports
 module.exports = {
     getUserWallet,
-    buyChampion
+    changeAmount,
+    createWallet
 };

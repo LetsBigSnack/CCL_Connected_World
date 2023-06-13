@@ -19,6 +19,13 @@ router.route('/buy')
         ],
         walletController.buyChampion);
 
+router.route('/add')
+    .post([
+            body('userID').exists().withMessage('userID is required.'),
+            body('walletAmount').exists().withMessage('amount is required.')
+        ],
+        walletController.addFunds);
+
 router.route('/:userID')
     .get(walletController.getUserWallet);
 

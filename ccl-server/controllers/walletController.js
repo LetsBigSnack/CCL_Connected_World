@@ -70,7 +70,7 @@ async function buyChampion(req, res, next) {
     });
     req.body.walletAmount = parseInt(userWallet.userWalletAmount) - parseInt(champion.championPrice);
     if(checkFunds(champion.championPrice, userWallet.userWalletAmount)){
-        walletModel.buyChampion(req.body)
+        walletModel.changeAmount(req.body)
             .then(data => {
                 data.userWalletID = userWallet.userWalletID;
                 data.transactionAmount = -champion.championPrice;
@@ -116,6 +116,68 @@ async function buyChampion(req, res, next) {
 
 }
 
+
+
+async function addFunds(req, res, next) {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        let jsonReturnObject = {
+            success : false,
+            error: errors.errors
+        }
+        res.status(400);
+        return res.send(jsonReturnObject);
+    }else{
+        let userWallet = await walletModel.getUserWallet(parseInt(req.body.userID))
+            .then(data => {return data}).catch(error => {
+                let jsonReturnObject = {
+                    success : false,
+                    error: error
+                }
+                res.status(500);
+                return res.send(jsonReturnObject);
+            });
+        let addFunds = parseInt(req.body.walletAmount);
+        req.body.walletAmount = userWallet.userWalletAmount + addFunds;
+        walletModel.changeAmount(req.body)
+            .then(data => {
+                data.userWalletID = userWallet.userWalletID;
+                data.transactionAmount = +addFunds;
+                data.transactionDescription = "User: " + req.body.userID + " added funds";
+
+                Promise.all([transactionModel.createTransaction(data)])
+                    .then(place => {
+                        let jsonReturnObject = {
+                            success : true,
+                            data: data.transactionDescription
+                        }
+                        res.status(200);
+                        res.send(jsonReturnObject);
+                    })
+                    .catch(error => {
+                        console.log("nono")
+                        console.log(error);
+                        let jsonReturnObject = {
+                            success : false,
+                            error: error
+                        }
+                        res.status(500);
+                        return res.send(jsonReturnObject);
+                    });
+            })
+            .catch(error => {
+                console.log(error)
+                let jsonReturnObject = {
+                    success : false,
+                    error: error
+                }
+                res.status(500);
+                res.send(jsonReturnObject);
+            });
+    }
+}
+
 function checkFunds(cost, amount){
     return amount - cost >= 0;
 }
@@ -123,5 +185,6 @@ function checkFunds(cost, amount){
 //// Exports
 module.exports = {
     getUserWallet,
-    buyChampion
+    buyChampion,
+    addFunds
 };

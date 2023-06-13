@@ -3,7 +3,7 @@ const { validationResult } = require('express-validator');
 //// Models
 const userModel = require("../models/userModel");
 const userPictureModel = require("../models/userPictureModel");
-
+const userWalletModel = require("../models/walletModel");
 //// Functions
 
 //TODO: Only users with the role "Administrator" can change data. Users can only edit their own profile
@@ -82,6 +82,9 @@ function createUser(req, res, next) {
 
     userModel.createUser(req.body)
         .then(userID => {
+
+            userWalletModel.createWallet(userID).then();
+
             let jsonReturnObject = {
                 success : true,
                 data: userID
