@@ -14,10 +14,10 @@ const patchnoteModel = require("../models/patchnoteModel");
  */
 function getPatchnotes(req, res, next) {
     patchnoteModel.getPatchnotes()
-        .then(users => {
+        .then(patchnotes => {
             let jsonReturnObject = {
                 success : true,
-                data: users
+                data: patchnotes
             }
             res.status(200);
             res.send(jsonReturnObject);
