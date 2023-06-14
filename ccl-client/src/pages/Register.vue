@@ -1,0 +1,45 @@
+<template>
+  <div class="flex flex-col md:flex-row w-full h-screen">
+    <!-- Image -->
+    <div class="w-1/2 bg-gray-200">
+      <img src="../assets/Fulllength.png" alt="Register Image" class="object-cover w-full h-full">
+    </div>
+    <!-- Register Form -->
+    <div class="w-1/2 flex items-center justify-center py-10">
+      <div class="max-w-md w-full">
+        <h1 class="text-2xl font-bold mb-5">Register</h1>
+        <form>
+          <div class="mb-4">
+            <label for="username" class="block mb-2">Username</label>
+            <input type="text" id="username" class="w-full border-gray-300 rounded-md px-3 py-2" placeholder="Enter your username">
+          </div>
+          <div class="mb-4">
+            <label for="email" class="block mb-2">Email</label>
+            <input type="email" id="email" class="w-full border-gray-300 rounded-md px-3 py-2" placeholder="Enter your email">
+          </div>
+          <div class="mb-4">
+            <label for="email-confirm" class="block mb-2">Confirm Email</label>
+            <input type="email" id="email-confirm" class="w-full border-gray-300 rounded-md px-3 py-2" placeholder="Confirm your email">
+          </div>
+          <div class="mb-4">
+            <label for="password" class="block mb-2">Password</label>
+            <input type="password" id="password" class="w-full border-gray-300 rounded-md px-3 py-2" placeholder="Enter your password">
+          </div>
+          <div class="mb-4">
+            <label for="password-confirm" class="block mb-2">Confirm Password</label>
+            <input type="password" id="password-confirm" class="w-full border-gray-300 rounded-md px-3 py-2" placeholder="Confirm your password">
+          </div>
+          <div class="mb-4">
+            <label class="block mb-2">
+              <input type="checkbox" class="mr-2">
+              I accept the terms and conditions
+            </label>
+          </div>
+          <button type="submit" class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600">Register</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</template>
+<script setup>
+</script>
