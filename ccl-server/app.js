@@ -19,7 +19,7 @@ const app = express();
 const port = 3000;
 
 // create a write-stream (in append mode)
-const accessLogStream = fs.createWriteStream(path.join(__dirname, './logs/requests.log'), { flags: 'a' })
+const accessLogStream = fs.createWriteStream(path.join(__dirname, './logs/requests.logs'), { flags: 'a' })
 // available formats: combined, common, dev, short, and tiny
 // write detailed logs into the specified file
 app.use(morgan('combined', { stream: accessLogStream }))
