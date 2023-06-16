@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "flowbite": "^1.6.6",
+    "tw-elements": "^1.0.0-beta2",
     "vue": "^3.2.47",
     "vue-router": "^4.2.2"
   },

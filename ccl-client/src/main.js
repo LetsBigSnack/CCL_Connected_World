@@ -1,9 +1,8 @@
 import { createApp } from 'vue'
-import {createRouter} from "vue-router";
+import {createRouter, createWebHistory} from "vue-router";
 import {createWebHashHistory} from "vue-router";
 import './style.css'
 import App from './App.vue'
-
 
 import LoginPage from "./pages/Login.vue";
 import HomePage from "./pages/Home.vue";
@@ -19,13 +18,13 @@ const routes = [
     { path: '/social', component: SocialPage},
 ]
 
-const router = createRouter({
+const webRouter = createRouter({
     // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes, // short for `routes: routes`
 })
 
 
 const app = createApp(App);
-app.use(router)
+app.use(webRouter)
 app.mount('#app');

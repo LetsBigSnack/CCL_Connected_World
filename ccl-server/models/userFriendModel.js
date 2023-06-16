@@ -24,7 +24,7 @@ let getFriends = (userID) => new Promise((resolve, reject) => {
 });
 
 let getRequest = (userID) => new Promise((resolve, reject) => {
-    let sql = "SELECT * FROM userFriends WHERE userFriendAccept = 0  AND (userID_1 = "+db.escape(userID) + " OR "+ "userID_2 = "+db.escape(userID)+")";
+    let sql = "SELECT * FROM userFriends WHERE userFriendAccept = 0  AND userID_2 = "+db.escape(userID);
 
     db.query(sql, async function (err, requests, fields) {
         if (err) {

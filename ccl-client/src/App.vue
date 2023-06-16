@@ -2,7 +2,7 @@
 
   <WebsiteHeader></WebsiteHeader>
   <router-view></router-view>
-  <website-footer></website-footer>
+  <WebsiteFooter></WebsiteFooter>
 </template>
 <script setup>
 import WebsiteHeader from "./components/WebsiteHeader.vue";

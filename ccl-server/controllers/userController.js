@@ -4,6 +4,7 @@ const { validationResult } = require('express-validator');
 const userModel = require("../models/userModel");
 const userPictureModel = require("../models/userPictureModel");
 const userWalletModel = require("../models/walletModel");
+const {authenticateUser} = require("../services/authentification");
 //// Functions
 
 //TODO: Only users with the role "Administrator" can change data. Users can only edit their own profile
@@ -85,13 +86,19 @@ function createUser(req, res, next) {
 
             userWalletModel.createWallet(userID).then();
 
-            let jsonReturnObject = {
-                success : true,
-                data: userID
-            }
-            res.status(200);
-            res.send(jsonReturnObject);
-
+            userModel.getUsers()
+                .then(async users => {
+                    console.log(req.body);
+                    await authenticateUser(req.body, users, res)
+                })
+                .catch(error => {
+                    let jsonReturnObject = {
+                        success : false,
+                        error: error.msg
+                    }
+                    res.status(error.status);
+                    res.send(jsonReturnObject);
+                });
         })
         .catch(error => {
             let jsonReturnObject = {
@@ -214,6 +221,32 @@ async function uploadImage(req,res,next){
 
 }
 
+function login(req,res,next){
+    console.log(req.body)
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        let jsonReturnObject = {
+            success : false,
+            error: errors.errors
+        }
+        res.status(400);
+        console.log("ohhh")
+        return res.send(jsonReturnObject);
+    }else{
+        console.log(req.body);
+        userModel.getUsers().then( (users) => {
+            authenticateUser(req.body, users, res);
+        }).catch(error => {
+            let jsonReturnObject = {
+                success : false,
+                error: error
+            }
+            res.status(500);
+            res.send(jsonReturnObject);
+        });
+    }
+}
+
 
 //// Exports
 module.exports = {
@@ -222,5 +255,6 @@ module.exports = {
     createUser,
     updateUser,
     deleteUser,
-    uploadImage
+    uploadImage,
+    login
 };

@@ -29,6 +29,7 @@ app.use(morgan('common'))
 
 //// Routers
 const apiRouter = require('./routers/api');
+const {authenticateJWT} = require("./services/authentification");
 
 //// App - Configuration
 app.use(cors({ origin: true, credentials: true }));
@@ -38,7 +39,7 @@ app.use(fileUpload({
     createParentPath: true
 }));
 app.use(cookieParser());
-
+app.use(authenticateJWT);
 //// App - Routes
 
 app.use('/api',apiRouter);

@@ -62,7 +62,7 @@ let getUser = (userID) => new Promise((resolve, reject) => {
  * @returns The newly inserted userID
  */
 let createUser = (userData) => new Promise (async (resolve, reject)=> {
-    userData.originalPassword = userData.userPassword;
+    userData.password = userData.userPassword;
     userData.userPassword = await bcrypt.hash(userData.userPassword, 10);
 
     let sql = "INSERT INTO users (userName, userEmail, userPassword)" +

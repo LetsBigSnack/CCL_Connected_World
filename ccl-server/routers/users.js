@@ -12,9 +12,9 @@ const router = express.Router();
 router.route('/')
     .get(userController.getUsers)
     .post( [
-        body('userName').exists().withMessage('Name is required.'),
-        body('userEmail').exists().withMessage('Email is required.').isEmail().withMessage('Email format is invalid.'),
-        body('userPassword').exists().withMessage('Password is required.')
+        body('userName').exists().not().isEmpty().withMessage('Name is required.'),
+        body('userEmail').exists().not().isEmpty().withMessage('Email is required.').isEmail().withMessage('Email format is invalid.'),
+        body('userPassword').exists().not().isEmpty().withMessage('Password is required.')
     ],userController.createUser);
 
 router.route('/:userID')
