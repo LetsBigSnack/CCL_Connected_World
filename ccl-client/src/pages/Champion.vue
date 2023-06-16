@@ -1,19 +1,72 @@
 <template>
-  <div class="max-w-6xl mx-auto px-4 py-8">
-    <div class="flex flex-col md:flex-row">
-      <!-- Product Image -->
-      <div class="w-full md:w-1/2 mb-4 md:mb-0">
-        <img src="product-image.jpg" alt="Product Image" class="w-full h-auto rounded-lg">
+  <div class="container mx-auto py-8">
+    <div class="grid grid-cols-1 md:grid-cols-6 gap-8">
+      <div class="col-span-1 md:col-span-2">
+        <div class="bg-component_secondary_bcc rounded-lg p-8 h-full flex flex-col justify-between">
+          <div>
+            <img src="champion1.png" alt="Champion 1" class="w-full rounded-lg shadow-lg mb-8">
+            <div>
+              <h2 class="text-2xl font-bold mb-4">Champion 1</h2>
+              <div class="mt-4">
+                <h3 class="text-lg font-medium">Stats</h3>
+                <ul class="mt-2 space-y-2">
+                  <li>Health: 500</li>
+                  <li>Attack Damage: 60</li>
+                  <li>Armor: 30</li>
+                  <li>Magic Resistance: 20</li>
+                  <li>Movement Speed: 350</li>
+                </ul>
+              </div>
+              <div class="mt-4">
+                <h3 class="text-lg font-medium">Role</h3>
+                <p class="mt-2">Mage, Assassin</p>
+              </div>
+            </div>
+          </div>
+          <button class="btn-primary w-full">Buy Champion</button>
+        </div>
       </div>
-
-      <!-- Product Details -->
-      <div class="w-full md:w-1/2 md:pl-8">
-        <h1 class="text-3xl font-bold mb-4">Product Name</h1>
-        <p class="text-gray-600 mb-4">Price: $99.99</p>
-        <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer in risus eu sapien lacinia consectetur. Fusce suscipit augue eget odio tincidunt, id malesuada sem dignissim.</p>
-        <p class="mb-4">Praesent scelerisque purus sit amet ante fringilla, ac tincidunt ex blandit. In cursus pretium dui, a consequat mauris varius nec. Vestibulum dapibus justo ac velit venenatis aliquet. Nam accumsan feugiat efficitur.</p>
-        <p class="mb-4">Sed ut ante non lacus eleifend consectetur sed nec dolor. Vestibulum auctor metus in neque suscipit tristique. In hac habitasse platea dictumst. Aliquam vel elit ex. Sed non pellentesque neque. Donec semper convallis nibh, vel dictum turpis pharetra in. Aliquam tempus magna ac lectus consequat, et bibendum est aliquet. Fusce in tincidunt nisl.</p>
-        <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Add to Cart</button>
+      <div class="col-span-4 md:col-span-4">
+        <div class="bg-component_secondary_bcc rounded-lg p-8 h-full">
+          <h3 class="text-lg font-medium mb-4">Description</h3>
+          <p class="text-lg leading-7">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ut odio ipsum. Curabitur eu dignissim elit. Sed tristique orci ut arcu ultrices, et hendrerit dolor malesuada. Nunc eu feugiat odio, ut ullamcorper tellus. Cras consequat, quam in efficitur dapibus, metus nulla eleifend est, vitae volutpat quam elit eu nisi. Duis convallis mi in metus consectetur varius. Curabitur interdum tincidunt mauris, non dictum nunc pulvinar at.
+          </p>
+          <div class="mt-6">
+            <h3 class="text-lg font-medium mb-4">Abilities</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              <div>
+                <img src="ability1.png" alt="Ability 1" class="w-full rounded-lg shadow-lg mb-4">
+                <h4 class="text-md font-medium">Ability 1</h4>
+                <p class="text-sm mt-2">Description of Ability 1</p>
+              </div>
+              <div>
+                <img src="ability2.png" alt="Ability 2" class="w-full rounded-lg shadow-lg mb-4">
+                <h4 class="text-md font-medium">Ability 2</h4>
+                <p class="text-sm mt-2">Description of Ability 2</p>
+              </div>
+              <div>
+                <img src="ability3.png" alt="Ability 3" class="w-full rounded-lg shadow-lg mb-4">
+                <h4 class="text-md font-medium">Ability 3</h4>
+                <p class="text-sm mt-2">Description of Ability 3</p>
+              </div>
+              <div>
+                <img src="ability4.png" alt="Ability 4" class="w-full rounded-lg shadow-lg mb-4">
+                <h4 class="text-md font-medium">Ability 4</h4>
+                <p class="text-sm mt-2">Description of Ability 4</p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-6">
+            <h3 class="text-lg font-medium mb-4">Tips</h3>
+            <ul class="list-disc pl-6">
+              <li>Tip 1: Lorem ipsum dolor sit amet</li>
+              <li>Tip 2: Consectetur adipiscing elit</li>
+              <li>Tip 3: Mauris ut odio ipsum</li>
+              <li>Tip 4: Curabitur eu dignissim elit</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -106,7 +106,11 @@ function updateJWT(res, user){
         };
     console.log(payload);
     const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: '1000d' });
-    res.cookie('accessToken', accessToken);
+    res.cookie('accessToken', accessToken,{
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none'
+    });
 }
 
 

@@ -5,7 +5,7 @@
     </div>
     <h2 class="text-xl font-bold mb-4">User List</h2>
     <ul class="w-full h-[80%] overflow-y-scroll no-scrollbar" v-if="users">
-      <UserElement v-for="(user,index) in filteredUsers" :username="user.userName"></UserElement>
+      <UserElement v-for="(user,index) in filteredUsers" :userName="user.userName" :userID="user.userID"></UserElement>
     </ul>
   </div>
 </template>

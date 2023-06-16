@@ -1,66 +1,57 @@
 <template>
-  <div class="flex">
-    <!-- Search and Filters -->
-    <div class="w-1/4 bg-gray-200 p-4">
-      <h2 class="text-xl font-bold mb-4">Search Filters</h2>
-      <form>
-        <div class="mb-4">
-          <label for="search" class="block mb-2">Search</label>
-          <input type="text" id="search" class="w-full border-gray-300 rounded-md px-3 py-2" placeholder="Enter your search query">
+  <div class="container mx-auto py-8">
+    <div class="flex flex-col md:flex-row">
+      <div class="w-full md:w-1/4">
+        <div class="bg-background_bcc rounded-lg p-6 mb-8">
+          <h2 class="text-2xl font-bold mb-4">Filter</h2>
+          <div class="mb-4">
+            <input type="text" placeholder="Search by name" class="input-primary w-full">
+          </div>
+          <div class="mb-4">
+            <label for="category" class="text-lg font-medium mb-2">Category:</label>
+            <select id="category" class="select-primary w-full">
+              <option value="">All Categories</option>
+              <option value="mage">Mage</option>
+              <option value="assassin">Assassin</option>
+              <option value="tank">Tank</option>
+              <option value="marksman">Marksman</option>
+              <option value="support">Support</option>
+              <option value="fighter">Fighter</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label for="price" class="text-lg font-medium mb-2">Price:</label>
+            <select id="price" class="select-primary w-full">
+              <option value="">All Prices</option>
+              <option value="0-1350">0 - 1350 RP</option>
+              <option value="1350-3150">1350 - 3150 RP</option>
+              <option value="3150-4800">3150 - 4800 RP</option>
+              <option value="4800-6300">4800 - 6300 RP</option>
+              <option value="6300">6300+ RP</option>
+            </select>
+          </div>
+          <div>
+            <button class="btn-primary w-full">Apply Filters</button>
+          </div>
         </div>
-        <div class="mb-4">
-          <label for="category" class="block mb-2">Chamption-Type</label>
-          <select id="category" class="w-full border-gray-300 rounded-md px-3 py-2">
-            <option value="">All types</option>
-            <option value="tank">Tank</option>
-            <option value="supports">Supports</option>
-            <option value="healer">Healer</option>
-          </select>
-        </div>
-        <div class="mb-4">
-          <label for="price" class="block mb-2">Price Range</label>
-          <input type="range" id="price" class="w-full">
-        </div>
-        <div class="mb-4">
-          <button type="submit" class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600">Apply Filters</button>
-        </div>
-      </form>
-    </div>
-
-    <!-- Articles -->
-    <div class="w-3/4 p-4">
-      <h2 class="text-xl font-bold mb-4">Champions</h2>
-      <div class="grid grid-cols-4 gap-4">
-        <!-- Article 1 -->
-        <div class="border border-gray-300 rounded-lg p-4 flex flex-col justify-center items-center">
-          <img src="../assets/Medium.png" alt="Article 1" class="w-full min-h-80 object-cover mb-4">
-          <h3 class="text-lg font-bold">Name</h3>
-          <h2 class="text-sm font-bold text-gray-600">50 BP</h2>
-          <button class="mt-4 bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600">Details</button>
-        </div>
-        <div class="border border-gray-300 rounded-lg p-4 flex flex-col justify-center items-center">
-          <img src="../assets/Medium.png" alt="Article 1" class="w-full min-h-80 object-cover mb-4">
-          <h3 class="text-lg font-bold">Name</h3>
-          <h2 class="text-sm font-bold text-gray-600">50 BP</h2>
-          <button class="mt-4 bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600">Details</button>
-        </div>
-        <div class="border border-gray-300 rounded-lg p-4 flex flex-col justify-center items-center">
-          <img src="../assets/Medium.png" alt="Article 1" class="w-full min-h-80 object-cover mb-4">
-          <h3 class="text-lg font-bold">Name</h3>
-          <h2 class="text-sm font-bold text-gray-600">50 BP</h2>
-          <button class="mt-4 bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600">Details</button>
-        </div>
-        <div class="border border-gray-300 rounded-lg p-4 flex flex-col justify-center items-center">
-          <img src="../assets/Medium.png" alt="Article 1" class="w-full min-h-80 object-cover mb-4">
-          <h3 class="text-lg font-bold">Name</h3>
-          <h2 class="text-sm font-bold text-gray-600">50 BP</h2>
-          <button class="mt-4 bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600">Details</button>
-        </div>
-        <div class="border border-gray-300 rounded-lg p-4 flex flex-col justify-center items-center">
-          <img src="../assets/Medium.png" alt="Article 1" class="w-full min-h-80 object-cover mb-4">
-          <h3 class="text-lg font-bold">Name</h3>
-          <h2 class="text-sm font-bold text-gray-600">50 BP</h2>
-          <button class="mt-4 bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600">Details</button>
+      </div>
+      <div class="w-full md:w-3/4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div class="bg-component_primary_bcc rounded-lg p-6">
+            <img src="champion1.png" alt="Champion 1" class="w-24 h-24 mx-auto mb-4">
+            <h3 class="text-xl font-bold mb-2">Champion 1</h3>
+            <p class="text-gray-500">Mage</p>
+            <p class="text-sm mt-2">Price: 3150 RP</p>
+            <a href="#" class="btn-primary mt-4 w-full">Show Details</a>
+          </div>
+          <div class="bg-component_primary_bcc rounded-lg p-6">
+            <img src="champion2.png" alt="Champion 2" class="w-24 h-24 mx-auto mb-4">
+            <h3 class="text-xl font-bold mb-2">Champion 2</h3>
+            <p class="text-gray-500">Assassin</p>
+            <p class="text-sm mt-2">Price: 4800 RP</p>
+            <a href="#" class="btn-primary mt-4 w-full">Show Details</a>
+          </div>
+          <!-- Add more champion cards as needed -->
         </div>
       </div>
     </div>

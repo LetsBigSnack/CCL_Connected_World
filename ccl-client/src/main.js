@@ -9,6 +9,11 @@ import HomePage from "./pages/Home.vue";
 import RegisterPage from "./pages/Register.vue";
 import ShopPage from "./pages/Shop.vue";
 import SocialPage from "./pages/Social.vue";
+import UserPage from "./pages/User.vue";
+import ChampionPage from "./pages/Champion.vue";
+import SettingsPage from "./pages/Settings.vue";
+import WalletPage from "./pages/Wallet.vue";
+
 
 const routes = [
     { path: '/', component: HomePage },
@@ -16,6 +21,10 @@ const routes = [
     { path: '/register', component: RegisterPage},
     { path: '/shop', component: ShopPage },
     { path: '/social', component: SocialPage},
+    { path: '/user', component: UserPage},
+    { path: '/champion', component: ChampionPage},
+    { path: '/setting', component: SettingsPage},
+    { path: '/wallet', component: WalletPage},
 ]
 
 const webRouter = createRouter({
