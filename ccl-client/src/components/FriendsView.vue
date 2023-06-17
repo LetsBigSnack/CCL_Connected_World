@@ -3,7 +3,7 @@
     <h2 class="text-4xl h-full mb-4 font-display text-primary_bcc">Friend List</h2>
 
     <ul v-if="friends" class="w-full h-[400px] overflow-y-scroll no-scrollbar">
-      <FriendsElement v-for="friend in friends" :userName="friend.friendName" :userID="friend.friendID"></FriendsElement>
+      <FriendsElement v-for="friend in friends" :userName="friend.friendName" :userID="friend.friendID" :userPicturePath="friend.friendPicturePath" class="shadow-lg shadow-black"></FriendsElement>
     </ul>
   </div>
 </template>

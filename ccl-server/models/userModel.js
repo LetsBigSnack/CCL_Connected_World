@@ -11,7 +11,9 @@ const db = require('../services/database.js').config;
  * @returns A list of all Users within the DB
  */
 let getUsers = () => new Promise((resolve, reject) => {
-    let sql = "SELECT * FROM users";
+    let sql = "SELECT *,users.userID FROM users " +
+        "LEFT JOIN userPictures "+
+        "ON users.userID = userPictures.userID ";
 
     db.query(sql, function (err, users, fields) {
         if (err) {
@@ -31,8 +33,8 @@ let getUsers = () => new Promise((resolve, reject) => {
  * @returns A an object which represents the user
  */
 let getUser = (userID) => new Promise((resolve, reject) => {
-    let sql = "SELECT * FROM users " +
-                "INNER JOIN userPictures "+
+    let sql = "SELECT *,users.userID FROM users " +
+                "LEFT JOIN userPictures "+
                 "ON users.userID = userPictures.userID "+
                 "WHERE users.userID = "+ db.escape(userID);
     console.log(sql);

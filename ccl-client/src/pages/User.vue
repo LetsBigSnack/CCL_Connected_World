@@ -1,15 +1,23 @@
 <template>
-  <div class="container mx-auto py-8">
-    <div class="bg-component_secondary_bcc text-content_text rounded-lg p-6">
-      <div class="flex flex-col md:flex-row items-center mb-8">
+  <div class="container w-full mx-auto py-8 text-content_text">
+    <div class="text-content_text rounded-lg p-6">
+      <div class="flex flex-col md:flex-row items-center mb-8 p-4">
         <img src="user-avatar.png" alt="User Avatar" class="w-24 h-24 rounded-full border-2 border-component_secondary_bcc mb-4 md:mb-0">
         <div class="md:ml-4">
-          <h1 class="text-3xl font-bold">John Doe</h1>
+          <h1 class="text-5xl">John Doe</h1>
           <p class="text-content_text">Summoner Level 10</p>
         </div>
+        <div class="md:ml-auto flex flex-col gap-2">
+          <button class="flex text-2xl mr-3 text-white text-md bg-secondary_bcc rounded-[0.5rem] p-2 md:mr-0 hover:bg-tertiary_bcc">
+            Add Friend
+          </button>
+          <button class="flex text-2xl mr-3 text-white text-md bg-[#ff5555] rounded-[0.5rem] p-2 md:mr-0 hover:bg-[#f83b3b]">
+            Report
+          </button>
+        </div>
       </div>
-      <div class="border-t border-component_secondary_bcc mt-8 mb-8">
-        <h2 class="text-lg font-semibold mb-4">Ranked Stats</h2>
+      <div class="border-t-4 border-component_secondary_bcc mt-8 mb-8 p-4">
+        <h2 class="text-3xl mb-4">Ranked Stats</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="p-4 bg-component_primary_bcc rounded-lg">
             <h3 class="text-base font-medium">Ranked Wins</h3>
@@ -29,8 +37,8 @@
           </div>
         </div>
       </div>
-      <div class="border-t border-component_secondary_bcc mt-8 mb-8">
-        <h2 class="text-lg font-semibold mb-4">Champions</h2>
+      <div class="border-t-4 border-component_secondary_bcc mt-8 mb-8 p-4">
+        <h2 class="text-3xl mb-4">Champions</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div class="bg-component_primary_bcc rounded-lg p-4">
             <img src="champion1.png" alt="Champion 1" class="w-16 h-16 mx-auto mb-2">
@@ -50,8 +58,8 @@
           </div>
         </div>
       </div>
-      <div class="border-t border-component_secondary_bcc mt-8 mb-8">
-        <h2 class="text-lg font-semibold mb-4">Achievements</h2>
+      <div class="border-t-4 border-component_secondary_bcc mt-8 mb-8 p-4">
+        <h2 class="text-3xl mb-4 mb-4">Achievements</h2>
         <ul class="list-disc pl-6">
           <li>First Blood Master - Achieved 100 First Blood kills</li>
           <li>Triple Kill Streak - Achieved 10 Triple Kills</li>
@@ -59,8 +67,8 @@
           <!-- Add more achievements as needed -->
         </ul>
       </div>
-      <div class="border-t border-component_secondary_bcc mt-8 mb-8">
-        <h2 class="text-lg font-semibold mb-4">Recent Matches</h2>
+      <div class="border-t-4 border-component_secondary_bcc mt-8 mb-8 p-4">
+        <h2 class="text-3xl mb-4">Recent Matches</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div class="bg-component_primary_bcc rounded-lg p-4">
             <h3 class="text-base font-medium">Match 1</h3>
@@ -78,7 +86,29 @@
       </div>
     </div>
   </div>
-
 </template>
 <script setup>
+import {onMounted, onRenderTriggered, onUpdated, ref, watch} from "vue";
+const props = defineProps(["userID","userName","userImagePath"]);
+
+onMounted(() => {
+  login();
+})
+
+
+
+async function login(){
+  let test = await fetch('http://127.0.0.1:3000/api/login', {
+    method: 'GET',
+    redirect: 'follow',
+    credentials: 'include',
+    headers: {'Content-Type': 'application/json'},
+  });
+  let data = await test.json();
+  if(data.success){
+
+  }else{
+
+  }
+}
 </script>

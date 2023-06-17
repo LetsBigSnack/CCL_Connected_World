@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-component_secondary_bcc rounded-lg py-8">
+  <div class="border-t-2 border-component_secondary_bcc  py-8">
     <div class="max-w-6xl mx-auto px-4">
       <h2 class="text-5xl mb-8 font-display text-primary_bcc">Latest Patch Notes</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 font-main_content" v-if="patchnotes" >

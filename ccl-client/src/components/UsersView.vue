@@ -1,11 +1,11 @@
 <template>
-  <div class="w-3/4 p-8 h-screen bg-component_secondary_bcc m-6 rounded-[10px]">
-    <div class="flex items-center mb-4">
-      <input v-model="userInput" @input="filterUsers" type="text" class="w-full rounded-md px-3 py-2 bg-component_primary_bcc border-0" placeholder="Search users...">
+  <div class="w-3/4 p-8 h-screen m-6">
+    <h2 class="text-4xl mb-4 font-display text-primary_bcc">User List</h2>
+    <div class="flex items-center mb-8">
+      <input v-model="userInput" @input="filterUsers" type="text" class="w-full text-3xl rounded-md px-3 py-2 bg-component_primary_bcc  font-navbar border-0 focus:border-primary_bcc focus:border-2" placeholder="Search users...">
     </div>
-    <h2 class="text-xl font-bold mb-4">User List</h2>
     <ul class="w-full h-[80%] overflow-y-scroll no-scrollbar" v-if="users">
-      <UserElement v-for="(user,index) in filteredUsers" :userName="user.userName" :userID="user.userID"></UserElement>
+      <UserElement v-for="(user,index) in filteredUsers" :userName="user.userName" :userID="user.userID" :userImagePath="user.userPicturePath" class="shadow-lg shadow-black"></UserElement>
     </ul>
   </div>
 </template>

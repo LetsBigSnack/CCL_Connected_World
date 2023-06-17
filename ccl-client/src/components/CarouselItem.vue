@@ -27,7 +27,7 @@
         class="block w-full"
         alt="..." />
     <div
-        class="bg-component_secondary_bcc bg-opacity-50 backdrop-blur-sm absolute inset-x-[15%] bottom-5 hidden py-5 text-center text-white md:block">
+        class="bg-component_secondary_bcc bg-opacity-75 backdrop-blur-sm absolute inset-x-[15%] bottom-5 hidden py-5 text-center text-white md:block">
       <h5 class="text-3xl text-primary_bcc font-display">{{ newsTitle }}</h5>
       <p>
         {{ newsContent }}

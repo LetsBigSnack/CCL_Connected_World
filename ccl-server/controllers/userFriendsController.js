@@ -14,9 +14,11 @@ function getFriends(req, res, next) {
                         let otherUserID = 0;
                         if(element.userID_1 === parseInt(req.params.userID)){
                            otherUserID = element.userID_2;
+
                         }else{
                             otherUserID = element.userID_1;
                         }
+                        element.friendPicturePath = users.find(user => user.userID === otherUserID).userPicturePath;
                         element.friendID = otherUserID;
                         element.friendName = users.find(user => user.userID === otherUserID).userName;
                     });
@@ -56,6 +58,7 @@ function getRequest(req, res, next) {
                     request.forEach((element) => {
                         element.requestID = element.userID_1;
                         element.requestName = users.find(user => user.userID === element.userID_1).userName;
+                        element.requestPicturePath = users.find(user => user.userID === element.userID_1).userPicturePath;
                     });
                     let jsonReturnObject = {
                         success : true,

@@ -1,13 +1,14 @@
 <template>
-  <div class="flex font-main_content justify-center">
-    <div v-if="loggedInUser" class="w-1/4 h-auto p-8 bg-component_secondary_bcc m-6 rounded-[10px] font-main_content" style="align-self: start;">
+  <div class="flex font-main_content justify-center flex-col md:flex-row">
+
+    <div v-if="loggedInUser" class="order-2 md:order-1 md:w-1/4 h-auto p-8 border-t-2 border-component_secondary_bcc m-6 font-main_content" style="align-self: start;">
         <FriendsView :userID="loggedInUser.id"></FriendsView>
       <br>
       <div>
         <RequestView :userID="loggedInUser.id"></RequestView>
       </div>
     </div>
-    <UsersView></UsersView>
+    <UsersView class="order-1 md:order-2 border-component_secondary_bcc border-t-2"></UsersView>
   </div>
 </template>
 <script setup>

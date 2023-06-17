@@ -21,10 +21,10 @@ const routes = [
     { path: '/register', component: RegisterPage},
     { path: '/shop', component: ShopPage },
     { path: '/social', component: SocialPage},
-    { path: '/user', component: UserPage},
     { path: '/champion', component: ChampionPage},
     { path: '/setting', component: SettingsPage},
     { path: '/wallet', component: WalletPage},
+    { path: '/users/:userID', component: UserPage},
 ]
 
 const webRouter = createRouter({
