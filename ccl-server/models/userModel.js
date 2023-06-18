@@ -1,6 +1,9 @@
 //// Modules
+const svg2png = require('svg2png');
+const fs = require('fs');
+const uuid = require('uuid');
 const bcrypt = require('bcrypt');
-
+const { pipeline } = require('stream');
 //// Services
 const db = require('../services/database.js').config;
 
@@ -13,7 +16,9 @@ const db = require('../services/database.js').config;
 let getUsers = () => new Promise((resolve, reject) => {
     let sql = "SELECT *,users.userID FROM users " +
         "LEFT JOIN userPictures "+
-        "ON users.userID = userPictures.userID ";
+        "ON users.userID = userPictures.userID "+
+        "LEFT JOIN userWallets "+
+        "ON users.userID = userWallets.userID ";
 
     db.query(sql, function (err, users, fields) {
         if (err) {
@@ -36,6 +41,8 @@ let getUser = (userID) => new Promise((resolve, reject) => {
     let sql = "SELECT *,users.userID FROM users " +
                 "LEFT JOIN userPictures "+
                 "ON users.userID = userPictures.userID "+
+                "LEFT JOIN userWallets "+
+                "ON users.userID = userWallets.userID "+
                 "WHERE users.userID = "+ db.escape(userID);
     console.log(sql);
     db.query(sql, function (err, user, fields) {
@@ -86,28 +93,34 @@ let createUser = (userData) => new Promise (async (resolve, reject)=> {
 })
 
 let updateUser = (userData, userID) => new Promise (async (resolve, reject)=> {
-
+    let sqls = "";
     if(Object.keys(userData).every(elem => ["userName", "userPassword", "userEmail"].includes(elem))){
-
         for (const key in userData) {
-            if(key === "userPassword"){
-                userData.userPassword = await bcrypt.hash(userData.userPassword, 10);
-            }
-            let sql = "UPDATE users " +
-                "SET "+key+" = "+db.escape(userData[key])+" "+
-                "WHERE userID = "+ db.escape(userID);
+            if(userData[key]){
+                if(key === "userPassword"){
 
-            db.query(sql, function (err, result, fields){
-                if(err) {
-                    reject({
-                        status: 500,
-                        msg: err
-                    });
+                    userData.userPassword = await bcrypt.hash(userData.userPassword, 10);
                 }
-            })
-            console.log(sql);
+                let sql = "UPDATE users " +
+                    "SET "+key+" = "+db.escape(userData[key])+" "+
+                    "WHERE userID = "+ db.escape(userID);
+                sqls += sql + ";";
+            }
         }
-        resolve("User updated");
+        console.log("end of loop");
+        console.log(sqls);
+        db.query(sqls, function (err, result, fields){
+            console.log("await");
+            if(err) {
+                console.log("big error");
+                reject({
+                    status: 500,
+                    msg: err
+                });
+            }else{
+                resolve("User updated");
+            }
+        })
     }else{
         reject({
             status: 400,
@@ -139,6 +152,35 @@ let deleteUser = (userID) => new Promise (async (resolve, reject)=> {
     })
 })
 
+async function generatePicture(userID) {
+
+    const seed = uuid.v4();
+    await saveSvg(`https://api.dicebear.com/6.x/adventurer-neutral/svg?seed=${seed}`,userID);
+
+}
+
+async function saveSvg(url, fileName) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch SVG image: ${response.status} ${response.statusText}`);
+        }
+
+        const writeStream = fs.createWriteStream(`public/userImages/${fileName}.svg`);
+        await new Promise((resolve, reject) => {
+            pipeline(response.body, writeStream, (error) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve();
+                }
+            });
+        });
+    } catch (error) {
+        console.error('Error saving SVG', error);
+    }
+}
+
 
 
 //// Exports
@@ -147,5 +189,6 @@ module.exports = {
     getUser,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    generatePicture
 };

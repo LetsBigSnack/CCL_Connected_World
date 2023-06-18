@@ -1,6 +1,5 @@
 import { createApp } from 'vue'
 import {createRouter, createWebHistory} from "vue-router";
-import {createWebHashHistory} from "vue-router";
 import './style.css'
 import App from './App.vue'
 
@@ -13,7 +12,7 @@ import UserPage from "./pages/User.vue";
 import ChampionPage from "./pages/Champion.vue";
 import SettingsPage from "./pages/Settings.vue";
 import WalletPage from "./pages/Wallet.vue";
-
+import InventoryPage from "./pages/Inventory.vue";
 
 const routes = [
     { path: '/', component: HomePage },
@@ -21,10 +20,11 @@ const routes = [
     { path: '/register', component: RegisterPage},
     { path: '/shop', component: ShopPage },
     { path: '/social', component: SocialPage},
-    { path: '/champion', component: ChampionPage},
     { path: '/setting', component: SettingsPage},
     { path: '/wallet', component: WalletPage},
+    { path: '/inventory', component: InventoryPage},
     { path: '/users/:userID', component: UserPage},
+    { path: '/champions/:championID', component: ChampionPage},
 ]
 
 const webRouter = createRouter({

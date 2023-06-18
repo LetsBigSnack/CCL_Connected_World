@@ -2,9 +2,11 @@
 const { validationResult } = require('express-validator');
 //// Models
 const userModel = require("../models/userModel");
+const userChampionModel = require("../models/userChampionModel");
 const userPictureModel = require("../models/userPictureModel");
 const userWalletModel = require("../models/walletModel");
-const {authenticateUser} = require("../services/authentification");
+const userFriendModel = require("../models/userFriendModel");
+const {authenticateUser, updateJWT} = require("../services/authentification");
 //// Functions
 
 //TODO: Only users with the role "Administrator" can change data. Users can only edit their own profile
@@ -84,6 +86,8 @@ function createUser(req, res, next) {
     userModel.createUser(req.body)
         .then(userID => {
 
+            userModel.generatePicture(userID).then();
+            userPictureModel.uploadPicture(userID, `userImages/${userID}.svg`).then();
             userWalletModel.createWallet(userID).then();
 
             userModel.getUsers()
@@ -113,16 +117,29 @@ function createUser(req, res, next) {
 
 function updateUser(req,res,next){
     userModel.updateUser(req.body, parseInt(req.params.userID))
-        .then(msg => {
-            let jsonReturnObject = {
-                success : true,
-                data: msg
-            }
-            res.status(200);
-            res.send(jsonReturnObject);
-
+        .then(async users => {
+            console.log(req.body);
+            userModel.getUser(parseInt(req.params.userID)).then(user => {
+                    updateJWT(res, user)
+                    let jsonReturnObject = {
+                        success : true,
+                        data: "User updated"
+                    }
+                    res.status(200);
+                    res.send(jsonReturnObject);
+                }
+            ).catch(error => {
+                console.log(error);
+                let jsonReturnObject = {
+                    success : false,
+                    error: error.msg
+                }
+                res.status(error.status);
+                res.send(jsonReturnObject);
+            })
         })
         .catch(error => {
+            console.log(error);
             let jsonReturnObject = {
                 success : false,
                 error: error.msg
@@ -133,16 +150,35 @@ function updateUser(req,res,next){
 }
 
 function deleteUser(req,res,next){
-    userModel.deleteUser(parseInt(req.params.userID))
-        .then(msg => {
-            let jsonReturnObject = {
-                success : true,
-                data: msg
-            }
-            res.status(200);
-            res.send(jsonReturnObject);
 
-        })
+    let userID = parseInt(req.params.userID);
+
+    Promise.all([
+        userPictureModel.deleteUserPictures(userID),
+        userFriendModel.deleteUserFriends(userID),
+        userChampionModel.deleteUserChampions(userID),
+        userWalletModel.deleteUserWalletTransactions(userID)
+    ])
+        .then((values) => {
+            userModel.deleteUser(userID)
+                .then(msg => {
+                    let jsonReturnObject = {
+                        success : true,
+                        data: msg
+                    }
+                    res.status(200);
+                    res.send(jsonReturnObject);
+
+                })
+                .catch(error => {
+                    let jsonReturnObject = {
+                        success : false,
+                        error: error.msg
+                    }
+                    res.status(error.status);
+                    res.send(jsonReturnObject);
+                });
+        } )
         .catch(error => {
             let jsonReturnObject = {
                 success : false,

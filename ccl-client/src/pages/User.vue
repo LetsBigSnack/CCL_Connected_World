@@ -1,14 +1,13 @@
 <template>
   <div class="container w-full mx-auto py-8 text-content_text">
-    <div class="text-content_text rounded-lg p-6">
+    <div v-if="user" class="text-content_text rounded-lg p-6">
       <div class="flex flex-col md:flex-row items-center mb-8 p-4">
-        <img src="user-avatar.png" alt="User Avatar" class="w-24 h-24 rounded-full border-2 border-component_secondary_bcc mb-4 md:mb-0">
+        <img :src="user.userPicturePath?`http://127.0.0.1:3000/${user.userPicturePath}`:'/assets/logo.svg'" :alt="`User ${userID}`" class="w-24 h-24 rounded-full border-2 border-component_secondary_bcc mb-4 md:mb-0">
         <div class="md:ml-4">
-          <h1 class="text-5xl">John Doe</h1>
-          <p class="text-content_text">Summoner Level 10</p>
+          <h1 class="text-5xl">{{user.userName}}</h1>
         </div>
         <div class="md:ml-auto flex flex-col gap-2">
-          <button class="flex text-2xl mr-3 text-white text-md bg-secondary_bcc rounded-[0.5rem] p-2 md:mr-0 hover:bg-tertiary_bcc">
+          <button @click="createRequest" class="flex text-2xl mr-3 text-white text-md bg-secondary_bcc rounded-[0.5rem] p-2 md:mr-0 hover:bg-tertiary_bcc">
             Add Friend
           </button>
           <button class="flex text-2xl mr-3 text-white text-md bg-[#ff5555] rounded-[0.5rem] p-2 md:mr-0 hover:bg-[#f83b3b]">
@@ -89,13 +88,19 @@
 </template>
 <script setup>
 import {onMounted, onRenderTriggered, onUpdated, ref, watch} from "vue";
-const props = defineProps(["userID","userName","userImagePath"]);
+import {useRoute, useRouter} from "vue-router";
+
+const route = useRoute()
+const router = useRouter();
+const userID =  route.params.userID;
+const user = ref();
+const loggedInUser = ref();
 
 onMounted(() => {
+  console.log(userID);
   login();
+  getUser();
 })
-
-
 
 async function login(){
   let test = await fetch('http://127.0.0.1:3000/api/login', {
@@ -106,9 +111,43 @@ async function login(){
   });
   let data = await test.json();
   if(data.success){
+    loggedInUser.value = data.data;
+  }
+}
 
+
+async function getUser(){
+  let test = await fetch(`http://127.0.0.1:3000/api/users/${userID}`, {
+    method: 'GET',
+    redirect: 'follow',
+    credentials: 'include',
+    headers: {'Content-Type': 'application/json'},
+  });
+  let data = await test.json();
+  if(data.success){
+    user.value = data.data;
+    console.log(user.value)
   }else{
 
   }
 }
+
+async function createRequest(){
+  let test = await fetch('http://127.0.0.1:3000/api/friends/add', {
+    method: 'POST',
+    redirect: 'follow',
+    credentials: 'include',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      userID_1: loggedInUser.value.id,
+      userID_2: route.params.userID,
+    })
+  });
+  let data = await test.json();
+  console.log(data);
+  if(data.success){
+
+  }
+}
+
 </script>

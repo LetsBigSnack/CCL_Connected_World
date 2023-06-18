@@ -33,7 +33,7 @@ let createTransaction  = (transactionData) => new Promise((resolve, reject) => {
 
 
 let getTransactions = (userWalletID) => new Promise((resolve, reject) => {
-    let sql = "SELECT * FROM transactions WHERE userWalletID = "+db.escape(userWalletID);
+    let sql = "SELECT * FROM transactions WHERE userWalletID = "+db.escape(userWalletID) + " ORDER BY transactionDate DESC";
 
     db.query(sql, function (err, transactions, fields) {
         if (err) {
@@ -48,8 +48,29 @@ let getTransactions = (userWalletID) => new Promise((resolve, reject) => {
     })
 });
 
+let deleteTransactions = (userWalletID) => new Promise((resolve, reject) => {
+    console.log("during await");
+    console.log(userWalletID);
+    let sql = "DELETE FROM transactions WHERE userWalletID = "+db.escape(userWalletID);
+
+    db.query(sql, function (err, transactions, fields) {
+        if (err) {
+            console.log(err)
+            return reject({
+                status: 500,
+                msg: err
+            });
+        }else{
+            console.log("resolve");
+            resolve(transactions)
+        }
+
+    })
+});
+
 //// Exports
 module.exports = {
     getTransactions,
-    createTransaction
+    createTransaction,
+    deleteTransactions
 };

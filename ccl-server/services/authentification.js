@@ -24,8 +24,6 @@ async function authenticateUser(data, users, res){
         return u.userName === data.userName
     });
     console.log("i am here");
-    console.log(data.password);
-    console.log(user.userPassword);
     //returns pending promise --> doesn't render true
     if (user && await checkPassword(data.password, user.userPassword)) {
         // Generate an access token
@@ -35,7 +33,9 @@ async function authenticateUser(data, users, res){
                 id: user.userID,
                 name: user.userName,
                 email: user.userEmail,
-                role: user.userRole
+                picture: user.userPicturePath,
+                role: user.userRole,
+                amount: user.userWalletAmount
             };
         console.log(payload);
         const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: '1000d' });
@@ -81,7 +81,9 @@ function authenticateJWT(req, res, next){
                     id: userToken.id,
                     name: userToken.name,
                     email: userToken.email,
-                    role: userToken.role
+                    picture: userToken.picture,
+                    role: userToken.role,
+                    amount: userToken.amount
                 };
             next();
         });
@@ -96,15 +98,28 @@ function authenticateJWT(req, res, next){
  * @param res HTTP-Response
  * @param user The user
  */
-function updateJWT(res, user){
-    const payload =
+function updateJWT(res, user,req=undefined){
+    let payload = {};
+    payload =
         {
             id: user.userID,
-            name: user.name,
+            name: user.userName,
             email: user.userEmail,
-            role: user.role
+            picture: user.userPicturePath,
+            role: user.userRole,
+            amount: user.userWalletAmount
         };
-    console.log(payload);
+    if(req){
+        req.user =
+            {
+                id: user.userID,
+                name: user.userName,
+                email: user.userEmail,
+                picture: user.userPicturePath,
+                role: user.userRole,
+                amount: user.userWalletAmount
+            };
+    }
     const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: '1000d' });
     res.cookie('accessToken', accessToken,{
         httpOnly: true,

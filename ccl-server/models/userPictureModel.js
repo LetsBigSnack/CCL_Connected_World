@@ -59,8 +59,26 @@ let uploadPicture = (userID, picturePath) => new Promise((resolve, reject) => {
     })
 })
 
+let deleteUserPictures = (userID) => new Promise((resolve, reject) => {
+    let sql = "DELETE FROM userPictures WHERE userID = "+ db.escape(userID);
+
+    db.query(sql, function (err, userPictures, fields) {
+        if (err) {
+            return reject({
+                status: 500,
+                msg: err
+            });
+        }else{
+            resolve(userPictures)
+        }
+
+    })
+});
+
+
 //// Exports
 module.exports = {
     getUserPictures,
-    uploadPicture
+    uploadPicture,
+    deleteUserPictures
 };

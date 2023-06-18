@@ -4,6 +4,9 @@ const express = require('express');
 //// Controllers
 const userController = require("../controllers/userController");
 const {body} = require("express-validator");
+const {updateJWT} = require("../services/authentification");
+
+const userModel = require("../models/userModel");
 
 //// Routes
 const router = express.Router();
@@ -12,12 +15,25 @@ const router = express.Router();
 router.route('/')
     .get((req,res,next)=>{
         if(req.user){
-            let jsonReturnObject = {
-                success : true,
-                data: req.user
-            }
-            res.status(200);
-            res.send(jsonReturnObject);
+
+            userModel.getUser(req.user.id).then(user => {
+
+                updateJWT(res,user,req)
+
+                let jsonReturnObject = {
+                    success : true,
+                    data: req.user
+                }
+                res.status(200);
+                res.send(jsonReturnObject);
+            }).catch(error => {
+                let jsonReturnObject = {
+                    success : false,
+                    error: "user not logged in"
+                }
+                res.status(200);
+                res.send(jsonReturnObject);
+            });
         }else{
             let jsonReturnObject = {
                 success : false,

@@ -81,11 +81,29 @@ let acceptRequest = (userFriendData) => new Promise((resolve, reject) => {
     })
 });
 
+let deleteUserFriends = (userID) => new Promise((resolve, reject) => {
+    let sql = "DELETE FROM userFriends WHERE userID_1 = "+db.escape(userID) + " OR userID_2 = "+db.escape(userID);
+
+    db.query(sql, async function (err, friends, fields) {
+        if (err) {
+            return reject({
+                status: 500,
+                msg: err
+            });
+        }else{
+            resolve(friends)
+        }
+
+    })
+});
+
+
 
 //// Exports
 module.exports = {
     getFriends,
     getRequest,
     createRequest,
-    acceptRequest
+    acceptRequest,
+    deleteUserFriends
 };

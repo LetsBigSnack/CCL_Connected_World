@@ -24,7 +24,48 @@ let getUserChampions = (userID) => new Promise((resolve, reject) => {
     })
 });
 
+let createUserChampion  = (userChampionData) => new Promise((resolve, reject) => {
+    let sql = "INSERT INTO userChampions " +
+        "(championID, userID) " +
+        "VALUES (" +
+        db.escape(userChampionData.championID)+", " +
+        db.escape(userChampionData.userID)+
+        ")";
+
+    db.query(sql, function (err, transactions, fields) {
+        if (err) {
+            return reject({
+                status: 500,
+                msg: err
+            });
+        }else{
+            resolve(transactions)
+        }
+
+    })
+});
+
+let deleteUserChampions = (userID) => new Promise((resolve, reject) => {
+    let sql = "DELETE FROM userChampions " +
+        "WHERE userChampions.userID =" + db.escape(userID);
+
+    db.query(sql, function (err, userChampions, fields) {
+        if (err) {
+            return reject({
+                status: 500,
+                msg: err
+            });
+        }else{
+            resolve(userChampions)
+        }
+
+    })
+});
+
+
 //// Exports
 module.exports = {
-    getUserChampions
+    getUserChampions,
+    createUserChampion,
+    deleteUserChampions
 };

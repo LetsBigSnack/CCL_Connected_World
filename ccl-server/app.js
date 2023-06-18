@@ -24,7 +24,7 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, './logs/reques
 // write detailed logs into the specified file
 app.use(morgan('combined', { stream: accessLogStream }))
 // write short logs into the console
-app.use(morgan('common'))
+//app.use(morgan('common'))
 
 
 //// Routers

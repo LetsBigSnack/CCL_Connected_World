@@ -5,7 +5,7 @@ const { validationResult } = require('express-validator');
 const walletModel = require("../models/walletModel");
 const transactionModel = require("../models/transactionModel");
 const championModel = require("../models/championModel");
-const userChampionModel = require("../models/userChampionMode");
+const userChampionModel = require("../models/userChampionModel");
 //// Functions
 
 /**
