@@ -4,7 +4,7 @@
       <div class="col-span-8 md:col-span-2 bg-component_secondary_bcc rounded-[10px] shadow-lg shadow-black">
         <div class="p-8 h-full flex flex-col justify-between border-primary_bcc border-t-4 rounded-[10px] gap-8">
           <div>
-            <img src="../assets/Medium.png" alt="Champion 1" class="w-full rounded-lg shadow-lg mb-8">
+            <img :src="champion.championImagePath?`http://127.0.0.1:3000/${champion.championImagePath}`:'/assets/medium.png'" :alt="`Champion ${champion.championID}`" class="w-full rounded-lg shadow-lg mb-8">
             <div class="flex flex-col gap-4">
               <h2 class="text-3xl font-bold mb-1 border-primary_bcc border-b-2">{{champion.championName}}</h2>
               <p class="text-lg font-bold mb-4">{{champion.championDescription}}</p>

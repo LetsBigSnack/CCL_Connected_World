@@ -40,19 +40,19 @@
         <h2 class="text-3xl mb-4">Champions</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div class="bg-component_primary_bcc rounded-lg p-4">
-            <img src="champion1.png" alt="Champion 1" class="w-16 h-16 mx-auto mb-2">
+            <img src="" alt="Champion 1" class="w-16 h-16 mx-auto mb-2">
             <p class="text-center">Champion 1</p>
           </div>
           <div class="bg-component_primary_bcc rounded-lg p-4">
-            <img src="champion2.png" alt="Champion 2" class="w-16 h-16 mx-auto mb-2">
+            <img src="" alt="Champion 2" class="w-16 h-16 mx-auto mb-2">
             <p class="text-center">Champion 2</p>
           </div>
           <div class="bg-component_primary_bcc rounded-lg p-4">
-            <img src="champion3.png" alt="Champion 3" class="w-16 h-16 mx-auto mb-2">
+            <img src="" alt="Champion 3" class="w-16 h-16 mx-auto mb-2">
             <p class="text-center">Champion 3</p>
           </div>
           <div class="bg-component_primary_bcc rounded-lg p-4">
-            <img src="champion4.png" alt="Champion 4" class="w-16 h-16 mx-auto mb-2">
+            <img src="" alt="Champion 4" class="w-16 h-16 mx-auto mb-2">
             <p class="text-center">Champion 4</p>
           </div>
         </div>

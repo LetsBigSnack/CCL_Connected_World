@@ -71,7 +71,7 @@
       <h2 class="text-xl font-bold mb-4">Are you sure?</h2>
       <p>Do you really want to delete your account?</p>
       <div class="flex gap-2">
-        <button class="bg-[#ff5555] text-white px-4 py-2 rounded-md mt-4  hover:bg-[#f83b3b]">
+        <button @click="deleteUserProfile" class="bg-[#ff5555] text-white px-4 py-2 rounded-md mt-4  hover:bg-[#f83b3b]">
           Yes
         </button>
         <button  @click="showDialogBox = false" class="bg-secondary_bcc text-white px-4 py-2 rounded-md mt-4  hover:bg-tertiary_bcc">
@@ -187,6 +187,41 @@ async function updateProfilePicture(){
   if(data.success){
     errors.value = undefined;
     await router.go();
+  }else{
+    errors.value = data.error;
+  }
+}
+
+async function deleteUserProfile(){
+
+  showDialogBox.value = false;
+  let test = await fetch(`http://127.0.0.1:3000/api/users/${user.value.id}`, {
+    method: 'DELETE',
+    redirect: 'follow',
+    credentials: 'include',
+    body: {}
+  });
+  let data = await test.json();
+  if(data.success){
+    errors.value = undefined;
+    await logout();
+  }else{
+    errors.value = data.error;
+  }
+}
+
+async function logout(){
+  let test = await fetch('http://127.0.0.1:3000/api/logout', {
+    method: 'GET',
+    redirect: 'follow',
+    credentials: 'include',
+    headers: {'Content-Type': 'application/json'},
+  });
+  let data = await test.json();
+  if(data.success){
+    errors.value = undefined;
+    user.value = undefined;
+    await router.replace({path: '/'});
   }else{
     errors.value = data.error;
   }
