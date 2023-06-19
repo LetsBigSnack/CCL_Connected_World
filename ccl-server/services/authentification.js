@@ -40,6 +40,7 @@ async function authenticateUser(data, users, res){
         console.log(payload);
         const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: '1000d' });
         res.cookie('accessToken', accessToken,{
+            maxAge:  365 * 24 * 60 * 60 * 1000,
             httpOnly: true,
             secure: true,
             sameSite: 'none'
@@ -122,6 +123,7 @@ function updateJWT(res, user,req=undefined){
     }
     const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: '1000d' });
     res.cookie('accessToken', accessToken,{
+        maxAge:  365 * 24 * 60 * 60 * 1000,
         httpOnly: true,
         secure: true,
         sameSite: 'none'

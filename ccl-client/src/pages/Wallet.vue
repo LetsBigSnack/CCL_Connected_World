@@ -34,8 +34,8 @@
       <div>
         <h3 class="text-xl font-bold mb-4 border-primary_bcc border-b-2">Add Funds</h3>
         <div class="flex flex-wrap w-full justify-center gap-4">
-          <button  @click="addFunds(100)" class="bg-primary_bcc text-content_text px-4 py-2 rounded-md">Add 100 BP</button>
-          <button @click="addFunds(500)" class="bg-primary_bcc text-content_text px-4 py-2 rounded-md">Add 500 BP</button>
+          <button  @click="addFunds(100)" class="bg-secondary_bcc  hover:bg-tertiary_bcc text-content_text px-4 py-2 rounded-md">Add 100 BP</button>
+          <button @click="addFunds(500)" class="bg-secondary_bcc  hover:bg-tertiary_bcc text-content_text px-4 py-2 rounded-md">Add 500 BP</button>
           <!-- Add more buttons for different amounts -->
         </div>
       </div>

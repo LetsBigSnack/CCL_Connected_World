@@ -1,5 +1,4 @@
 //// Modules
-const svg2png = require('svg2png');
 const fs = require('fs');
 const uuid = require('uuid');
 const bcrypt = require('bcrypt');

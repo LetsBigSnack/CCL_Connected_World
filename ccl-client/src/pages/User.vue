@@ -7,10 +7,10 @@
           <h1 class="text-5xl">{{user.userName}}</h1>
         </div>
         <div class="md:ml-auto flex flex-col gap-2">
-          <button @click="createRequest" class="flex text-2xl mr-3 text-white text-md bg-secondary_bcc rounded-[0.5rem] p-2 md:mr-0 hover:bg-tertiary_bcc">
+          <button v-if="loggedInUser" @click="createRequest" class="flex text-2xl mr-3 text-white text-md bg-secondary_bcc rounded-[0.5rem] p-2 md:mr-0 hover:bg-tertiary_bcc">
             Add Friend
           </button>
-          <button class="flex text-2xl mr-3 text-white text-md bg-[#ff5555] rounded-[0.5rem] p-2 md:mr-0 hover:bg-[#f83b3b]">
+          <button v-if="loggedInUser" class="flex text-2xl mr-3 text-white text-md bg-[#ff5555] rounded-[0.5rem] p-2 md:mr-0 hover:bg-[#f83b3b]">
             Report
           </button>
         </div>

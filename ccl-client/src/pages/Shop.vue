@@ -22,9 +22,9 @@
             <label for="price" class="text-lg mb-2">Price:</label>
             <select  v-model="userPrice"  id="price" class="appearance-none w-full rounded-md px-3 py-2 bg-component_primary_bcc border-0 focus:border-primary_bcc focus:border-2">
               <option value="" selected>All Prices</option>
-              <option value="0-50">0 - 50 BP</option>
-              <option value="50-100">50 - 100 BP</option>
-              <option value="100">100+ BP</option>
+              <option value="0-150">0 - 150 BP</option>
+              <option value="150-250">150 - 250 BP</option>
+              <option value="250">250+ BP</option>
             </select>
           </div>
           <div class="flex w-full justify-center">
@@ -37,7 +37,6 @@
       <div class="w-full md:w-3/4">
         <ul class="h-[80vh] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 overflow-y-scroll no-scrollbar auto-rows-min" v-if="champions">
           <ChampionElement v-for="champion in filteredChampions" :championID="champion.championID" :championName="champion.championName" :championType="champion.championType" :championPicturePath="champion.championImagePath" :championPrice="champion.championPrice"></ChampionElement>
-          <!-- Add more champion cards as needed -->
         </ul>
       </div>
     </div>
@@ -69,14 +68,14 @@ function filterChampions(){
   }
   if(userPrice){
     switch (userPrice.value){
-      case '0-50':
-        filteredChampions.value = filteredChampions.value.filter(champion => champion.championPrice <= 50);
+      case '0-150':
+        filteredChampions.value = filteredChampions.value.filter(champion => champion.championPrice <= 150);
         break;
-      case '50-100':
-        filteredChampions.value = filteredChampions.value.filter(champion => champion.championPrice >= 50 && champion.championPrice <= 100);
+      case '150-250':
+        filteredChampions.value = filteredChampions.value.filter(champion => champion.championPrice >= 150 && champion.championPrice <= 250);
         break;
-      case '100':
-        filteredChampions.value = filteredChampions.value.filter(champion => champion.championPrice >= 100);
+      case '250':
+        filteredChampions.value = filteredChampions.value.filter(champion => champion.championPrice >= 250);
         break;
     }
   }

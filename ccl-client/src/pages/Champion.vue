@@ -23,8 +23,11 @@
               </div>
             </div>
           </div>
-          <button @click="buyChampion" class="items-center text-center mr-3 text-md bg-secondary_bcc rounded-[0.5rem] p-2 md:mr-0 hover:bg-tertiary_bcc focus:border-primary_bcc focus:border-2">
+          <button v-if="loggedInUser && !isOwned" @click="showDialogBox = true" class="items-center text-center mr-3 text-md bg-secondary_bcc rounded-[0.5rem] p-2 md:mr-0 hover:bg-tertiary_bcc focus:border-primary_bcc focus:border-2">
             Buy Champion
+          </button>
+          <button v-else-if="loggedInUser && isOwned" @click="showDialogBox = true" disabled class="items-center text-center mr-3 text-md rounded-[0.5rem] p-2 md:mr-0 bg-tertiary_bcc focus:border-primary_bcc focus:border-2">
+            Owned
           </button>
         </div>
       </div>
@@ -46,6 +49,28 @@
       </div>
     </div>
   </div>
+  <div v-if="showDialogBox && loggedInUser" class="fixed inset-0 flex items-center justify-center w-screen h-screen backdrop-blur">
+    <div class="bg-component_primary_bcc rounded-lg shadow-lg p-4 border-4 border-component_secondary_bcc">
+      <h2 class="text-xl font-bold mb-4">Do you want to buy <span class="text-primary_bcc">{{champion.championName}}</span></h2>
+      <div class="flex justify-between">
+        <p>Champion Cost:</p><span class="text-secondary_bcc">{{champion.championPrice}} BP</span>
+      </div>
+      <div class="flex justify-between">
+        <p>Wallet Amount: </p><span class="text-secondary_bcc">{{loggedInUser.amount}} BP</span>
+      </div>
+      <div class="border-t-2 border-primary_bcc flex justify-between">
+        <p>Remaining Amount: </p><span class="text-secondary_bcc">{{loggedInUser.amount - champion.championPrice}} BP</span>
+      </div>
+      <div class="flex gap-2">
+        <button :disabled="(loggedInUser.amount - champion.championPrice) <= 0"  @click="buyChampion" class="bg-secondary_bcc text-white px-4 py-2 rounded-md mt-4  hover:bg-tertiary_bcc disabled:bg-component_secondary_bcc">
+          Buy
+        </button>
+        <button @click="showDialogBox = false"  class="bg-[#ff5555] text-white px-4 py-2 rounded-md mt-4  hover:bg-[#f83b3b]">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 <script setup>
 import {onMounted, onRenderTriggered, onUpdated, ref, watch} from "vue";
@@ -57,11 +82,15 @@ const router = useRouter();
 const championID =  route.params.championID;
 const champion = ref();
 const loggedInUser = ref();
+const showDialogBox = ref(false);
+const isOwned = ref(false);
 
-onMounted(() => {
-  login();
-  getChampion();
+onMounted(async () => {
+  await login();
+  await getChampion();
+  await getUserChampion();
 })
+
 
 async function login(){
   let test = await fetch('http://127.0.0.1:3000/api/login', {
@@ -94,6 +123,7 @@ async function getChampion(){
 }
 
 async function buyChampion(){
+  showDialogBox.value = false;
   let test = await fetch('http://127.0.0.1:3000/api/wallet/buy', {
     method: 'POST',
     redirect: 'follow',
@@ -107,7 +137,28 @@ async function buyChampion(){
   let data = await test.json();
   console.log(data);
   if(data.success){
+    router.go("/");
     console.log("Great Success");
+  }
+}
+
+async function getUserChampion(){
+  if(!loggedInUser.value){
+    return;
+  }
+  let test = await fetch(`http://127.0.0.1:3000/api/userChampions/`, {
+    method: 'POST',
+    redirect: 'follow',
+    credentials: 'include',
+    headers: {'Content-Type': 'application/json'},
+    body:  JSON.stringify({
+      userID: loggedInUser.value.id,
+      championID: championID
+    })
+  });
+  let data = await test.json();
+  if(data.success){
+    isOwned.value = true;
   }
 }
 
