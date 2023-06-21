@@ -57,7 +57,7 @@ onMounted(() => {
 })
 
 function filterChampions(){
-  console.log(userType.value)
+
   if(userInput.value){
     filteredChampions.value = champions.value.filter(champion => champion.championName.toLowerCase().includes(userInput.value.toLowerCase()));
   }else{

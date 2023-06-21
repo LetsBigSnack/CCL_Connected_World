@@ -50,7 +50,7 @@ function getFriends(req, res, next) {
 }
 
 function getRequest(req, res, next) {
-    console.log(req.params.userID);
+    ;
     userFriendModel.getRequest(parseInt(req.params.userID))
         .then(request => {
             userModel.getUsers()
@@ -79,7 +79,7 @@ function getRequest(req, res, next) {
 
         })
         .catch(error => {
-            console.log("error");
+            ;
             let jsonReturnObject = {
                 success : false,
                 error: error
@@ -92,7 +92,7 @@ function getRequest(req, res, next) {
 function getAllRequest(req,res,next){
 
     userFriendModel.getAllRequest(parseInt(req.params.userID)).then(response => {
-        console.log("create Request")
+
         let jsonReturnObject = {
             success : true,
             data: response
@@ -102,7 +102,7 @@ function getAllRequest(req,res,next){
 
     })
         .catch(error => {
-            console.log(error)
+
             let jsonReturnObject = {
                 success : false,
                 error: error
@@ -123,7 +123,7 @@ async function createRequest(req, res, next) {
         return res.send(jsonReturnObject);
     }
 
-    console.log("before await")
+
     await Promise.all([userFriendModel.getFriends(parseInt(req.user.id)),  userFriendModel.getAllRequest(parseInt(req.user.id))]).
     then(values=> {
         let friends = values[0].find(element =>
@@ -135,7 +135,7 @@ async function createRequest(req, res, next) {
             || (element.userID_2 === parseInt(req.user.id) &&  element.userID_1 === parseInt(req.body.userID_2)));
 
         if(friends || request){
-            console.log("FOUND");
+            ;
             let jsonReturnObject = {
                 success : false,
                 error: "You are either already friends or there is a pending request"
@@ -145,7 +145,7 @@ async function createRequest(req, res, next) {
         }else{
             userFriendModel.createRequest(req.body)
                 .then(response => {
-                    console.log("create Request")
+
                     let jsonReturnObject = {
                         success : true,
                         data: response
@@ -155,7 +155,7 @@ async function createRequest(req, res, next) {
 
                 })
                 .catch(error => {
-                    console.log(error)
+
                     let jsonReturnObject = {
                         success : false,
                         error: error
@@ -166,7 +166,7 @@ async function createRequest(req, res, next) {
         }
     })
     .catch(error => {
-        console.log(error);
+        ;
         let jsonReturnObject = {
             success : false,
             error: error
@@ -174,7 +174,7 @@ async function createRequest(req, res, next) {
         res.status(500);
         return res.send(jsonReturnObject);
     });
-    console.log("after await")
+
 
 }
 

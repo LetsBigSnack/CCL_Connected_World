@@ -118,7 +118,7 @@ async function getChampion(){
   let data = await test.json();
   if(data.success){
     champion.value = data.data;
-    console.log(champion.value)
+
   }else{
 
   }
@@ -137,10 +137,10 @@ async function buyChampion(){
     })
   });
   let data = await test.json();
-  console.log(data);
+  ;
   if(data.success){
     router.go();
-    console.log("Great Success");
+    ;
   }
 }
 

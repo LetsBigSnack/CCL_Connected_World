@@ -86,7 +86,7 @@ const pending = ref(false);
 const alreadyFriends = ref(false);
 
 onMounted(async () => {
-  console.log(userID);
+  ;
   await login();
   await getUser();
   if(loggedInUser.value){
@@ -119,7 +119,7 @@ async function getUser(){
   let data = await test.json();
   if(data.success){
     user.value = data.data;
-    console.log(user.value)
+
   }else{
 
   }
@@ -135,7 +135,7 @@ async function getFriends(){
   let data = await test.json();
   if(data.success){
     friends.value = data.data;
-    console.log(friends.value);
+    ;
     if(friends.value.find(element => element.userID_1 === parseInt(userID) || element.userID_2 === parseInt(userID))){
       alreadyFriends.value = true;
     }
@@ -154,7 +154,7 @@ async function getRequest(){
   let data = await test.json();
   if(data.success){
     request.value = data.data;
-    console.log(request.value);
+    ;
     if(request.value.find(element => element.userID_1 === parseInt(userID) || element.userID_2 === parseInt(userID))){
       pending.value = true;
     }
@@ -175,7 +175,7 @@ async function createRequest(){
     })
   });
   let data = await test.json();
-  console.log(data);
+  ;
   if(data.success){
     router.go();
   }

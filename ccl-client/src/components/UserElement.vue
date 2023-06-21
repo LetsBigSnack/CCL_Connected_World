@@ -25,7 +25,7 @@ const props = defineProps(['userID', 'userName', 'userImagePath']);
 const router = useRouter();
 const loggedInUser = ref();
 
-console.log(props.userImagePath);
+;
 
 onMounted(() => {
   login();
@@ -42,8 +42,8 @@ async function login(){
   let data = await test.json();
   if(data.success){
     loggedInUser.value = data.data;
-    console.log(loggedInUser.value);
-    console.log(props.userID);
+    ;
+    ;
   }
 }
 
@@ -59,7 +59,7 @@ async function createRequest(){
     })
   });
   let data = await test.json();
-  console.log(data);
+  ;
   if(data.success){
     await router.go();
   }

@@ -72,9 +72,9 @@ let deleteUserWalletTransactions = (userID) => new Promise(async (resolve, rejec
             });
         } else {
             if (userWallets[0]) {
-                console.log("during");
+                ;
                 userWallet = userWallets[0];
-                console.log(userWallet);
+                ;
                 transactionModel.deleteTransactions(userWallet.userWalletID).then(async data => {
                     await deleteUserWallet(userID)
                     resolve(data)
@@ -97,13 +97,13 @@ let deleteUserWallet = (userID) => new Promise(async (resolve, reject) => {
     let sql = "DELETE FROM userWallets WHERE userID = " + db.escape(userID);
     db.query(sql, function (err, userWallets, fields) {
         if (err) {
-            console.log("error");
+            ;
             return reject({
                 status: 500,
                 msg: err
             });
         } else {
-            console.log("resolve");
+            ;
             resolve(userWallets)
         }
     })

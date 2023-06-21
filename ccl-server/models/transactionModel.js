@@ -7,7 +7,7 @@ const db = require('../services/database.js').config;
 
 let createTransaction  = (transactionData) => new Promise((resolve, reject) => {
 
-    console.log("transaction"+transactionData);
+    ;
 
     let sql = "INSERT INTO transactions " +
         "(userWalletID, transactionAmount, transactionDescription) " +
@@ -49,19 +49,19 @@ let getTransactions = (userWalletID) => new Promise((resolve, reject) => {
 });
 
 let deleteTransactions = (userWalletID) => new Promise((resolve, reject) => {
-    console.log("during await");
-    console.log(userWalletID);
+    ;
+    ;
     let sql = "DELETE FROM transactions WHERE userWalletID = "+db.escape(userWalletID);
 
     db.query(sql, function (err, transactions, fields) {
         if (err) {
-            console.log(err)
+
             return reject({
                 status: 500,
                 msg: err
             });
         }else{
-            console.log("resolve");
+            ;
             resolve(transactions)
         }
 

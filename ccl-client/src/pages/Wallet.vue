@@ -92,7 +92,7 @@ async function getWallet(){
   });
   let data = await test.json();
   if(data.success){
-    console.log(data);
+    ;
     wallet.value = data.data;
   }
 }
@@ -106,7 +106,7 @@ async function getTransaction(){
   });
   let data = await test.json();
   if(data.success){
-    console.log(data);
+    ;
     transactions.value = data.data;
     if(transactions.value.length>0){
       fromTransaction.value = 1;
@@ -154,10 +154,10 @@ function applyFilter(){
   if(fromTransaction.value < 1){
     return;
   }
-  console.log(fromTransaction.value-1,toTransaction.value-1,transactions.value.length);
+  ;
   let tempTransactions = [];
   for(let i = fromTransaction.value-1; i < toTransaction.value; i++){
-    console.log("index"+i);
+    ;
     tempTransactions.push(transactions.value[i]);
   }
   filteredTransactions.value = tempTransactions;
@@ -176,9 +176,9 @@ async function addFunds(amount){
     })
   });
   let data = await test.json();
-  console.log(data);
+  ;
   if(data.success){
-    console.log("Great Success");
+    ;
     router.go();
   }
 }

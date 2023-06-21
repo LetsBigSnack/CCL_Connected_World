@@ -105,12 +105,12 @@ let updateUser = (userData, userID) => new Promise (async (resolve, reject)=> {
                 sqls += sql + ";";
             }
         }
-        console.log("end of loop");
-        console.log(sqls);
+        ;
+        ;
         db.query(sqls, function (err, result, fields){
-            console.log("await");
+            ;
             if(err) {
-                console.log("big error");
+                ;
                 reject({
                     status: 500,
                     msg: err

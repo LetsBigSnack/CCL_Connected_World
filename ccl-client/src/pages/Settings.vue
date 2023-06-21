@@ -110,10 +110,10 @@ onMounted(() => {
 function handleFileChange(event){
   profileImageFile.value = event.target.files[0];
   if(!profileImageFile.value.type.includes("image")){
-    console.log("not an image");
+    ;
     profileImageFile.value = null;
   }
-  console.log(profileImageFile.value)
+
 }
 
 async function login(){
@@ -163,7 +163,7 @@ async function updateProfile(){
     userPassword:newPassword.value
   })
   let data = await test.json();
-  console.log(data)
+
   if(data.success){
     errors.value = undefined;
     router.go();
@@ -193,7 +193,7 @@ async function updateProfilePicture(){
     errors.value = undefined;
     await router.go();
   }else{
-    console.log(data.error);
+    ;
     errors.value = data.error;
   }
 }

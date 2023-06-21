@@ -28,7 +28,7 @@ let getRequest = (userID) => new Promise((resolve, reject) => {
 
     db.query(sql, async function (err, requests, fields) {
         if (err) {
-            console.log("error")
+
             return reject({
                 status: 500,
                 msg: err
@@ -45,7 +45,7 @@ let getAllRequest = (userID) => new Promise((resolve, reject) => {
 
     db.query(sql, async function (err, requests, fields) {
         if (err) {
-            console.log("error")
+
             return reject({
                 status: 500,
                 msg: err

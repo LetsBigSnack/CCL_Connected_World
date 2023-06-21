@@ -89,7 +89,7 @@ function createUser(req, res, next) {
 
             userModel.getUsers()
                 .then(async users => {
-                    console.log(req.body);
+                    ;
                     await authenticateUser(req.body, users, res)
                 })
                 .catch(error => {
@@ -136,7 +136,7 @@ function updateUser(req,res,next){
 
     userModel.updateUser(req.body, parseInt(req.params.userID))
         .then(async users => {
-            console.log(req.body);
+            ;
             userModel.getUser(parseInt(req.params.userID)).then(user => {
                     updateJWT(res, user)
                     let jsonReturnObject = {
@@ -147,7 +147,7 @@ function updateUser(req,res,next){
                     res.send(jsonReturnObject);
                 }
             ).catch(error => {
-                console.log(error);
+                ;
                 let jsonReturnObject = {
                     success : false,
                     error: error.msg
@@ -157,7 +157,7 @@ function updateUser(req,res,next){
             })
         })
         .catch(error => {
-            console.log(error);
+            ;
             let jsonReturnObject = {
                 success : false,
                 error: error.msg
@@ -229,7 +229,7 @@ function deleteUser(req,res,next){
 }
 
 async function uploadImage(req,res,next){
-    console.log(req.files.image);
+    ;
     try{
         if(!req.files){
             let jsonReturnObject = {
@@ -253,7 +253,7 @@ async function uploadImage(req,res,next){
                     //TODO change file extension
                     let filename = './public/userImages/'+req.params.userID + '.jpg';
                     await image.mv(filename);
-                    console.log('Saved Picture to: '+ filename);
+                    ;
                     userPictureModel.uploadPicture(parseInt(req.params.userID), "userImages/"+req.params.userID + ".jpg")
                         .then(userPicture => {
                             res.send({
@@ -295,7 +295,7 @@ async function uploadImage(req,res,next){
 }
 
 function login(req,res,next){
-    console.log(req.body)
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         let jsonReturnObject = {
@@ -303,10 +303,10 @@ function login(req,res,next){
             error: errors.errors
         }
         res.status(400);
-        console.log("ohhh")
+
         return res.send(jsonReturnObject);
     }else{
-        console.log(req.body);
+        ;
         userModel.getUsers().then( (users) => {
             authenticateUser(req.body, users, res);
         }).catch(error => {

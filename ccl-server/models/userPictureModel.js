@@ -34,7 +34,7 @@ let uploadPicture = (userID, picturePath) => new Promise((resolve, reject) => {
                 "SET userPicturePath = "+db.escape(picturePath)+" "+
                 "WHERE userID = "+ db.escape(userID);
         }else{
-            console.log("false");
+            ;
             sql = "INSERT INTO userPictures (userID, userPicturePath)" +
                 " VALUES (" +  db.escape(userID) +
                 "," + db.escape(picturePath) +

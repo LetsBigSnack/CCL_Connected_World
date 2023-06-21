@@ -87,8 +87,8 @@ async function buyChampion(req, res, next) {
                         res.send(jsonReturnObject);
                     })
                     .catch(error => {
-                        console.log("nono")
-                        console.log(error);
+
+                        ;
                         let jsonReturnObject = {
                             success : false,
                             error: error
@@ -156,8 +156,8 @@ async function addFunds(req, res, next) {
                         res.send(jsonReturnObject);
                     })
                     .catch(error => {
-                        console.log("nono")
-                        console.log(error);
+
+                        ;
                         let jsonReturnObject = {
                             success : false,
                             error: error
@@ -167,7 +167,7 @@ async function addFunds(req, res, next) {
                     });
             })
             .catch(error => {
-                console.log(error)
+
                 let jsonReturnObject = {
                     success : false,
                     error: error

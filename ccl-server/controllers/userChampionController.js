@@ -34,7 +34,7 @@ function getUserChampions(req, res, next) {
 }
 
 function getUserChampion(req, res, next) {
-    console.log(req.body);
+    ;
     userChampionModel.getUserChampion(parseInt(req.body.userID), parseInt(req.body.championID))
         .then(news => {
             let jsonReturnObject = {

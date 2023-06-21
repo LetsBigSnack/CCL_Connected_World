@@ -23,11 +23,11 @@ async function authenticateUser(data, users, res){
     const user = users.find(u => {
         return u.userName === data.userName
     });
-    console.log("i am here");
+    ;
     //returns pending promise --> doesn't render true
     if (user && await checkPassword(data.password, user.userPassword)) {
         // Generate an access token
-        console.log(ACCESS_TOKEN_SECRET);
+        ;
         const payload =
             {
                 id: user.userID,
@@ -37,7 +37,7 @@ async function authenticateUser(data, users, res){
                 role: user.userRole,
                 amount: user.userWalletAmount
             };
-        console.log(payload);
+        ;
         const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: '1000d' });
         res.cookie('accessToken', accessToken,{
             maxAge:  365 * 24 * 60 * 60 * 1000,
@@ -139,8 +139,8 @@ function updateJWT(res, user,req=undefined){
  */
 async function checkPassword(password, hash){
     let pw = await bcrypt.compare(password, hash)
-    console.log(password);
-    console.log(pw);
+    ;
+    ;
     return pw;
 }
 
