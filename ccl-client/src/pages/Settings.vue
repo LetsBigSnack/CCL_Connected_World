@@ -66,6 +66,9 @@
       </div>
     </div>
   </div>
+  <div v-else>
+    <NotLoggedIn></NotLoggedIn>
+  </div>
   <div v-if="showDialogBox" class="fixed inset-0 flex items-center justify-center w-screen h-screen backdrop-blur">
     <div class="bg-component_primary_bcc rounded-lg shadow-lg p-4 border-4 border-component_secondary_bcc">
       <h2 class="text-xl font-bold mb-4">Are you sure?</h2>
@@ -81,11 +84,13 @@
 
     </div>
   </div>
+
 </template>
 
 <script setup>
 import {onMounted, ref} from "vue";
 import {useRoute, useRouter} from 'vue-router'
+import NotLoggedIn from "../components/NotLoggedIn.vue";
 
 const route = useRoute()
 const router = useRouter()
@@ -188,6 +193,7 @@ async function updateProfilePicture(){
     errors.value = undefined;
     await router.go();
   }else{
+    console.log(data.error);
     errors.value = data.error;
   }
 }

@@ -11,23 +11,23 @@
         <form @submit.prevent="submitForm">
           <div class="mb-4">
             <label for="username" class="block mb-2">Username</label>
-            <input v-model="username" type="text" id="username" class="w-full rounded-md px-3 py-2 bg-component_primary_bcc border-0" placeholder="Enter your username">
+            <input autocomplete="username" v-model="username" type="text" id="username" class="w-full rounded-md px-3 py-2 bg-component_primary_bcc border-0" placeholder="Enter your username">
           </div>
           <div class="mb-4">
             <label for="email" class="block mb-2">Email</label>
-            <input v-model="email" type="email" id="email" class="w-full rounded-md px-3 py-2 bg-component_primary_bcc border-0" placeholder="Enter your email">
+            <input autocomplete="email" v-model="email" type="email" id="email" class="w-full rounded-md px-3 py-2 bg-component_primary_bcc border-0" placeholder="Enter your email">
           </div>
           <div class="mb-4">
             <label for="email-confirm" class="block mb-2">Confirm Email</label>
-            <input v-model="conf_email"  type="email" id="email-confirm" class="w-full rounded-md px-3 py-2 bg-component_primary_bcc border-0" placeholder="Confirm your email">
+            <input autocomplete="email"  v-model="conf_email"  type="email" id="email-confirm" class="w-full rounded-md px-3 py-2 bg-component_primary_bcc border-0" placeholder="Confirm your email">
           </div>
           <div class="mb-4">
             <label for="password" class="block mb-2">Password</label>
-            <input v-model="password"  type="password" id="password" class="w-full rounded-md px-3 py-2 bg-component_primary_bcc border-0" placeholder="Enter your password">
+            <input autocomplete="new-password" v-model="password"  type="password" id="password" class="w-full rounded-md px-3 py-2 bg-component_primary_bcc border-0" placeholder="Enter your password">
           </div>
           <div class="mb-4">
             <label for="password-confirm" class="block mb-2">Confirm Password</label>
-            <input v-model="conf_password"  type="password" id="password-confirm" class="w-full rounded-md px-3 py-2 bg-component_primary_bcc border-0" placeholder="Confirm your password">
+            <input autocomplete="new-password" v-model="conf_password"  type="password" id="password-confirm" class="w-full rounded-md px-3 py-2 bg-component_primary_bcc border-0" placeholder="Confirm your password">
           </div>
           <div class="mb-4">
             <label class="block mb-2">

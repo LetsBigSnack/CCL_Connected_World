@@ -6,9 +6,15 @@
         <div class="md:ml-4">
           <h1 class="text-5xl">{{user.userName}}</h1>
         </div>
-        <div class="md:ml-auto flex flex-col gap-2">
-          <button v-if="loggedInUser" @click="createRequest" class="flex text-2xl mr-3 text-white text-md bg-secondary_bcc rounded-[0.5rem] p-2 md:mr-0 hover:bg-tertiary_bcc">
+        <div v-if="loggedInUser && parseInt(loggedInUser.id) !== parseInt(userID)" class="md:ml-auto flex flex-col gap-2">
+          <button v-if="loggedInUser && !pending && !alreadyFriends" @click="createRequest" class="flex text-2xl mr-3 text-white text-md bg-secondary_bcc rounded-[0.5rem] p-2 md:mr-0 hover:bg-tertiary_bcc">
             Add Friend
+          </button>
+          <button v-else-if="loggedInUser && pending && !alreadyFriends" disabled class="flex text-2xl mr-3 text-white text-md bg-tertiary_bcc rounded-[0.5rem] p-2 md:mr-0">
+            Pending
+          </button>
+          <button v-else-if="loggedInUser && !pending && alreadyFriends" disabled class="flex text-2xl mr-3 text-white text-md bg-tertiary_bcc rounded-[0.5rem] p-2 md:mr-0">
+            Friended
           </button>
           <button v-if="loggedInUser" class="flex text-2xl mr-3 text-white text-md bg-[#ff5555] rounded-[0.5rem] p-2 md:mr-0 hover:bg-[#f83b3b]">
             Report
@@ -37,28 +43,7 @@
         </div>
       </div>
       <div class="border-t-4 border-component_secondary_bcc mt-8 mb-8 p-4">
-        <h2 class="text-3xl mb-4">Champions</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="bg-component_primary_bcc rounded-lg p-4">
-            <img src="" alt="Champion 1" class="w-16 h-16 mx-auto mb-2">
-            <p class="text-center">Champion 1</p>
-          </div>
-          <div class="bg-component_primary_bcc rounded-lg p-4">
-            <img src="" alt="Champion 2" class="w-16 h-16 mx-auto mb-2">
-            <p class="text-center">Champion 2</p>
-          </div>
-          <div class="bg-component_primary_bcc rounded-lg p-4">
-            <img src="" alt="Champion 3" class="w-16 h-16 mx-auto mb-2">
-            <p class="text-center">Champion 3</p>
-          </div>
-          <div class="bg-component_primary_bcc rounded-lg p-4">
-            <img src="" alt="Champion 4" class="w-16 h-16 mx-auto mb-2">
-            <p class="text-center">Champion 4</p>
-          </div>
-        </div>
-      </div>
-      <div class="border-t-4 border-component_secondary_bcc mt-8 mb-8 p-4">
-        <h2 class="text-3xl mb-4 mb-4">Achievements</h2>
+        <h2 class="text-3xl mb-4">Achievements</h2>
         <ul class="list-disc pl-6">
           <li>First Blood Master - Achieved 100 First Blood kills</li>
           <li>Triple Kill Streak - Achieved 10 Triple Kills</li>
@@ -94,12 +79,20 @@ const route = useRoute()
 const router = useRouter();
 const userID =  route.params.userID;
 const user = ref();
+const friends = ref();
+const request = ref();
 const loggedInUser = ref();
+const pending = ref(false);
+const alreadyFriends = ref(false);
 
-onMounted(() => {
+onMounted(async () => {
   console.log(userID);
-  login();
-  getUser();
+  await login();
+  await getUser();
+  if(loggedInUser.value){
+    await getFriends();
+    await getRequest();
+  }
 })
 
 async function login(){
@@ -132,6 +125,44 @@ async function getUser(){
   }
 }
 
+async function getFriends(){
+  let test = await fetch(`http://127.0.0.1:3000/api/friends/${loggedInUser.value.id}`, {
+    method: 'GET',
+    redirect: 'follow',
+    credentials: 'include',
+    headers: {'Content-Type': 'application/json'},
+  });
+  let data = await test.json();
+  if(data.success){
+    friends.value = data.data;
+    console.log(friends.value);
+    if(friends.value.find(element => element.userID_1 === parseInt(userID) || element.userID_2 === parseInt(userID))){
+      alreadyFriends.value = true;
+    }
+  }else{
+
+  }
+}
+
+async function getRequest(){
+  let test = await fetch(`http://127.0.0.1:3000/api/friends/${loggedInUser.value.id}/open/all`, {
+    method: 'GET',
+    redirect: 'follow',
+    credentials: 'include',
+    headers: {'Content-Type': 'application/json'},
+  });
+  let data = await test.json();
+  if(data.success){
+    request.value = data.data;
+    console.log(request.value);
+    if(request.value.find(element => element.userID_1 === parseInt(userID) || element.userID_2 === parseInt(userID))){
+      pending.value = true;
+    }
+  }else{
+
+  }
+}
+
 async function createRequest(){
   let test = await fetch('http://127.0.0.1:3000/api/friends/add', {
     method: 'POST',
@@ -146,7 +177,7 @@ async function createRequest(){
   let data = await test.json();
   console.log(data);
   if(data.success){
-
+    router.go();
   }
 }
 

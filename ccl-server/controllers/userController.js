@@ -6,11 +6,8 @@ const userChampionModel = require("../models/userChampionModel");
 const userPictureModel = require("../models/userPictureModel");
 const userWalletModel = require("../models/walletModel");
 const userFriendModel = require("../models/userFriendModel");
-const {authenticateUser, updateJWT} = require("../services/authentification");
+const {authenticateUser, updateJWT, checkAccess} = require("../services/authentification");
 //// Functions
-
-//TODO: Only users with the role "Administrator" can change data. Users can only edit their own profile
-//TODO: implement hasAccess to needed functions
 
 /**
  * This function returns all the users in the DB
@@ -84,11 +81,11 @@ function createUser(req, res, next) {
     }
 
     userModel.createUser(req.body)
-        .then(userID => {
+        .then(async userID => {
 
-            userModel.generatePicture(userID).then();
-            userPictureModel.uploadPicture(userID, `userImages/${userID}.svg`).then();
-            userWalletModel.createWallet(userID).then();
+            await userModel.generatePicture(userID).then();
+            await userPictureModel.uploadPicture(userID, `userImages/${userID}.svg`).then();
+            await userWalletModel.createWallet(userID).then();
 
             userModel.getUsers()
                 .then(async users => {
@@ -97,7 +94,7 @@ function createUser(req, res, next) {
                 })
                 .catch(error => {
                     let jsonReturnObject = {
-                        success : false,
+                        success: false,
                         error: error.msg
                     }
                     res.status(error.status);
@@ -116,6 +113,27 @@ function createUser(req, res, next) {
 
 
 function updateUser(req,res,next){
+
+    if(!req.user){
+        let jsonReturnObject = {
+            success : false,
+            error: "No User"
+        }
+        res.status(402);
+        return res.send(jsonReturnObject);
+    }
+
+    let hasAccess = checkAccess(req.user.role, parseInt(req.user.id), parseInt(req.params.userID));
+
+    if(!hasAccess){
+        let jsonReturnObject = {
+            success : false,
+            error: "No Access"
+        }
+        res.status(403);
+        return res.send(jsonReturnObject);
+    }
+
     userModel.updateUser(req.body, parseInt(req.params.userID))
         .then(async users => {
             console.log(req.body);
@@ -150,6 +168,27 @@ function updateUser(req,res,next){
 }
 
 function deleteUser(req,res,next){
+
+    if(!req.user){
+        let jsonReturnObject = {
+            success : false,
+            error: "No User"
+        }
+        res.status(402);
+        return res.send(jsonReturnObject);
+    }
+
+    let hasAccess = checkAccess(req.user.role, parseInt(req.user.id), parseInt(req.params.userID));
+
+    if(!hasAccess){
+        let jsonReturnObject = {
+            success : false,
+            error: "No Access"
+        }
+        res.status(403);
+        return res.send(jsonReturnObject);
+    }
+
 
     let userID = parseInt(req.params.userID);
 
@@ -189,7 +228,6 @@ function deleteUser(req,res,next){
         });
 }
 
-//TODO change image upload;
 async function uploadImage(req,res,next){
     console.log(req.files.image);
     try{
@@ -214,9 +252,8 @@ async function uploadImage(req,res,next){
                 if(validImageTypes.includes(image.mimetype)){
                     //TODO change file extension
                     let filename = './public/userImages/'+req.params.userID + '.jpg';
-                    image.mv(filename);
+                    await image.mv(filename);
                     console.log('Saved Picture to: '+ filename);
-                   ;
                     userPictureModel.uploadPicture(parseInt(req.params.userID), "userImages/"+req.params.userID + ".jpg")
                         .then(userPicture => {
                             res.send({

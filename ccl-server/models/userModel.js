@@ -43,7 +43,6 @@ let getUser = (userID) => new Promise((resolve, reject) => {
                 "LEFT JOIN userWallets "+
                 "ON users.userID = userWallets.userID "+
                 "WHERE users.userID = "+ db.escape(userID);
-    console.log(sql);
     db.query(sql, function (err, user, fields) {
         if (err) {
             reject({

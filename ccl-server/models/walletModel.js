@@ -32,7 +32,6 @@ let changeAmount = (buyData) => new Promise((resolve, reject) => {
         "SET userWalletAmount = "+ db.escape(parseInt(buyData.walletAmount))+" "+
         "WHERE userID = "+ db.escape(parseInt(buyData.userID));
 
-    console.log(sql);
     db.query(sql, function (err, result, fields){
         if(err) {
             reject({
@@ -50,7 +49,6 @@ let createWallet = (userID) => new Promise((resolve, reject) => {
         "(userID, userWalletAmount) " +
         "VALUES ("+db.escape(userID)+", 500);"
 
-    console.log(sql);
     db.query(sql, function (err, result, fields){
         if(err) {
             reject({
@@ -66,8 +64,6 @@ let createWallet = (userID) => new Promise((resolve, reject) => {
 let deleteUserWalletTransactions = (userID) => new Promise(async (resolve, reject) => {
     let sql = "SELECT * FROM userWallets WHERE userID = " + db.escape(userID);
     let userWallet = {};
-    console.log(sql);
-    console.log("before sql")
     await db.query(sql, function (err, userWallets, fields) {
         if (err) {
             return reject({

@@ -20,20 +20,19 @@
               <router-link to="/social" class="hover:text-primary_bcc block py-2 pl-3 pr-4 rounded hover:bg-tertiary_bcc md:hover:bg-transparent md:hover:text-primary_bcc md:p-0">Community</router-link>
             </li>
             <li>
-              <router-link to="/" class="hover:text-primary_bcc block py-2 pl-3 pr-4 rounded hover:bg-tertiary_bcc md:hover:bg-transparent md:hover:text-primary_bcc md:p-0 ">Play</router-link>
+              <router-link v-if="user" to="/game" class="hover:text-primary_bcc block py-2 pl-3 pr-4 rounded hover:bg-tertiary_bcc md:hover:bg-transparent md:hover:text-primary_bcc md:p-0 ">Play</router-link>
             </li>
-            <div v-if="!user" class="flex gap-4">
-              <li>
+            <li>
+              <div v-if="!user" class="flex gap-4">
                 <router-link to="/login" class="flex mr-3 text-white text-md bg-secondary_bcc rounded-[0.5rem] p-2 md:mr-0 hover:bg-tertiary_bcc">
                   Login
                 </router-link>
-              </li>
-              <li>
+
                 <router-link to="/register" class="flex mr-3 text-white text-md bg-secondary_bcc rounded-[0.5rem] p-2 md:mr-0 hover:bg-tertiary_bcc">
                   Sign up
                 </router-link>
-              </li>
-            </div>
+              </div>
+            </li>
           </ul>
         </div>
 
@@ -55,7 +54,7 @@
                 <router-link v-if="user"  :to="`/users/${user.id}`" class="block px-4 py-2 text-sm hover:bg-primary_bcc hover:text-component_primary_bcc">Profile</router-link>
               </li>
               <li>
-                <router-link to="/setting" class="block px-4 py-2 text-sm hover:bg-primary_bcc hover:text-component_primary_bcc">Settings</router-link>
+                <router-link to="/settings" class="block px-4 py-2 text-sm hover:bg-primary_bcc hover:text-component_primary_bcc">Settings</router-link>
               </li>
               <li>
                 <router-link to="/wallet" class="block px-4 py-2 text-sm hover:bg-primary_bcc hover:text-component_primary_bcc">Wallet</router-link>

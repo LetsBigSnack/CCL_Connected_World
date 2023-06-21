@@ -28,7 +28,7 @@ async function acceptRequest(){
     })
   });
   let data = await test.json();
-  console.log(data);
+  http://127.0.0.1:3000/
   if(data.success){
     await router.go();
   }

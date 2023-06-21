@@ -6,7 +6,6 @@
 
   <div class="max-w-6xl mx-auto px-4 py-8">
     <PatchView ></PatchView>
-    <!-- Game Description -->
     <br>
     <div>
       <div class="border-t-2 border-component_secondary_bcc p-4 font-main_content">
@@ -22,9 +21,9 @@
       <div class="border-t-2 border-component_secondary_bcc  p-4 font-main_content flex flex-col">
         <h2 class="text-5xl mb-4 font-display text-primary_bcc">Play the Game</h2>
         <p class="mb-4">Prepare yourself for adrenaline-pumping battles and endless excitement in BattleChamp! Enter the arena, choose your champion, and prove your worth as the ultimate brawler. Are you ready to become the BattleChamp? Play now and find out!</p>
-        <button class="flex mr-3 text-md bg-secondary_bcc rounded-[0.5rem] p-2 md:mr-0 hover:bg-tertiary_bcc text-center justify-center font-display text-5xl">
+        <router-link to="/game" class="flex mr-3 text-md bg-secondary_bcc rounded-[0.5rem] p-2 md:mr-0 hover:bg-tertiary_bcc text-center justify-center font-display text-5xl">
           Play now
-        </button>
+        </router-link>
       </div>
     </div>
 

@@ -11,10 +11,26 @@ const config = mysql.createConnection({
     multipleStatements: true
 });
 
+function handleDisconnect() {
+    config.connect((err) => {
+        if (err) {
+            console.error('Error connecting to database:', err);
+            setTimeout(handleDisconnect, 2000); // Retry connection after 2 seconds
+        }else{
+            console.log("Connected");
+        }
+    });
 
-config.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-});
+    config.on('error', (err) => {
+        console.error('Database connection error:', err);
+        if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+            handleDisconnect(); // Reconnect if the connection is lost
+        } else {
+            throw err;
+        }
+    });
+}
+
+handleDisconnect();
 
 module.exports = {config};

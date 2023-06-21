@@ -15,6 +15,8 @@ router.route('/:userID')
     .get(userFriendsController.getFriends);
 router.route('/:userID/open')
     .get(userFriendsController.getRequest);
+router.route('/:userID/open/all')
+    .get(userFriendsController.getAllRequest);
 
 //// Modules
 module.exports = router;

@@ -41,6 +41,9 @@
       </div>
     </div>
   </div>
+  <div v-else>
+    <NotLoggedIn></NotLoggedIn>
+  </div>
 </template>
 
 <script setup>
@@ -48,6 +51,7 @@ import {onMounted, ref} from "vue";
 import { initTE } from "tw-elements";
 import TransactionElement from "../components/TransactionElement.vue";
 import {useRouter} from "vue-router";
+import NotLoggedIn from "../components/NotLoggedIn.vue";
 const wallet = ref();
 const loggedInUser = ref();
 const fromTransaction = ref();
@@ -60,8 +64,10 @@ const router = useRouter();
 onMounted(async () => {
   initTE();
   await login();
-  await getWallet();
-  await getTransaction();
+  if(loggedInUser.value){
+    await getWallet();
+    await getTransaction();
+  }
 });
 
 async function login(){

@@ -34,20 +34,37 @@ let getRequest = (userID) => new Promise((resolve, reject) => {
                 msg: err
             });
         }else{
-            console.log("here");
-            console.log(requests);
             resolve(requests)
         }
 
     })
 });
 
+let getAllRequest = (userID) => new Promise((resolve, reject) => {
+    let sql = "SELECT * FROM userFriends WHERE userFriendAccept = 0  AND (userID_1 = "+db.escape(userID) + " OR "+ "userID_2 = "+db.escape(userID)+")";
+
+    db.query(sql, async function (err, requests, fields) {
+        if (err) {
+            console.log("error")
+            return reject({
+                status: 500,
+                msg: err
+            });
+        }else{
+            resolve(requests)
+        }
+
+    })
+});
+
+
+
 let createRequest = (userFriendData) => new Promise((resolve, reject) => {
     let sql = "INSERT INTO `userFriends` " +
         "(`userID_1`, `userID_2`, `userFriendAccept`) " +
         "VALUES " +
-        "("+db.escape(userFriendData.userID_1)+", " +
-        ""+db.escape(userFriendData.userID_2)+", " +
+        "("+db.escape(parseInt(userFriendData.userID_1))+", " +
+        ""+db.escape(parseInt(userFriendData.userID_2))+", " +
         "0);"
     db.query(sql, async function (err, requests, fields) {
         if (err) {
@@ -105,5 +122,6 @@ module.exports = {
     getRequest,
     createRequest,
     acceptRequest,
-    deleteUserFriends
+    deleteUserFriends,
+    getAllRequest
 };

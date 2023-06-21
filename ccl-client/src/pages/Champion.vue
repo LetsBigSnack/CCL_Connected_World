@@ -87,8 +87,10 @@ const isOwned = ref(false);
 
 onMounted(async () => {
   await login();
-  await getChampion();
-  await getUserChampion();
+  if (loggedInUser.value){
+    await getChampion();
+    await getUserChampion();
+  }
 })
 
 
@@ -137,7 +139,7 @@ async function buyChampion(){
   let data = await test.json();
   console.log(data);
   if(data.success){
-    router.go("/");
+    router.go();
     console.log("Great Success");
   }
 }

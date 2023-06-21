@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto py-8">
+  <div v-if="loggedInUser" class="container mx-auto py-8">
     <div class="flex flex-col md:flex-row gap-8">
       <div class="w-full md:w-1/4" style="align-self: start;">
         <div class="bg-component_secondary_bcc rounded-lg p-6 mb-8 shadow-lg shadow-black">
@@ -32,10 +32,14 @@
       </div>
     </div>
   </div>
+  <div v-else>
+    <NotLoggedIn></NotLoggedIn>
+  </div>
 </template>
 <script setup>
 import ChampionElement from "../components/ChampionElement.vue";
 import {onMounted, ref} from "vue";
+import NotLoggedIn from "../components/NotLoggedIn.vue";
 
 const champions = ref();
 const filteredChampions = ref();
@@ -45,7 +49,9 @@ const loggedInUser = ref();
 
 onMounted(async () => {
   await login();
-  await getUserChampions();
+  if(loggedInUser){
+    await getUserChampions();
+  }
 })
 
 
