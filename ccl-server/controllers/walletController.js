@@ -9,12 +9,10 @@ const userChampionModel = require("../models/userChampionModel");
 //// Functions
 
 /**
- * This function returns all the users in the DB
- * Preferred-Methode: GET
- *
- * @param req HTTP-Request
- * @param res HTTP-Response
- * @param next Possible-Middleware Callback
+ * Retrieves the user's wallet.
+ * @param {object} req - The HTTP request.
+ * @param {object} res - The HTTP response.
+ * @param {function} next - The next middleware function.
  */
 function getUserWallet(req, res, next) {
     walletModel.getUserWallet(req.params.userID)
@@ -37,6 +35,12 @@ function getUserWallet(req, res, next) {
         });
 }
 
+/**
+ * Buys a champion for the user.
+ * @param {object} req - The HTTP request.
+ * @param {object} res - The HTTP response.
+ * @param {function} next - The next middleware function.
+ */
 async function buyChampion(req, res, next) {
 
     const errors = validationResult(req);
@@ -118,6 +122,12 @@ async function buyChampion(req, res, next) {
 
 
 
+/**
+ * Adds funds to the user's wallet.
+ * @param {object} req - The HTTP request.
+ * @param {object} res - The HTTP response.
+ * @param {function} next - The next middleware function.
+ */
 async function addFunds(req, res, next) {
 
     const errors = validationResult(req);
@@ -178,6 +188,12 @@ async function addFunds(req, res, next) {
     }
 }
 
+/**
+ * Checks if the user has sufficient funds.
+ * @param {number} cost - The cost of the item.
+ * @param {number} amount - The amount of funds in the wallet.
+ * @returns {boolean} - True if the user has sufficient funds, false otherwise.
+ */
 function checkFunds(cost, amount){
     return amount - cost >= 0;
 }

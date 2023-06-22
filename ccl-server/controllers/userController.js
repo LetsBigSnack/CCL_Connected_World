@@ -10,12 +10,10 @@ const {authenticateUser, updateJWT, checkAccess} = require("../services/authenti
 //// Functions
 
 /**
- * This function returns all the users in the DB
- * Preferred-Methode: GET
- *
- * @param req HTTP-Request
- * @param res HTTP-Response
- * @param next Possible-Middleware Callback
+ * Retrieves all users from the database.
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @param {function} next - The possible middleware callback.
  */
 function getUsers(req, res, next) {
     userModel.getUsers()
@@ -39,12 +37,10 @@ function getUsers(req, res, next) {
 }
 
 /**
- * This function returns all the users in the DB
- * Preferred-Methode: GET
- *
- * @param req HTTP-Request
- * @param res HTTP-Response
- * @param next Possible-Middleware Callback
+ * Retrieves a specific user from the database.
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @param {function} next - The possible middleware callback.
  */
 function getUser(req, res, next) {
     let userID = parseInt(req.params.userID);
@@ -68,6 +64,12 @@ function getUser(req, res, next) {
         });
 }
 
+/**
+ * Creates a new user in the database.
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @param {function} next - The possible middleware callback.
+ */
 function createUser(req, res, next) {
 
     const errors = validationResult(req);
@@ -112,6 +114,12 @@ function createUser(req, res, next) {
 }
 
 
+/**
+ * Updates a user in the database.
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @param {function} next - The possible middleware callback.
+ */
 function updateUser(req,res,next){
 
     if(!req.user){
@@ -167,6 +175,12 @@ function updateUser(req,res,next){
         });
 }
 
+/**
+ * Deletes a user from the database.
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @param {function} next - The possible middleware callback.
+ */
 function deleteUser(req,res,next){
 
     if(!req.user){
@@ -228,8 +242,14 @@ function deleteUser(req,res,next){
         });
 }
 
+/**
+ * Uploads an image for a user.
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @param {function} next - The possible middleware callback.
+ */
+
 async function uploadImage(req,res,next){
-    ;
     try{
         if(!req.files){
             let jsonReturnObject = {
@@ -294,6 +314,12 @@ async function uploadImage(req,res,next){
 
 }
 
+/**
+ * Authenticates a user and generates a JWT token.
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @param {function} next - The possible middleware callback.
+ */
 function login(req,res,next){
 
     const errors = validationResult(req);

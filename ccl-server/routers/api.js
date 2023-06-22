@@ -1,9 +1,6 @@
 //// Modules
 const express = require('express');
 
-//// Controllers
-
-
 //// Routers
 const userRouter = require("../routers/users");
 const patchnotesRouter = require("../routers/patches");
@@ -14,6 +11,7 @@ const userChampionsRouter = require("../routers/userChampion");
 const userFriendsRouter = require("../routers/userFriends");
 const loginRouter = require("../routers/login");
 const logoutRouter = require("../routers/logout");
+
 //// Routes
 const router = express.Router();
 

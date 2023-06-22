@@ -1,7 +1,7 @@
 //// Modules
 const mysql = require('mysql');
 
-
+// Configuration for the Database inside the .env file
 const config = mysql.createConnection({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
@@ -11,13 +11,16 @@ const config = mysql.createConnection({
     multipleStatements: true
 });
 
+/**
+ * Handles disconnections and tries to reconnect every 2 seconds
+ */
 function handleDisconnect() {
     config.connect((err) => {
         if (err) {
             console.error('Error connecting to database:', err);
             setTimeout(handleDisconnect, 2000); // Retry connection after 2 seconds
         }else{
-            ;
+            console.log("DATABASE CONNECTED")
         }
     });
 
@@ -31,6 +34,7 @@ function handleDisconnect() {
     });
 }
 
+//Starts the Connection process
 handleDisconnect();
 
 module.exports = {config};

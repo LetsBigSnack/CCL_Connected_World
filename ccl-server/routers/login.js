@@ -1,12 +1,13 @@
 //// Modules
 const express = require('express');
-
+const {body} = require("express-validator");
 //// Controllers
 const userController = require("../controllers/userController");
-const {body} = require("express-validator");
+const userModel = require("../models/userModel");
+
+// Services
 const {updateJWT} = require("../services/authentification");
 
-const userModel = require("../models/userModel");
 
 //// Routes
 const router = express.Router();
@@ -14,6 +15,7 @@ const router = express.Router();
 
 router.route('/')
     .get((req,res,next)=>{
+        //didn't need a controllers for 1 methode
         if(req.user){
 
             userModel.getUser(req.user.id).then(user => {

@@ -8,6 +8,11 @@ const abilityModel = require('../models/abilityModel');
 
 //// Functions
 
+/**
+ * Retrieves all champions from the database.
+ * @returns {Promise<Array>} A promise that resolves to an array of champions.
+ * @rejects {Object} An object containing the status and error message if an error occurs during the retrieval process.
+ */
 let getChampions = () => new Promise((resolve, reject) => {
     let sql = "SELECT * FROM champions";
 
@@ -18,24 +23,18 @@ let getChampions = () => new Promise((resolve, reject) => {
                 msg: err
             });
         }else{
-            /**
-             * for (const champion of champions) {
-             *                 const index = champions.indexOf(champion);
-             *                 await abilityModel.getChampionAbilities(champion.championID)
-             *                     .then((abilities) => {
-             *                         champions[index].abilities = abilities;
-             *                     })
-             *                     .catch((error) => {
-             *                         reject(error);
-             *                     });
-             *             }
-             */
             resolve(champions)
         }
 
     })
 });
 
+/**
+ * Retrieves a specific champion from the database based on the provided champion ID.
+ * @param {number} championID - The ID of the champion to retrieve.
+ * @returns {Promise<Object>} A promise that resolves to the champion object with its abilities.
+ * @rejects {Object} An object containing the status and error message if an error occurs during the retrieval process or if no champion with the specified ID is found.
+ */
 let getChampion = (championID) => new Promise((resolve, reject) => {
     let sql = "SELECT * FROM champions WHERE championID = "+ db.escape(championID);
 

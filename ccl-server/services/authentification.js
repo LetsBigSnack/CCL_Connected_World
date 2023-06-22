@@ -2,12 +2,12 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
+// Variables
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 
 /**
  * This function tries to authenticate the user based on given data
- * @param uname The username of the user
- * @param pw The encrypted password of the user
+ * @param data The contains the username and password of the user
  * @param users A list of all users
  * @param res The HTTP-Response
  */
@@ -23,11 +23,10 @@ async function authenticateUser(data, users, res){
     const user = users.find(u => {
         return u.userName === data.userName
     });
-    ;
+
     //returns pending promise --> doesn't render true
     if (user && await checkPassword(data.password, user.userPassword)) {
         // Generate an access token
-        ;
         const payload =
             {
                 id: user.userID,
@@ -37,8 +36,12 @@ async function authenticateUser(data, users, res){
                 role: user.userRole,
                 amount: user.userWalletAmount
             };
-        ;
+
         const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: '1000d' });
+
+        //Cookie needs extra parameters otherwise it will not be saved in the browser
+        //maxAge needs to be set otherwise the cookie is a session cookie and will be deleted
+        //when the user closes the browser
         res.cookie('accessToken', accessToken,{
             maxAge:  365 * 24 * 60 * 60 * 1000,
             httpOnly: true,
@@ -110,6 +113,7 @@ function updateJWT(res, user,req=undefined){
             role: user.userRole,
             amount: user.userWalletAmount
         };
+    //is user was updated the req.user should also be updated
     if(req){
         req.user =
             {
@@ -122,6 +126,9 @@ function updateJWT(res, user,req=undefined){
             };
     }
     const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET, { expiresIn: '1000d' });
+    //Cookie needs extra parameters otherwise it will not be saved in the browser
+    //maxAge needs to be set otherwise the cookie is a session cookie and will be deleted
+    //when the user closes the browser
     res.cookie('accessToken', accessToken,{
         maxAge:  365 * 24 * 60 * 60 * 1000,
         httpOnly: true,
@@ -129,7 +136,6 @@ function updateJWT(res, user,req=undefined){
         sameSite: 'none'
     });
 }
-
 
 /**
  * This functions, checks if the password is correct
@@ -139,8 +145,6 @@ function updateJWT(res, user,req=undefined){
  */
 async function checkPassword(password, hash){
     let pw = await bcrypt.compare(password, hash)
-    ;
-    ;
     return pw;
 }
 
@@ -170,6 +174,5 @@ module.exports = {
     authenticateUser,
     authenticateJWT,
     checkAccess,
-    ownership,
     updateJWT
 };

@@ -32,6 +32,7 @@ const apiRouter = require('./routers/api');
 const {authenticateJWT} = require("./services/authentification");
 
 //// App - Configuration
+// CORS needs to be configured otherwise the communication between back-end and front-end will not work
 app.use(cors({ origin: true, credentials: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -40,12 +41,12 @@ app.use(fileUpload({
 }));
 app.use(cookieParser());
 app.use(authenticateJWT);
-//// App - Routes
 
+//// App - Routes
 app.use('/api',apiRouter);
 app.use(express.static('public'));
 
 
 app.listen(port, ()=>{
-    ;
+    console.log("SERVER STARTED");
 });

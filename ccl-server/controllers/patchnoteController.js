@@ -5,12 +5,10 @@ const patchnoteModel = require("../models/patchnoteModel");
 //// Functions
 
 /**
- * This function returns all the users in the DB
- * Preferred-Methode: GET
- *
- * @param req HTTP-Request
- * @param res HTTP-Response
- * @param next Possible-Middleware Callback
+ * Retrieves all patchnotes from the database.
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @param {function} next - The possible middleware callback.
  */
 function getPatchnotes(req, res, next) {
     patchnoteModel.getPatchnotes()

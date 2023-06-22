@@ -9,8 +9,9 @@ const db = require('../services/database.js').config;
 //// Functions
 
 /**
- * This function access the DB and retrieves all the users
- * @returns A list of all Users within the DB
+ * Retrieves all users from the database.
+ * @returns {Promise<Array>} A promise that resolves to an array of all users within the database.
+ * @rejects {Object} An object containing the status and error message if an error occurs during the retrieval process.
  */
 let getUsers = () => new Promise((resolve, reject) => {
     let sql = "SELECT *,users.userID FROM users " +
@@ -32,10 +33,12 @@ let getUsers = () => new Promise((resolve, reject) => {
 })
 
 /**
- * This function access the DB and retrieves one user
- * @param userID The ID of the user, which will be retrieved
- * @returns A an object which represents the user
+ * Retrieves a specific user from the database based on the provided user ID.
+ * @param {number} userID - The ID of the user to retrieve.
+ * @returns {Promise<Object>} A promise that resolves to the user object.
+ * @rejects {Object} An object containing the status and error message if an error occurs during the retrieval process or if no user with the specified ID is found.
  */
+
 let getUser = (userID) => new Promise((resolve, reject) => {
     let sql = "SELECT *,users.userID FROM users " +
                 "LEFT JOIN userPictures "+
@@ -64,10 +67,15 @@ let getUser = (userID) => new Promise((resolve, reject) => {
 })
 
 /**
- * This function add a new User to the DB
- * @param userData The Data, which the new user will have
- * @returns The newly inserted userID
+ * Creates a new user in the database.
+ * @param {Object} userData - The data of the user to be inserted.
+ * @param {string} userData.userName - The name of the user.
+ * @param {string} userData.userEmail - The email of the user.
+ * @param {string} userData.userPassword - The password of the user.
+ * @returns {Promise<number>} A promise that resolves to the newly inserted userID.
+ * @rejects {Object} An object containing the status and error message if an error occurs during the insertion process.
  */
+
 let createUser = (userData) => new Promise (async (resolve, reject)=> {
     userData.password = userData.userPassword;
     userData.userPassword = await bcrypt.hash(userData.userPassword, 10);
@@ -90,6 +98,16 @@ let createUser = (userData) => new Promise (async (resolve, reject)=> {
     })
 })
 
+/**
+ * Updates a specific user in the database based on the provided user ID.
+ * @param {Object} userData - The updated data of the user.
+ * @param {string} userData.userName - The updated name of the user.
+ * @param {string} userData.userEmail - The updated email of the user.
+ * @param {string} userData.userPassword - The updated password of the user.
+ * @param {number} userID - The ID of the user to update.
+ * @returns {Promise<string>} A promise that resolves to a success message indicating that the user has been updated.
+ * @rejects {Object} An object containing the status and error message if an error occurs during the update process or if the request body contains invalid fields.
+ */
 let updateUser = (userData, userID) => new Promise (async (resolve, reject)=> {
     let sqls = "";
     if(Object.keys(userData).every(elem => ["userName", "userPassword", "userEmail"].includes(elem))){
@@ -127,8 +145,13 @@ let updateUser = (userData, userID) => new Promise (async (resolve, reject)=> {
     }
 })
 
+/**
+ * Deletes a specific user from the database based on the provided user ID.
+ * @param {number} userID - The ID of the user to delete.
+ * @returns {Promise<Object>} A promise that resolves to the deleted user object.
+ * @rejects {Object} An object containing the status and error message if an error occurs during the deletion process or if no user with the specified ID is found.
+ */
 let deleteUser = (userID) => new Promise (async (resolve, reject)=> {
-    //TODO delete all dependencies
     let sql = "DELETE FROM users WHERE userID ="+ db.escape(userID);
 
     db.query(sql, function (err, user, fields) {
@@ -150,6 +173,11 @@ let deleteUser = (userID) => new Promise (async (resolve, reject)=> {
     })
 })
 
+/**
+ * Generates a picture for a specific user.
+ * @param {number} userID - The ID of the user.
+ * @returns {Promise<void>} A promise that resolves when the picture generation is completed.
+ */
 async function generatePicture(userID) {
 
     const seed = uuid.v4();
@@ -157,6 +185,13 @@ async function generatePicture(userID) {
 
 }
 
+/**
+ * Saves an SVG image from the provided URL to a file.
+ * @param {string} url - The URL of the SVG image.
+ * @param {string} fileName - The name of the file to save the SVG image.
+ * @returns {Promise<void>} A promise that resolves when the SVG image is saved successfully.
+ * @rejects {Error} An error object if there is an issue fetching the SVG image or saving it to a file.
+ */
 async function saveSvg(url, fileName) {
     try {
         const response = await fetch(url);

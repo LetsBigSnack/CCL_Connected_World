@@ -5,6 +5,12 @@ const userFriendModel = require("../models/userFriendModel");
 const userModel = require("../models/userModel");
 //// Functions
 
+/**
+ * Retrieves the friends of a specific user.
+ * @param {object} req - The HTTP request.
+ * @param {object} res - The HTTP response.
+ * @param {function} next - The next middleware function.
+ */
 function getFriends(req, res, next) {
     userFriendModel.getFriends(parseInt(req.params.userID))
         .then(friends => {
@@ -49,8 +55,13 @@ function getFriends(req, res, next) {
         });
 }
 
+/**
+ * Retrieves the friend requests of a specific user.
+ * @param {object} req - The HTTP request.
+ * @param {object} res - The HTTP response.
+ * @param {function} next - The next middleware function.
+ */
 function getRequest(req, res, next) {
-    ;
     userFriendModel.getRequest(parseInt(req.params.userID))
         .then(request => {
             userModel.getUsers()
@@ -89,6 +100,12 @@ function getRequest(req, res, next) {
         });
 }
 
+/**
+ * Retrieves all friend requests of a specific user.
+ * @param {object} req - The HTTP request.
+ * @param {object} res - The HTTP response.
+ * @param {function} next - The next middleware function.
+ */
 function getAllRequest(req,res,next){
 
     userFriendModel.getAllRequest(parseInt(req.params.userID)).then(response => {
@@ -112,6 +129,12 @@ function getAllRequest(req,res,next){
         });
 }
 
+/**
+ * Creates a friend request between two users.
+ * @param {object} req - The HTTP request.
+ * @param {object} res - The HTTP response.
+ * @param {function} next - The next middleware function.
+ */
 async function createRequest(req, res, next) {
 
     if(parseInt(req.user.id) === parseInt(req.body.userID_1) &&  parseInt(req.user.id) === parseInt(req.body.userID_2)){
@@ -179,6 +202,12 @@ async function createRequest(req, res, next) {
 }
 
 
+/**
+ * Accepts a friend request.
+ * @param {object} req - The HTTP request.
+ * @param {object} res - The HTTP response.
+ * @param {function} next - The next middleware function.
+ */
 function acceptRequest(req, res, next) {
     userFriendModel.acceptRequest(req.body)
         .then(response => {

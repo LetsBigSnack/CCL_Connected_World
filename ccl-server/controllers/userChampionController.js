@@ -5,12 +5,11 @@ const userChampionModel = require("../models/userChampionModel");
 //// Functions
 
 /**
- * This function returns all the users in the DB
- * Preferred-Methode: GET
- *
- * @param req HTTP-Request
- * @param res HTTP-Response
- * @param next Possible-Middleware Callback
+ * Retrieves all user champions for a specific user from the database.
+ * @function getUserChampions
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @param {function} next - The possible middleware callback.
  */
 function getUserChampions(req, res, next) {
     userChampionModel.getUserChampions(parseInt(req.params.userID))
@@ -33,6 +32,12 @@ function getUserChampions(req, res, next) {
         });
 }
 
+/**
+ * Retrieves a specific user champion for a specific user and champion from the database.
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @param {function} next - The possible middleware callback.
+ */
 function getUserChampion(req, res, next) {
     ;
     userChampionModel.getUserChampion(parseInt(req.body.userID), parseInt(req.body.championID))
