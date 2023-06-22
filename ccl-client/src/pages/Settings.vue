@@ -1,3 +1,7 @@
+/**
+* Vue component for the User Profile page.
+* @component
+*/
 <template>
   <div v-if="user" class="w-full mx-auto mt-10 px-4 max-w-4xl">
     <div class="bg-background_bcc rounded-lg p-6">
@@ -107,6 +111,11 @@ onMounted(() => {
   login();
 })
 
+
+/**
+ * Event handler for the file input change event.
+ * @param {Event} event - The file input change event.
+ */
 function handleFileChange(event){
   profileImageFile.value = event.target.files[0];
   if(!profileImageFile.value.type.includes("image")){
@@ -116,6 +125,9 @@ function handleFileChange(event){
 
 }
 
+/**
+ * Performs the login request and sets the user data.
+ */
 async function login(){
   let test = await fetch('http://127.0.0.1:3000/api/login', {
     method: 'GET',
@@ -135,6 +147,9 @@ async function login(){
   }
 }
 
+/**
+ * Checks the form inputs and performs the profile update.
+ */
 async function checkForm(){
   if(newPassword.value){
     if(newPassword.value !== confNewPassword.value){
@@ -145,6 +160,9 @@ async function checkForm(){
   await updateProfile();
 }
 
+/**
+ * Checks the form inputs and performs the profile update.
+ */
 async function updateProfile(){
   let test = await fetch(`http://127.0.0.1:3000/api/users/${user.value.id}`, {
     method: 'PUT',
@@ -172,6 +190,9 @@ async function updateProfile(){
   }
 }
 
+/**
+ * Performs the profile picture update.
+ */
 async function updateProfilePicture(){
 
   if (!profileImageFile.value) {
@@ -198,6 +219,9 @@ async function updateProfilePicture(){
   }
 }
 
+/**
+ * Performs the user profile deletion.
+ */
 async function deleteUserProfile(){
 
   showDialogBox.value = false;
@@ -216,6 +240,9 @@ async function deleteUserProfile(){
   }
 }
 
+/**
+ * Performs the user logout.
+ */
 async function logout(){
   let test = await fetch('http://127.0.0.1:3000/api/logout', {
     method: 'GET',

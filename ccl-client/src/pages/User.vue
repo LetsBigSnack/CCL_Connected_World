@@ -1,3 +1,7 @@
+/**
+* Vue component for the User Profile page.
+* @component
+*/
 <template>
   <div class="container w-full mx-auto py-8 text-content_text">
     <div v-if="user" class="text-content_text rounded-lg p-6">
@@ -77,14 +81,47 @@ import {useRoute, useRouter} from "vue-router";
 
 const route = useRoute()
 const router = useRouter();
-const userID =  route.params.userID;
-const user = ref();
-const friends = ref();
-const request = ref();
-const loggedInUser = ref();
-const pending = ref(false);
-const alreadyFriends = ref(false);
+/**
+ * The ID of the user profile being viewed.
+ * @type {string}
+ */
+const userID = route.params.userID;
 
+/**
+ * The user data.
+ * @type {import("vue").Ref<Object>}
+ */
+const user = ref();
+
+/**
+ * The user's friends data.
+ * @type {import("vue").Ref<Object>}
+ */
+const friends = ref();
+
+/**
+ * The friend request data.
+ * @type {import("vue").Ref<Object>}
+ */
+const request = ref();
+
+/**
+ * The currently logged-in user data.
+ * @type {import("vue").Ref<Object>}
+ */
+const loggedInUser = ref();
+
+/**
+ * Indicates whether a friend request is pending.
+ * @type {import("vue").Ref<boolean>}
+ */
+const pending = ref(false);
+
+/**
+ * Indicates whether the user is already friends with the logged-in user.
+ * @type {import("vue").Ref<boolean>}
+ */
+const alreadyFriends = ref(false);
 onMounted(async () => {
   ;
   await login();
@@ -95,6 +132,10 @@ onMounted(async () => {
   }
 })
 
+/**
+ * Performs the login operation.
+ * @returns {Promise<void>}
+ */
 async function login(){
   let test = await fetch('http://127.0.0.1:3000/api/login', {
     method: 'GET',
@@ -108,7 +149,10 @@ async function login(){
   }
 }
 
-
+/**
+ * Retrieves the user's information.
+ * @returns {Promise<void>}
+ */
 async function getUser(){
   let test = await fetch(`http://127.0.0.1:3000/api/users/${userID}`, {
     method: 'GET',
@@ -125,6 +169,10 @@ async function getUser(){
   }
 }
 
+/**
+ * Retrieves the user's friends.
+ * @returns {Promise<void>}
+ */
 async function getFriends(){
   let test = await fetch(`http://127.0.0.1:3000/api/friends/${loggedInUser.value.id}`, {
     method: 'GET',
@@ -144,6 +192,10 @@ async function getFriends(){
   }
 }
 
+/**
+ * Retrieves the friend request status.
+ * @returns {Promise<void>}
+ */
 async function getRequest(){
   let test = await fetch(`http://127.0.0.1:3000/api/friends/${loggedInUser.value.id}/open/all`, {
     method: 'GET',
@@ -163,6 +215,11 @@ async function getRequest(){
   }
 }
 
+
+/**
+ * Creates a friend request.
+ * @returns {Promise<void>}
+ */
 async function createRequest(){
   let test = await fetch('http://127.0.0.1:3000/api/friends/add', {
     method: 'POST',

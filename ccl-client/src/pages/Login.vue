@@ -1,3 +1,7 @@
+/**
+* Vue component for the Not Found page.
+* @component
+*/
 <template>
   <div class="flex flex-col md:flex-row min-h-1/2">
     <!-- Login Form -->
@@ -43,6 +47,10 @@ const username = ref("");
 const password = ref("");
 const errors = ref();
 
+/**
+ * Performs the login operation.
+ * @returns {Promise<void>}
+ */
 async function login(){
   let test = await fetch('http://127.0.0.1:3000/api/login', {
     method: 'POST',

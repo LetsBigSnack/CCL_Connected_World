@@ -1,3 +1,7 @@
+/**
+* Vue component for the Not Found page.
+* @component
+*/
 <template>
   <div class="max-w-6xl mx-auto px-4 py-8 min-h-[80vh] flex flex-col justify-center items-center gap-2">
     <div>

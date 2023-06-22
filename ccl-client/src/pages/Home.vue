@@ -1,3 +1,7 @@
+/**
+* Vue component for the Inventory page.
+* @component
+*/
 <template>
   <div v-if="news">
     <CarouselView :news="news"></CarouselView>
@@ -40,6 +44,11 @@ const news = ref();
 onMounted(()=>{
   getNews();
 });
+
+/**
+ * Retrieves the news data.
+ * @returns {Promise<void>}
+ */
 async function getNews(){
   const API = "http://127.0.0.1:3000/api/news";
   const data = await fetch(API).then(res => res.json())

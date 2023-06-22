@@ -1,3 +1,7 @@
+/**
+* Vue component for the Inventory page.
+* @component
+*/
 <template>
   <div v-if="loggedInUser" class="container mx-auto py-8">
     <div class="flex flex-col md:flex-row gap-8">
@@ -54,7 +58,10 @@ onMounted(async () => {
   }
 })
 
-
+/**
+ * Performs the login operation.
+ * @returns {Promise<void>}
+ */
 async function login(){
   let test = await fetch('http://127.0.0.1:3000/api/login', {
     method: 'GET',
@@ -68,6 +75,10 @@ async function login(){
   }
 }
 
+/**
+ * Filters the list of champions based on the user input.
+ * @returns {void}
+ */
 function filterChampions(){
 
   if(userInput.value){
@@ -80,6 +91,10 @@ function filterChampions(){
   }
 }
 
+/**
+ * Retrieves the user's champions.
+ * @returns {Promise<void>}
+ */
 async function getUserChampions(){
   let test = await fetch(`http://127.0.0.1:3000/api/userChampions/${loggedInUser.value.id}`, {
     method: 'GET',

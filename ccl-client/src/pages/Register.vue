@@ -1,3 +1,7 @@
+/**
+* Vue component for the Register page.
+* @component
+*/
 <template>
   <div class="flex flex-col md:flex-row w-full  min-h-1/2">
     <!-- Image -->
@@ -67,6 +71,9 @@ const conf_password = ref("");
 const terms_conditions = ref();
 const errors = ref();
 
+/**
+ * Handles the form submission.
+ */
 async function checkForm(){
 
   if(email.value === "" || conf_email.value === "" || password.value === "" || conf_password.value === "" || terms_conditions.value === ""){
@@ -91,6 +98,9 @@ async function checkForm(){
   await register();
 }
 
+/**
+ * Performs the registration process.
+ */
 async function register(){
   let test = await fetch('http://127.0.0.1:3000/api/users', {
     method: 'POST',

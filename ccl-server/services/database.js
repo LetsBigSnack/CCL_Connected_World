@@ -28,11 +28,19 @@ function handleDisconnect() {
         console.error('Database connection error:', err);
         if (err.code === 'PROTOCOL_CONNECTION_LOST') {
             handleDisconnect(); // Reconnect if the connection is lost
-        } else {
+        }else{
+            console.log("Other Error");
             throw err;
         }
     });
 }
+
+setInterval(function () {
+    config.ping(function (err) {
+        if (err) throw err;
+        console.log('Server responded to ping');
+    });
+}, 10000);
 
 //Starts the Connection process
 handleDisconnect();

@@ -1,3 +1,20 @@
+/**
+* @typedef {Object} WalletData - Wallet data object.
+* @property {number} userWalletAmount - User's wallet balance.
+*/
+
+/**
+* @typedef {Object} TransactionData - Transaction data object.
+* @property {string} transactionID - Transaction ID.
+* @property {number} transactionAmount - Transaction amount.
+* @property {string} transactionDescription - Transaction description.
+* @property {string} transactionDate - Transaction date.
+*/
+
+/**
+* Vue component for the Wallet page.
+* @component
+*/
 <template>
   <div v-if="loggedInUser" class="w-full mx-auto mt-10 px-4 max-w-3xl">
     <div class="p-6 flex flex-col gap-8">
@@ -52,12 +69,39 @@ import { initTE } from "tw-elements";
 import TransactionElement from "../components/TransactionElement.vue";
 import {useRouter} from "vue-router";
 import NotLoggedIn from "../components/NotLoggedIn.vue";
+/**
+ * @type {import("vue").Ref<WalletData>}
+ */
 const wallet = ref();
+
+/**
+ * @type {import("vue").Ref<Object>}
+ */
 const loggedInUser = ref();
+
+/**
+ * @type {import("vue").Ref<number>}
+ */
 const fromTransaction = ref();
+
+/**
+ * @type {import("vue").Ref<number>}
+ */
 const toTransaction = ref();
+
+/**
+ * @type {import("vue").Ref<TransactionData[]>}
+ */
 const transactions = ref();
+
+/**
+ * @type {import("vue").Ref<TransactionData[]>}
+ */
 const filteredTransactions = ref();
+
+/**
+ * @type {import("vue-router").Router}
+ */
 const router = useRouter();
 
 
@@ -70,6 +114,10 @@ onMounted(async () => {
   }
 });
 
+/**
+ * Performs the login operation.
+ * @returns {Promise<void>}
+ */
 async function login(){
   let test = await fetch('http://127.0.0.1:3000/api/login', {
     method: 'GET',
@@ -83,6 +131,11 @@ async function login(){
   }
 }
 
+
+/**
+ * Retrieves the user's wallet information.
+ * @returns {Promise<void>}
+ */
 async function getWallet(){
   let test = await fetch(`http://127.0.0.1:3000/api/wallet/${loggedInUser.value.id}`, {
     method: 'GET',
@@ -97,6 +150,10 @@ async function getWallet(){
   }
 }
 
+/**
+ * Retrieves the user's transactions.
+ * @returns {Promise<void>}
+ */
 async function getTransaction(){
   let test = await fetch(`http://127.0.0.1:3000/api/wallet/transactions/${wallet.value.userWalletID}`, {
     method: 'GET',
@@ -122,6 +179,10 @@ async function getTransaction(){
   }
 }
 
+/**
+ * Displays the next set of transactions.
+ * @returns {void}
+ */
 function nextTransactions(){
   if(toTransaction.value+5 <= transactions.value.length){
     fromTransaction.value += 5;
@@ -133,6 +194,10 @@ function nextTransactions(){
   applyFilter()
 }
 
+/**
+ * Displays the previous set of transactions.
+ * @returns {void}
+ */
 function previousTransactions(){
   if(toTransaction.value%5 === 0){
     if(fromTransaction.value-5 >= 1){
@@ -150,20 +215,27 @@ function previousTransactions(){
   applyFilter()
 }
 
+/**
+ * Applies the filter to display the specified range of transactions.
+ * @returns {void}
+ */
 function applyFilter(){
   if(fromTransaction.value < 1){
     return;
   }
-  ;
   let tempTransactions = [];
   for(let i = fromTransaction.value-1; i < toTransaction.value; i++){
-    ;
     tempTransactions.push(transactions.value[i]);
   }
   filteredTransactions.value = tempTransactions;
 
 }
 
+/**
+ * Adds funds to the user's wallet.
+ * @param {number} amount - The amount of funds to add.
+ * @returns {Promise<void>}
+ */
 async function addFunds(amount){
   let test = await fetch('http://127.0.0.1:3000/api/wallet/add', {
     method: 'POST',
@@ -176,9 +248,7 @@ async function addFunds(amount){
     })
   });
   let data = await test.json();
-  ;
   if(data.success){
-    ;
     router.go();
   }
 }

@@ -1,3 +1,7 @@
+/**
+* Vue component for the Champion List page.
+* @component
+*/
 <template>
   <div class="container mx-auto py-8">
     <div class="flex flex-col md:flex-row gap-8">
@@ -46,16 +50,43 @@
 import ChampionElement from "../components/ChampionElement.vue";
 import {onMounted, ref} from "vue";
 
+/**
+ * The champion data.
+ * @type {import("vue").Ref<Object>}
+ */
 const champions = ref();
+
+/**
+ * The filtered champion data based on user input.
+ * @type {import("vue").Ref<Object>}
+ */
 const filteredChampions = ref();
+
+/**
+ * The user input for filtering champions by name.
+ * @type {import("vue").Ref<string>}
+ */
 const userInput = ref("");
+
+/**
+ * The selected champion category for filtering.
+ * @type {import("vue").Ref<string>}
+ */
 const userType = ref("");
+
+/**
+ * The selected price range for filtering champions.
+ * @type {import("vue").Ref<string>}
+ */
 const userPrice = ref("");
 
 onMounted(() => {
   getChampions();
 })
 
+/**
+ * Filters the champion list based on user input.
+ */
 function filterChampions(){
 
   if(userInput.value){
@@ -81,6 +112,9 @@ function filterChampions(){
   }
 }
 
+/**
+ * Fetches the champion data from the server.
+ */
 async function getChampions(){
   let test = await fetch('http://127.0.0.1:3000/api/champions/', {
     method: 'GET',
