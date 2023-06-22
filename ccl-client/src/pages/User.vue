@@ -20,7 +20,7 @@
           <button v-else-if="loggedInUser && !pending && alreadyFriends" disabled class="flex text-2xl mr-3 text-white text-md bg-tertiary_bcc rounded-[0.5rem] p-2 md:mr-0">
             Friended
           </button>
-          <button v-if="loggedInUser" class="flex text-2xl mr-3 text-white text-md bg-[#ff5555] rounded-[0.5rem] p-2 md:mr-0 hover:bg-[#f83b3b]">
+          <button disabled v-if="loggedInUser" class="flex text-2xl mr-3 text-white text-md rounded-[0.5rem] p-2 md:mr-0 bg-[#f83b3b]">
             Report
           </button>
         </div>
@@ -73,11 +73,15 @@
         </div>
       </div>
     </div>
+    <div v-else>
+      <UserNotFound></UserNotFound>
+    </div>
   </div>
 </template>
 <script setup>
 import {onMounted, onRenderTriggered, onUpdated, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
+import UserNotFound from "../components/UserNotFound.vue";
 
 const route = useRoute()
 const router = useRouter();

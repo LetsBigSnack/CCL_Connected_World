@@ -3,7 +3,7 @@
 * @component
 */
 <template>
-  <div class="flex flex-col md:flex-row w-full  min-h-1/2">
+  <div v-if="!loggedInUser" class="flex flex-col md:flex-row w-full  min-h-1/2">
     <!-- Image -->
     <div class="w-2/6  hidden md:flex">
       <img src="../assets/Fulllength.png" alt="Register Image" class="object-cover w-full h-full">
@@ -54,11 +54,16 @@
     </div>
 
   </div>
+  <div v-else>
+    <Already></Already>
+  </div>
 </template>
 <script setup>
 
 import {onMounted, ref} from "vue";
 import {useRoute, useRouter} from 'vue-router'
+import Already from "../components/Already.vue";
+
 
 const route = useRoute()
 const router = useRouter()
@@ -70,6 +75,36 @@ const password = ref("");
 const conf_password = ref("");
 const terms_conditions = ref();
 const errors = ref();
+
+
+
+
+/**
+ * The currently logged-in user data.
+ * @type {import("vue").Ref<Object>}
+ */
+const loggedInUser = ref();
+
+onMounted(() => {
+  login();
+})
+
+/**
+ * Performs the login operation.
+ * @returns {Promise<void>}
+ */
+async function login(){
+  let test = await fetch('http://127.0.0.1:3000/api/login', {
+    method: 'GET',
+    redirect: 'follow',
+    credentials: 'include',
+    headers: {'Content-Type': 'application/json'},
+  });
+  let data = await test.json();
+  if(data.success){
+    loggedInUser.value = data.data;
+  }
+}
 
 /**
  * Handles the form submission.

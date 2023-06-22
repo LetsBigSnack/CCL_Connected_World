@@ -53,7 +53,7 @@
       </div>
     </div>
   </div>
-  <div v-if="showDialogBox && loggedInUser" class="fixed inset-0 flex items-center justify-center w-screen h-screen backdrop-blur">
+  <div v-if="showDialogBox && loggedInUser && champion" class="fixed inset-0 flex items-center justify-center w-screen h-screen backdrop-blur">
     <div class="bg-component_primary_bcc rounded-lg shadow-lg p-4 border-4 border-component_secondary_bcc">
       <h2 class="text-xl font-bold mb-4">Do you want to buy <span class="text-primary_bcc">{{champion.championName}}</span></h2>
       <div class="flex justify-between">
@@ -75,11 +75,16 @@
       </div>
     </div>
   </div>
+  <div v-if="!champion">
+    <ChampionNotFound></ChampionNotFound>
+  </div>
 </template>
 <script setup>
 import {onMounted, onRenderTriggered, onUpdated, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import AbilitiyElement from "../components/AbilitiyElement.vue";
+import UserNotFound from "../components/UserNotFound.vue";
+import ChampionNotFound from "../components/ChampionNotFound.vue";
 
 const route = useRoute()
 const router = useRouter();
@@ -91,8 +96,8 @@ const isOwned = ref(false);
 
 onMounted(async () => {
   await login();
+  await getChampion();
   if (loggedInUser.value){
-    await getChampion();
     await getUserChampion();
   }
 })

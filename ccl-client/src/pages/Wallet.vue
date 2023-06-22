@@ -199,6 +199,11 @@ function nextTransactions(){
  * @returns {void}
  */
 function previousTransactions(){
+
+  if(transactions.value.length < 6){
+    return
+  }
+  
   if(toTransaction.value%5 === 0){
     if(fromTransaction.value-5 >= 1){
       fromTransaction.value -= 5;
@@ -211,7 +216,6 @@ function previousTransactions(){
     fromTransaction.value -= 5;
     toTransaction.value -= toTransaction.value%5;
   }
-
   applyFilter()
 }
 
