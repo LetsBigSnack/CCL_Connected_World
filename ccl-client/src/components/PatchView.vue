@@ -27,7 +27,7 @@ onMounted(()=>{
  * @returns {Promise<void>}
  */
 async function getPatches(){
-  const API = "http://127.0.0.1:3000/api/patchnotes";
+  const API = "https://cc221019-10110.node.fhstp.io/api/patchnotes";
   const data = await fetch(API).then(res => res.json())
   if(data.success){
     patchnotes.value = data.data;

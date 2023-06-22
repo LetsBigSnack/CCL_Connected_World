@@ -116,7 +116,7 @@ function filterChampions(){
  * Fetches the champion data from the server.
  */
 async function getChampions(){
-  let test = await fetch('http://127.0.0.1:3000/api/champions/', {
+  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/champions/', {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',

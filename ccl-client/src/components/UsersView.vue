@@ -43,7 +43,7 @@ function filterUsers(){
  * Retrieves the list of users from the API.
  */
 async function getUsers(){
-  let test = await fetch('http://127.0.0.1:3000/api/users', {
+  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/users', {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',

@@ -10,7 +10,7 @@
       data-te-carousel-item
       style="backface-visibility: hidden">
     <img
-        :src="'http://127.0.0.1:3000/'+newsImagePath"
+        :src="'https://cc221019-10110.node.fhstp.io/'+newsImagePath"
         class="block w-full"
         alt="Carousel Item" />
     <div
@@ -26,7 +26,7 @@
        data-te-carousel-item
        style="backface-visibility: hidden">
     <img
-        :src="'http://127.0.0.1:3000/'+newsImagePath"
+        :src="'https://cc221019-10110.node.fhstp.io/'+newsImagePath"
         class="block w-full"
         alt="Carousel Item" />
     <div

@@ -63,7 +63,7 @@ onMounted(async () => {
  * @returns {Promise<void>}
  */
 async function login(){
-  let test = await fetch('http://127.0.0.1:3000/api/login', {
+  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/login', {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',
@@ -96,7 +96,7 @@ function filterChampions(){
  * @returns {Promise<void>}
  */
 async function getUserChampions(){
-  let test = await fetch(`http://127.0.0.1:3000/api/userChampions/${loggedInUser.value.id}`, {
+  let test = await fetch(`https://cc221019-10110.node.fhstp.io/api/userChampions/${loggedInUser.value.id}`, {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',

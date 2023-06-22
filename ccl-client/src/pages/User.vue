@@ -6,7 +6,7 @@
   <div class="container w-full mx-auto py-8 text-content_text">
     <div v-if="user" class="text-content_text rounded-lg p-6">
       <div class="flex flex-col md:flex-row items-center mb-8 p-4">
-        <img :src="user.userPicturePath?`http://127.0.0.1:3000/${user.userPicturePath}`:'/assets/logo.svg'" :alt="`User ${user.userName} ICON`" class="w-24 h-24 rounded-full border-2 border-component_secondary_bcc mb-4 md:mb-0">
+        <img :src="user.userPicturePath?`https://cc221019-10110.node.fhstp.io/${user.userPicturePath}`:'/assets/logo.svg'" :alt="`User ${user.userName} ICON`" class="w-24 h-24 rounded-full border-2 border-component_secondary_bcc mb-4 md:mb-0">
         <div class="md:ml-4">
           <h1 class="text-5xl">{{user.userName}}</h1>
         </div>
@@ -141,7 +141,7 @@ onMounted(async () => {
  * @returns {Promise<void>}
  */
 async function login(){
-  let test = await fetch('http://127.0.0.1:3000/api/login', {
+  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/login', {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',
@@ -158,7 +158,7 @@ async function login(){
  * @returns {Promise<void>}
  */
 async function getUser(){
-  let test = await fetch(`http://127.0.0.1:3000/api/users/${userID}`, {
+  let test = await fetch(`https://cc221019-10110.node.fhstp.io/api/users/${userID}`, {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',
@@ -178,7 +178,7 @@ async function getUser(){
  * @returns {Promise<void>}
  */
 async function getFriends(){
-  let test = await fetch(`http://127.0.0.1:3000/api/friends/${loggedInUser.value.id}`, {
+  let test = await fetch(`https://cc221019-10110.node.fhstp.io/api/friends/${loggedInUser.value.id}`, {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',
@@ -201,7 +201,7 @@ async function getFriends(){
  * @returns {Promise<void>}
  */
 async function getRequest(){
-  let test = await fetch(`http://127.0.0.1:3000/api/friends/${loggedInUser.value.id}/open/all`, {
+  let test = await fetch(`https://cc221019-10110.node.fhstp.io/api/friends/${loggedInUser.value.id}/open/all`, {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',
@@ -225,7 +225,7 @@ async function getRequest(){
  * @returns {Promise<void>}
  */
 async function createRequest(){
-  let test = await fetch('http://127.0.0.1:3000/api/friends/add', {
+  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/friends/add', {
     method: 'POST',
     redirect: 'follow',
     credentials: 'include',

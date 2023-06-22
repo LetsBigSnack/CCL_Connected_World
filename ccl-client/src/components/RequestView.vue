@@ -24,7 +24,7 @@ onMounted(() => {
  * Retrieves the friend requests from the API.
  */
 async function getRequests(){
-  let test = await fetch(`http://127.0.0.1:3000/api/friends/${props.userID}/open`, {
+  let test = await fetch(`https://cc221019-10110.node.fhstp.io/api/friends/${props.userID}/open`, {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',

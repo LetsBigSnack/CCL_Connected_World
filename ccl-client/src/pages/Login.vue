@@ -65,7 +65,7 @@ onMounted(() => {
  * @returns {Promise<void>}
  */
 async function loginGET(){
-  let test = await fetch('http://127.0.0.1:3000/api/login', {
+  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/login', {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',
@@ -82,7 +82,7 @@ async function loginGET(){
  * @returns {Promise<void>}
  */
 async function login(){
-  let test = await fetch('http://127.0.0.1:3000/api/login', {
+  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/login', {
     method: 'POST',
     redirect: 'follow',
     credentials: 'include',

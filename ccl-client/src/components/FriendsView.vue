@@ -29,7 +29,7 @@ onMounted(() => {
  * @returns {Promise<void>}
  */
 async function getFriends(){
-  let test = await fetch(`http://127.0.0.1:3000/api/friends/${props.userID}`, {
+  let test = await fetch(`https://cc221019-10110.node.fhstp.io/api/friends/${props.userID}`, {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',

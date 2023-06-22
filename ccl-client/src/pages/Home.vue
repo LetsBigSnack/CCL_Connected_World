@@ -50,7 +50,7 @@ onMounted(()=>{
  * @returns {Promise<void>}
  */
 async function getNews(){
-  const API = "http://127.0.0.1:3000/api/news";
+  const API = "https://cc221019-10110.node.fhstp.io/api/news";
   const data = await fetch(API).then(res => res.json())
   if(data.success){
     news.value = data.data;
