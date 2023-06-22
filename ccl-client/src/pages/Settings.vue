@@ -6,7 +6,7 @@
   <div v-if="user" class="w-full mx-auto mt-10 px-4 max-w-4xl">
     <div class="bg-background_bcc rounded-lg p-6">
       <div class="flex flex-col md:flex-row items-center mb-8">
-        <img v-if="user"  :src="user.picture?`http://127.0.0.1:3000/${ user.picture}`:'/assets/logo.svg'" :alt="`User ${user.picture} Avatar`" class="w-32 h-32 rounded-full border-2 border-component_secondary_bcc mb-4 md:mb-0">
+        <img v-if="user"  :src="user.picture?`http://127.0.0.1:3000/${ user.picture}`:'/assets/logo.svg'" :alt="`User ${user.name} Avatar Profile Picture`" class="w-32 h-32 rounded-full border-2 border-component_secondary_bcc mb-4 md:mb-0">
         <div class="md:ml-4">
           <h1 v-if="user" class="text-4xl">{{user.name}}</h1>
           <p  v-if="user" class="text-content_text">{{user.email}}</p>

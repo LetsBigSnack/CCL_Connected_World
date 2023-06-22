@@ -9,11 +9,11 @@
         <div class="bg-component_secondary_bcc rounded-lg p-6 mb-8 shadow-lg shadow-black">
           <h2 class="text-3xl font-bold mb-4 border-b-2 border-secondary_bcc">Filter</h2>
           <div class="mb-4">
-            <input v-model="userInput" @input="filterChampions" type="text" placeholder="Search by name" class="w-full text-xl rounded-md px-3 py-2 bg-component_primary_bcc  font-navbar border-0 focus:border-primary_bcc focus:border-2">
+            <input tabindex="20" v-model="userInput" @input="filterChampions" type="text" placeholder="Search by name" class="w-full text-xl rounded-md px-3 py-2 bg-component_primary_bcc  font-navbar border-0 focus:border-primary_bcc focus:border-2">
           </div>
           <div class="mb-4">
             <label for="category" class="text-lg mb-2">Category:</label>
-            <select v-model="userType" id="category" class="w-full rounded-md px-3 py-2 bg-component_primary_bcc border-0 focus:border-primary_bcc focus:border-2">
+            <select tabindex="20" v-model="userType" id="category" class="w-full rounded-md px-3 py-2 bg-component_primary_bcc border-0 focus:border-primary_bcc focus:border-2">
               <option value="" selected>All Categories</option>
               <option value="mage">Mage</option>
               <option value="assassin">Assassin</option>
@@ -23,7 +23,7 @@
             </select>
           </div>
           <div class="flex w-full justify-center">
-            <button @click="filterChampions" class="flex-grow items-center text-center mr-3 text-md bg-secondary_bcc rounded-[0.5rem] p-2 md:mr-0 hover:bg-tertiary_bcc focus:border-primary_bcc focus:border-2">
+            <button tabindex="20" @click="filterChampions" class="flex-grow items-center text-center mr-3 text-md bg-secondary_bcc rounded-[0.5rem] p-2 md:mr-0 hover:bg-tertiary_bcc focus:border-primary_bcc focus:border-2">
               Apply filter
             </button>
           </div>

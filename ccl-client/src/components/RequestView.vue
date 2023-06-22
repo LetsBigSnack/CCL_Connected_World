@@ -1,3 +1,7 @@
+/**
+* Vue component for RequestView
+* @component
+*/
 <template>
   <h2 class="text-4xl mb-4 font-display text-primary_bcc">Friend Request</h2>
   <ul v-if="requests" class="w-full h-[200px] overflow-y-scroll no-scrollbar">
@@ -16,7 +20,9 @@ onMounted(() => {
   getRequests();
 })
 
-
+/**
+ * Retrieves the friend requests from the API.
+ */
 async function getRequests(){
   let test = await fetch(`http://127.0.0.1:3000/api/friends/${props.userID}/open`, {
     method: 'GET',

@@ -1,5 +1,5 @@
 /**
-* Vue component for the Inventory page.
+* Vue component for the Home page.
 * @component
 */
 <template>

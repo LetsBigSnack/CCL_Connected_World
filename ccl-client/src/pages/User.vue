@@ -6,7 +6,7 @@
   <div class="container w-full mx-auto py-8 text-content_text">
     <div v-if="user" class="text-content_text rounded-lg p-6">
       <div class="flex flex-col md:flex-row items-center mb-8 p-4">
-        <img :src="user.userPicturePath?`http://127.0.0.1:3000/${user.userPicturePath}`:'/assets/logo.svg'" :alt="`User ${userID}`" class="w-24 h-24 rounded-full border-2 border-component_secondary_bcc mb-4 md:mb-0">
+        <img :src="user.userPicturePath?`http://127.0.0.1:3000/${user.userPicturePath}`:'/assets/logo.svg'" :alt="`User ${user.userName} ICON`" class="w-24 h-24 rounded-full border-2 border-component_secondary_bcc mb-4 md:mb-0">
         <div class="md:ml-4">
           <h1 class="text-5xl">{{user.userName}}</h1>
         </div>

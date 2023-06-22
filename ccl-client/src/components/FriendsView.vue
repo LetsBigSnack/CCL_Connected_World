@@ -1,3 +1,7 @@
+/**
+* Vue component for FriendsView
+* @component
+*/
 <template>
   <div>
     <h2 class="text-4xl h-full mb-4 font-display text-primary_bcc">Friend List</h2>
@@ -20,6 +24,10 @@ onMounted(() => {
 })
 
 
+/**
+ * Retrieves the friend data.
+ * @returns {Promise<void>}
+ */
 async function getFriends(){
   let test = await fetch(`http://127.0.0.1:3000/api/friends/${props.userID}`, {
     method: 'GET',

@@ -1,3 +1,7 @@
+/**
+* Vue component for Footer
+* @component
+*/
 <template>
 <footer class="bg-component_secondary_bcc shadow-lg shadow-black box">
 <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">

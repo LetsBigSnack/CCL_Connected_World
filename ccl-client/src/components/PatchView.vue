@@ -1,3 +1,7 @@
+/**
+* Vue component for PatchView
+* @component
+*/
 <template>
   <div class="border-t-2 border-component_secondary_bcc  py-8">
     <div class="max-w-6xl mx-auto px-4">
@@ -17,6 +21,11 @@ const patchnotes = ref();
 onMounted(()=>{
   getPatches();
 });
+
+/**
+ * Retrieves the patch data.
+ * @returns {Promise<void>}
+ */
 async function getPatches(){
   const API = "http://127.0.0.1:3000/api/patchnotes";
   const data = await fetch(API).then(res => res.json())

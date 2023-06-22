@@ -1,3 +1,7 @@
+/**
+* Vue component for CarouselView
+* @component
+*/
 <template >
   <div
       id="carouselExampleCaptions"

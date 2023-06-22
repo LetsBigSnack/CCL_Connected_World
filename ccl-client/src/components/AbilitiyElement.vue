@@ -1,3 +1,7 @@
+/**
+* Vue component for AbilityElement
+* @component
+*/
 <template>
   <div class="w-full md:w-1/2 flex flex-col gap-2">
     <h4 class="text-md font-medium border-primary_bcc border-b-2">{{ abilityName }}</h4>

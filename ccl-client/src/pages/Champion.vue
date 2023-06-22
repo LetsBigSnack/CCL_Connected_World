@@ -1,10 +1,14 @@
+/**
+* Vue component for the Champion page.
+* @component
+*/
 <template>
   <div v-if="champion" class="container mx-auto py-8">
     <div class="grid grid-cols-1 md:grid-cols-8 gap-8">
       <div class="col-span-8 md:col-span-2 bg-component_secondary_bcc rounded-[10px] shadow-lg shadow-black">
         <div class="p-8 h-full flex flex-col justify-between border-primary_bcc border-t-4 rounded-[10px] gap-8">
           <div>
-            <img :src="champion.championImagePath?`http://127.0.0.1:3000/${champion.championImagePath}`:'/assets/medium.png'" :alt="`Champion ${champion.championID}`" class="w-full rounded-lg shadow-lg mb-8">
+            <img :src="champion.championImagePath?`http://127.0.0.1:3000/${champion.championImagePath}`:'/assets/medium.png'" :alt="`Champion ${champion.championName} Picture`" class="w-full rounded-lg shadow-lg mb-8">
             <div class="flex flex-col gap-4">
               <h2 class="text-3xl font-bold mb-1 border-primary_bcc border-b-2">{{champion.championName}}</h2>
               <p class="text-lg font-bold mb-4">{{champion.championDescription}}</p>
@@ -93,7 +97,9 @@ onMounted(async () => {
   }
 })
 
-
+/**
+ * Performs the login request and sets the user data.
+ */
 async function login(){
   let test = await fetch('http://127.0.0.1:3000/api/login', {
     method: 'GET',
@@ -108,6 +114,9 @@ async function login(){
 }
 
 
+/**
+ * Retrieves the champion data from the API.
+ */
 async function getChampion(){
   let test = await fetch(`http://127.0.0.1:3000/api/champions/${championID}`, {
     method: 'GET',
@@ -124,6 +133,10 @@ async function getChampion(){
   }
 }
 
+/**
+ * Handles the buy champion action.
+ * Performs the buy request and updates the champion ownership status.
+ */
 async function buyChampion(){
   showDialogBox.value = false;
   let test = await fetch('http://127.0.0.1:3000/api/wallet/buy', {
@@ -137,13 +150,14 @@ async function buyChampion(){
     })
   });
   let data = await test.json();
-  ;
   if(data.success){
     router.go();
-    ;
   }
 }
 
+/**
+ * Retrieves the user champion data from the API and updates the ownership status.
+ */
 async function getUserChampion(){
   if(!loggedInUser.value){
     return;

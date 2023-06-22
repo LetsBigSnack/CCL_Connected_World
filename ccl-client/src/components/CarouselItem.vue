@@ -1,4 +1,7 @@
-
+/**
+* Vue component for CarouselItem
+* @component
+*/
 <template>
 
   <div v-if="main"
@@ -9,9 +12,9 @@
     <img
         :src="'http://127.0.0.1:3000/'+newsImagePath"
         class="block w-full"
-        alt="..." />
+        alt="Carousel Item" />
     <div
-        class="bg-component_secondary_bcc bg-opacity-50 backdrop-blur-sm rounded-[10px] absolute inset-x-[15%] bottom-5 hidden py-5 text-center text-white md:block">
+        class="bg-component_secondary_bcc bg-opacity-75 backdrop-blur-sm absolute inset-x-[15%] bottom-5 hidden py-5 text-center text-white md:block">
       <h5 class="text-3xl text-primary_bcc font-display">{{ newsTitle }}</h5>
       <p>
         {{ newsContent }}
@@ -25,7 +28,7 @@
     <img
         :src="'http://127.0.0.1:3000/'+newsImagePath"
         class="block w-full"
-        alt="..." />
+        alt="Carousel Item" />
     <div
         class="bg-component_secondary_bcc bg-opacity-75 backdrop-blur-sm absolute inset-x-[15%] bottom-5 hidden py-5 text-center text-white md:block">
       <h5 class="text-3xl text-primary_bcc font-display">{{ newsTitle }}</h5>

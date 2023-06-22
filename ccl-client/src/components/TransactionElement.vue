@@ -1,3 +1,7 @@
+/**
+* Vue component for TransactionElement
+* @component
+*/
 <template>
   <li v-if="transactionType" class="bg-component_primary_bcc rounded-lg p-4 shadow-lg shadow-black mb-2">
     <div class="flex justify-between items-center">
