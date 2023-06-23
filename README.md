@@ -61,6 +61,7 @@ DB_USER=your_password
 DB_PASSWORD=your_password
 DB_Database=your_database
 DB_PORT=3306
+ACCESS_TOKEN_SECRET=generated_access_token
 ```
 
 Replace the values for **DB_HOST**, **DB_USER**, **DB_PASSWORD**, and **DB_Database** with your MySQL server details. Modify the **DB_PORT** value if necessary.
