@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: services/database.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: services/database.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//// Modules
+const mysql = require('mysql');
+
+// Configuration for the Database inside the .env file
+const config = mysql.createConnection({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_Database,
+    multipleStatements: true
+});
+
+/**
+ * Handles disconnections and tries to reconnect every 2 seconds
+ */
+function handleDisconnect() {
+    config.connect((err) => {
+        if (err) {
+            console.error('Error connecting to database:', err);
+            setTimeout(handleDisconnect, 2000); // Retry connection after 2 seconds
+        }else{
+            console.log("DATABASE CONNECTED")
+        }
+    });
+
+    config.on('error', (err) => {
+        console.error('Database connection error:', err);
+        if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+            handleDisconnect(); // Reconnect if the connection is lost
+        }else{
+            console.log("Other Error");
+            throw err;
+        }
+    });
+}
+
+setInterval(function () {
+    config.ping(function (err) {
+        if (err) throw err;
+        console.log('Server responded to ping');
+    });
+}, 10000);
+
+//Starts the Connection process
+handleDisconnect();
+
+module.exports = {config};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#acceptRequest">acceptRequest</a></li><li><a href="global.html#addFunds">addFunds</a></li><li><a href="global.html#authenticateJWT">authenticateJWT</a></li><li><a href="global.html#authenticateUser">authenticateUser</a></li><li><a href="global.html#buyChampion">buyChampion</a></li><li><a href="global.html#changeAmount">changeAmount</a></li><li><a href="global.html#checkAccess">checkAccess</a></li><li><a href="global.html#checkFunds">checkFunds</a></li><li><a href="global.html#checkPassword">checkPassword</a></li><li><a href="global.html#createRequest">createRequest</a></li><li><a href="global.html#createTransaction">createTransaction</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#createUserChampion">createUserChampion</a></li><li><a href="global.html#createWallet">createWallet</a></li><li><a href="global.html#deleteTransactions">deleteTransactions</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#deleteUserChampions">deleteUserChampions</a></li><li><a href="global.html#deleteUserFriends">deleteUserFriends</a></li><li><a href="global.html#deleteUserPictures">deleteUserPictures</a></li><li><a href="global.html#deleteUserWallet">deleteUserWallet</a></li><li><a href="global.html#deleteUserWalletTransactions">deleteUserWalletTransactions</a></li><li><a href="global.html#generatePicture">generatePicture</a></li><li><a href="global.html#getAbilities">getAbilities</a></li><li><a href="global.html#getAllRequest">getAllRequest</a></li><li><a href="global.html#getChampion">getChampion</a></li><li><a href="global.html#getChampionAbilities">getChampionAbilities</a></li><li><a href="global.html#getChampions">getChampions</a></li><li><a href="global.html#getFriends">getFriends</a></li><li><a href="global.html#getNews">getNews</a></li><li><a href="global.html#getPatchnotes">getPatchnotes</a></li><li><a href="global.html#getRequest">getRequest</a></li><li><a href="global.html#getTransactions">getTransactions</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUserChampion">getUserChampion</a></li><li><a href="global.html#getUserChampions">getUserChampions</a></li><li><a href="global.html#getUserPictures">getUserPictures</a></li><li><a href="global.html#getUserWallet">getUserWallet</a></li><li><a href="global.html#getUsers">getUsers</a></li><li><a href="global.html#handleDisconnect">handleDisconnect</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#ownership">ownership</a></li><li><a href="global.html#saveSvg">saveSvg</a></li><li><a href="global.html#updateJWT">updateJWT</a></li><li><a href="global.html#updateUser">updateUser</a></li><li><a href="global.html#uploadImage">uploadImage</a></li><li><a href="global.html#uploadPicture">uploadPicture</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Fri Jun 23 2023 16:03:50 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

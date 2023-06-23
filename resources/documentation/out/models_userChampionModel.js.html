@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/userChampionModel.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/userChampionModel.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//// Modules
+
+//// Services
+const db = require('../services/database.js').config;
+
+//// Functions
+
+/**
+ * Retrieves the champions associated with a specific user from the database.
+ * @param {number} userID - The ID of the user.
+ * @returns {Promise&lt;Array>} A promise that resolves to an array of champions associated with the specified user.
+ * @rejects {Object} An object containing the status and error message if an error occurs during the retrieval process.
+ */
+let getUserChampions = (userID) => new Promise((resolve, reject) => {
+    let sql = "SELECT * FROM userChampions " +
+            "INNER JOIN champions " +
+            "ON userChampions.championID = champions.championID " +
+            "WHERE userChampions.userID =" + db.escape(userID);
+
+    db.query(sql, function (err, userChampions, fields) {
+        if (err) {
+            return reject({
+                status: 500,
+                msg: err
+            });
+        }else{
+            resolve(userChampions)
+        }
+
+    })
+});
+
+/**
+ * Creates a new user champion association in the database.
+ * @param {Object} userChampionData - The user champion data to be inserted.
+ * @param {number} userChampionData.championID - The ID of the champion.
+ * @param {number} userChampionData.userID - The ID of the user.
+ * @returns {Promise&lt;Array>} A promise that resolves to the created user champion association.
+ * @rejects {Object} An object containing the status and error message if an error occurs during the insertion process.
+ */
+let createUserChampion  = (userChampionData) => new Promise((resolve, reject) => {
+    let sql = "INSERT INTO userChampions " +
+        "(championID, userID) " +
+        "VALUES (" +
+        db.escape(userChampionData.championID)+", " +
+        db.escape(userChampionData.userID)+
+        ")";
+
+    db.query(sql, function (err, userChampions, fields) {
+        if (err) {
+            return reject({
+                status: 500,
+                msg: err
+            });
+        }else{
+            resolve(userChampions)
+        }
+
+    })
+});
+
+/**
+ * Deletes the user champion associations for a specific user from the database.
+ * @param {number} userID - The ID of the user.
+ * @returns {Promise&lt;Array>} A promise that resolves to the deleted user champion associations.
+ * @rejects {Object} An object containing the status and error message if an error occurs during the deletion process.
+ */
+let deleteUserChampions = (userID) => new Promise((resolve, reject) => {
+    let sql = "DELETE FROM userChampions " +
+        "WHERE userChampions.userID =" + db.escape(userID);
+
+    db.query(sql, function (err, userChampions, fields) {
+        if (err) {
+            return reject({
+                status: 500,
+                msg: err
+            });
+        }else{
+            resolve(userChampions)
+        }
+
+    })
+});
+
+
+/**
+ * Retrieves a specific user champion association from the database based on the provided user ID and champion ID.
+ * @param {number} userID - The ID of the user.
+ * @param {number} championID - The ID of the champion.
+ * @returns {Promise&lt;Object>} A promise that resolves to the user champion association.
+ * @rejects {Object} An object containing the status and error message if an error occurs during the retrieval process or if no user champion association is found.
+ */
+let getUserChampion = (userID, championID) => new Promise((resolve, reject) => {
+    let sql = "SELECT * FROM userChampions " +
+        "INNER JOIN champions " +
+        "ON userChampions.championID = champions.championID " +
+        "WHERE userChampions.userID =" + db.escape(userID) +" AND "+
+        "champions.championID =" + db.escape(championID);
+
+    db.query(sql, function (err, userChampions, fields) {
+        if (err) {
+            return reject({
+                status: 500,
+                msg: err
+            });
+        }else{
+            if(userChampions.length > 0){
+                resolve(userChampions[0])
+            }
+            return reject({
+                status: 404,
+                msg: "No userChampion found"
+            });
+        }
+
+    })
+});
+
+
+
+
+//// Exports
+module.exports = {
+    getUserChampions,
+    createUserChampion,
+    deleteUserChampions,
+    getUserChampion
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#acceptRequest">acceptRequest</a></li><li><a href="global.html#addFunds">addFunds</a></li><li><a href="global.html#authenticateJWT">authenticateJWT</a></li><li><a href="global.html#authenticateUser">authenticateUser</a></li><li><a href="global.html#buyChampion">buyChampion</a></li><li><a href="global.html#changeAmount">changeAmount</a></li><li><a href="global.html#checkAccess">checkAccess</a></li><li><a href="global.html#checkFunds">checkFunds</a></li><li><a href="global.html#checkPassword">checkPassword</a></li><li><a href="global.html#createRequest">createRequest</a></li><li><a href="global.html#createTransaction">createTransaction</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#createUserChampion">createUserChampion</a></li><li><a href="global.html#createWallet">createWallet</a></li><li><a href="global.html#deleteTransactions">deleteTransactions</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#deleteUserChampions">deleteUserChampions</a></li><li><a href="global.html#deleteUserFriends">deleteUserFriends</a></li><li><a href="global.html#deleteUserPictures">deleteUserPictures</a></li><li><a href="global.html#deleteUserWallet">deleteUserWallet</a></li><li><a href="global.html#deleteUserWalletTransactions">deleteUserWalletTransactions</a></li><li><a href="global.html#generatePicture">generatePicture</a></li><li><a href="global.html#getAbilities">getAbilities</a></li><li><a href="global.html#getAllRequest">getAllRequest</a></li><li><a href="global.html#getChampion">getChampion</a></li><li><a href="global.html#getChampionAbilities">getChampionAbilities</a></li><li><a href="global.html#getChampions">getChampions</a></li><li><a href="global.html#getFriends">getFriends</a></li><li><a href="global.html#getNews">getNews</a></li><li><a href="global.html#getPatchnotes">getPatchnotes</a></li><li><a href="global.html#getRequest">getRequest</a></li><li><a href="global.html#getTransactions">getTransactions</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUserChampion">getUserChampion</a></li><li><a href="global.html#getUserChampions">getUserChampions</a></li><li><a href="global.html#getUserPictures">getUserPictures</a></li><li><a href="global.html#getUserWallet">getUserWallet</a></li><li><a href="global.html#getUsers">getUsers</a></li><li><a href="global.html#handleDisconnect">handleDisconnect</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#ownership">ownership</a></li><li><a href="global.html#saveSvg">saveSvg</a></li><li><a href="global.html#updateJWT">updateJWT</a></li><li><a href="global.html#updateUser">updateUser</a></li><li><a href="global.html#uploadImage">uploadImage</a></li><li><a href="global.html#uploadPicture">uploadPicture</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Fri Jun 23 2023 16:03:50 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

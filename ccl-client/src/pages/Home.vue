@@ -40,6 +40,7 @@ import CarouselView from "../components/CarouselView.vue";
 import PatchView from "../components/PatchView.vue";
 
 const news = ref();
+const website = import.meta.env.VITE_API_BASE_URL
 
 onMounted(()=>{
   getNews();
@@ -50,7 +51,7 @@ onMounted(()=>{
  * @returns {Promise<void>}
  */
 async function getNews(){
-  const API = "https://cc221019-10110.node.fhstp.io/api/news";
+  const API = website+"/api/news";
   const data = await fetch(API).then(res => res.json())
   if(data.success){
     news.value = data.data;

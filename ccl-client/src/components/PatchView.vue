@@ -17,6 +17,7 @@ import PatchItem from "./PatchItem.vue";
 import {onMounted, ref} from "vue";
 
 const patchnotes = ref();
+const website = import.meta.env.VITE_API_BASE_URL
 
 onMounted(()=>{
   getPatches();
@@ -27,7 +28,7 @@ onMounted(()=>{
  * @returns {Promise<void>}
  */
 async function getPatches(){
-  const API = "https://cc221019-10110.node.fhstp.io/api/patchnotes";
+  const API = website+"/api/patchnotes";
   const data = await fetch(API).then(res => res.json())
   if(data.success){
     patchnotes.value = data.data;

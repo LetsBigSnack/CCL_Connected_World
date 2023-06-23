@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/walletController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/walletController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//// Modules
+const { validationResult } = require('express-validator');
+
+//// Models
+const walletModel = require("../models/walletModel");
+const transactionModel = require("../models/transactionModel");
+const championModel = require("../models/championModel");
+const userChampionModel = require("../models/userChampionModel");
+//// Functions
+
+/**
+ * Retrieves the user's wallet.
+ * @param {object} req - The HTTP request.
+ * @param {object} res - The HTTP response.
+ * @param {function} next - The next middleware function.
+ */
+function getUserWallet(req, res, next) {
+    walletModel.getUserWallet(req.params.userID)
+        .then(news => {
+            let jsonReturnObject = {
+                success : true,
+                data: news
+            }
+            res.status(200);
+            res.send(jsonReturnObject);
+
+        })
+        .catch(error => {
+            let jsonReturnObject = {
+                success : false,
+                error: error
+            }
+            res.status(500);
+            res.send(jsonReturnObject);
+        });
+}
+
+/**
+ * Buys a champion for the user.
+ * @param {object} req - The HTTP request.
+ * @param {object} res - The HTTP response.
+ * @param {function} next - The next middleware function.
+ */
+async function buyChampion(req, res, next) {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        let jsonReturnObject = {
+            success : false,
+            error: errors.errors
+        }
+        res.status(400);
+        return res.send(jsonReturnObject);
+    }
+
+    let userWallet = await walletModel.getUserWallet(parseInt(req.body.userID))
+        .then(data => {return data}).catch(error => {
+        let jsonReturnObject = {
+            success : false,
+            error: error
+        }
+        res.status(500);
+        return res.send(jsonReturnObject);
+    });
+
+    let champion = await championModel.getChampion(parseInt(req.body.championID))
+        .then(data => {return data}).catch(error => {
+        let jsonReturnObject = {
+            success : false,
+            error: error
+        }
+        res.status(500);
+        return res.send(jsonReturnObject);
+    });
+    req.body.walletAmount = parseInt(userWallet.userWalletAmount) - parseInt(champion.championPrice);
+    if(checkFunds(champion.championPrice, userWallet.userWalletAmount)){
+        walletModel.changeAmount(req.body)
+            .then(data => {
+                data.userWalletID = userWallet.userWalletID;
+                data.transactionAmount = -champion.championPrice;
+                data.transactionDescription = "User: " + req.body.userID + " bought Champion: "
+                                            + req.body.championID;
+
+                Promise.all([transactionModel.createTransaction(data), userChampionModel.createUserChampion(req.body)])
+                    .then(place => {
+                        let jsonReturnObject = {
+                            success : true,
+                            data: data.transactionDescription
+                        }
+                        res.status(200);
+                        res.send(jsonReturnObject);
+                    })
+                    .catch(error => {
+
+                        ;
+                        let jsonReturnObject = {
+                            success : false,
+                            error: error
+                        }
+                        res.status(500);
+                        return res.send(jsonReturnObject);
+                    });
+            })
+            .catch(error => {
+                let jsonReturnObject = {
+                    success : false,
+                    error: error
+                }
+                res.status(500);
+                res.send(jsonReturnObject);
+            });
+    }else{
+        let jsonReturnObject = {
+            success : false,
+            error: "insufficient funds"
+        }
+        res.status(500);
+        return res.send(jsonReturnObject);
+    }
+
+}
+
+
+
+/**
+ * Adds funds to the user's wallet.
+ * @param {object} req - The HTTP request.
+ * @param {object} res - The HTTP response.
+ * @param {function} next - The next middleware function.
+ */
+async function addFunds(req, res, next) {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        let jsonReturnObject = {
+            success : false,
+            error: errors.errors
+        }
+        res.status(400);
+        return res.send(jsonReturnObject);
+    }else{
+        let userWallet = await walletModel.getUserWallet(parseInt(req.body.userID))
+            .then(data => {return data}).catch(error => {
+                let jsonReturnObject = {
+                    success : false,
+                    error: error
+                }
+                res.status(500);
+                return res.send(jsonReturnObject);
+            });
+        let addFunds = parseInt(req.body.walletAmount);
+        req.body.walletAmount = userWallet.userWalletAmount + addFunds;
+        walletModel.changeAmount(req.body)
+            .then(data => {
+                data.userWalletID = userWallet.userWalletID;
+                data.transactionAmount = +addFunds;
+                data.transactionDescription = "User: " + req.body.userID + " added funds";
+
+                Promise.all([transactionModel.createTransaction(data)])
+                    .then(place => {
+                        let jsonReturnObject = {
+                            success : true,
+                            data: data.transactionDescription
+                        }
+                        res.status(200);
+                        res.send(jsonReturnObject);
+                    })
+                    .catch(error => {
+
+                        ;
+                        let jsonReturnObject = {
+                            success : false,
+                            error: error
+                        }
+                        res.status(500);
+                        return res.send(jsonReturnObject);
+                    });
+            })
+            .catch(error => {
+
+                let jsonReturnObject = {
+                    success : false,
+                    error: error
+                }
+                res.status(500);
+                res.send(jsonReturnObject);
+            });
+    }
+}
+
+/**
+ * Checks if the user has sufficient funds.
+ * @param {number} cost - The cost of the item.
+ * @param {number} amount - The amount of funds in the wallet.
+ * @returns {boolean} - True if the user has sufficient funds, false otherwise.
+ */
+function checkFunds(cost, amount){
+    return amount - cost >= 0;
+}
+
+//// Exports
+module.exports = {
+    getUserWallet,
+    buyChampion,
+    addFunds
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#acceptRequest">acceptRequest</a></li><li><a href="global.html#addFunds">addFunds</a></li><li><a href="global.html#authenticateJWT">authenticateJWT</a></li><li><a href="global.html#authenticateUser">authenticateUser</a></li><li><a href="global.html#buyChampion">buyChampion</a></li><li><a href="global.html#changeAmount">changeAmount</a></li><li><a href="global.html#checkAccess">checkAccess</a></li><li><a href="global.html#checkFunds">checkFunds</a></li><li><a href="global.html#checkPassword">checkPassword</a></li><li><a href="global.html#createRequest">createRequest</a></li><li><a href="global.html#createTransaction">createTransaction</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#createUserChampion">createUserChampion</a></li><li><a href="global.html#createWallet">createWallet</a></li><li><a href="global.html#deleteTransactions">deleteTransactions</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#deleteUserChampions">deleteUserChampions</a></li><li><a href="global.html#deleteUserFriends">deleteUserFriends</a></li><li><a href="global.html#deleteUserPictures">deleteUserPictures</a></li><li><a href="global.html#deleteUserWallet">deleteUserWallet</a></li><li><a href="global.html#deleteUserWalletTransactions">deleteUserWalletTransactions</a></li><li><a href="global.html#generatePicture">generatePicture</a></li><li><a href="global.html#getAbilities">getAbilities</a></li><li><a href="global.html#getAllRequest">getAllRequest</a></li><li><a href="global.html#getChampion">getChampion</a></li><li><a href="global.html#getChampionAbilities">getChampionAbilities</a></li><li><a href="global.html#getChampions">getChampions</a></li><li><a href="global.html#getFriends">getFriends</a></li><li><a href="global.html#getNews">getNews</a></li><li><a href="global.html#getPatchnotes">getPatchnotes</a></li><li><a href="global.html#getRequest">getRequest</a></li><li><a href="global.html#getTransactions">getTransactions</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUserChampion">getUserChampion</a></li><li><a href="global.html#getUserChampions">getUserChampions</a></li><li><a href="global.html#getUserPictures">getUserPictures</a></li><li><a href="global.html#getUserWallet">getUserWallet</a></li><li><a href="global.html#getUsers">getUsers</a></li><li><a href="global.html#handleDisconnect">handleDisconnect</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#ownership">ownership</a></li><li><a href="global.html#saveSvg">saveSvg</a></li><li><a href="global.html#updateJWT">updateJWT</a></li><li><a href="global.html#updateUser">updateUser</a></li><li><a href="global.html#uploadImage">uploadImage</a></li><li><a href="global.html#uploadPicture">uploadPicture</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Fri Jun 23 2023 16:03:50 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

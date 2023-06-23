@@ -50,6 +50,7 @@ const filteredChampions = ref();
 const userInput = ref("");
 const userType = ref("");
 const loggedInUser = ref();
+const website = import.meta.env.VITE_API_BASE_URL
 
 onMounted(async () => {
   await login();
@@ -63,7 +64,7 @@ onMounted(async () => {
  * @returns {Promise<void>}
  */
 async function login(){
-  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/login', {
+  let test = await fetch(website+'/api/login', {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',
@@ -96,7 +97,7 @@ function filterChampions(){
  * @returns {Promise<void>}
  */
 async function getUserChampions(){
-  let test = await fetch(`https://cc221019-10110.node.fhstp.io/api/userChampions/${loggedInUser.value.id}`, {
+  let test = await fetch(website+`/api/userChampions/${loggedInUser.value.id}`, {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',

@@ -8,7 +8,7 @@
       <div class="col-span-8 md:col-span-2 bg-component_secondary_bcc rounded-[10px] shadow-lg shadow-black">
         <div class="p-8 h-full flex flex-col justify-between border-primary_bcc border-t-4 rounded-[10px] gap-8">
           <div>
-            <img :src="champion.championImagePath?`https://cc221019-10110.node.fhstp.io/${champion.championImagePath}`:'/assets/medium.png'" :alt="`Champion ${champion.championName} Picture`" class="w-full rounded-lg shadow-lg mb-8">
+            <img :src="champion.championImagePath?website+`/${champion.championImagePath}`:'/assets/medium.png'" :alt="`Champion ${champion.championName} Picture`" class="w-full rounded-lg shadow-lg mb-8">
             <div class="flex flex-col gap-4">
               <h2 class="text-3xl font-bold mb-1 border-primary_bcc border-b-2">{{champion.championName}}</h2>
               <p class="text-lg font-bold mb-4">{{champion.championDescription}}</p>
@@ -93,6 +93,7 @@ const champion = ref();
 const loggedInUser = ref();
 const showDialogBox = ref(false);
 const isOwned = ref(false);
+const website = import.meta.env.VITE_API_BASE_URL
 
 onMounted(async () => {
   await login();
@@ -106,7 +107,7 @@ onMounted(async () => {
  * Performs the login request and sets the user data.
  */
 async function login(){
-  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/login', {
+  let test = await fetch(website+'/api/login', {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',
@@ -123,7 +124,7 @@ async function login(){
  * Retrieves the champion data from the API.
  */
 async function getChampion(){
-  let test = await fetch(`https://cc221019-10110.node.fhstp.io/api/champions/${championID}`, {
+  let test = await fetch(website+`/api/champions/${championID}`, {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',
@@ -144,7 +145,7 @@ async function getChampion(){
  */
 async function buyChampion(){
   showDialogBox.value = false;
-  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/wallet/buy', {
+  let test = await fetch(website+'/api/wallet/buy', {
     method: 'POST',
     redirect: 'follow',
     credentials: 'include',
@@ -167,7 +168,7 @@ async function getUserChampion(){
   if(!loggedInUser.value){
     return;
   }
-  let test = await fetch(`https://cc221019-10110.node.fhstp.io/api/userChampions/`, {
+  let test = await fetch(website+`/api/userChampions/`, {
     method: 'POST',
     redirect: 'follow',
     credentials: 'include',

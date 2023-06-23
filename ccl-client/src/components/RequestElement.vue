@@ -5,7 +5,7 @@
 <template>
   <li class="flex items-center justify-between mb-2 cursor-pointer bg-component_secondary_bcc hover:bg-primary_bcc hover:text-component_secondary_bcc p-2 rounded-lg">
     <router-link  tabindex="100"  :to="`/users/${userID}`" class="flex w-full items-center">
-      <img :src="userPicturePath?`https://cc221019-10110.node.fhstp.io/${userPicturePath}`:'/assets/logo.svg'" :alt="`Request ${userName} Picture`"  class="w-12 h-12 rounded-full mr-4">
+      <img :src="userPicturePath?website+`/${userPicturePath}`:'/assets/logo.svg'" :alt="`Request ${userName} Picture`"  class="w-12 h-12 rounded-full mr-4">
       <span class="">{{props.userName}}</span>
     </router-link>
     <button tabindex="100"  @click="acceptRequest" class="bg-secondary_bcc hover:bg-tertiary_bcc text-white rounded-full w-10 h-10 flex items-center justify-center">
@@ -20,12 +20,12 @@ import {useRouter} from "vue-router";
 
 const props = defineProps(['userID', 'userName', 'userFriendID', 'userPicturePath']);
 const router = useRouter();
-
+const website = import.meta.env.VITE_API_BASE_URL
 /**
  * Accepts the friend request.
  */
 async function acceptRequest(){
-  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/friends/accept/', {
+  let test = await fetch(website+'/api/friends/accept/', {
     method: 'PUT',
     redirect: 'follow',
     credentials: 'include',

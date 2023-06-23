@@ -10,7 +10,7 @@
       data-te-carousel-item
       style="backface-visibility: hidden">
     <img
-        :src="'https://cc221019-10110.node.fhstp.io/'+newsImagePath"
+        :src="website+'/'+newsImagePath"
         class="block w-full"
         alt="Carousel Item" />
     <div
@@ -26,7 +26,7 @@
        data-te-carousel-item
        style="backface-visibility: hidden">
     <img
-        :src="'https://cc221019-10110.node.fhstp.io/'+newsImagePath"
+        :src="website+'/'+newsImagePath"
         class="block w-full"
         alt="Carousel Item" />
     <div
@@ -39,5 +39,6 @@
   </div>
 </template>
 <script setup>
+const website = import.meta.env.VITE_API_BASE_URL
 const props = defineProps(['main', 'newsTitle','newsContent', 'newsImagePath'])
 </script>

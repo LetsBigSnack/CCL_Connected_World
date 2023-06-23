@@ -6,7 +6,7 @@
   <div v-if="user" class="w-full mx-auto mt-10 px-4 max-w-4xl">
     <div class="bg-background_bcc rounded-lg p-6">
       <div class="flex flex-col md:flex-row items-center mb-8">
-        <img v-if="user"  :src="user.picture?`https://cc221019-10110.node.fhstp.io/${ user.picture}`:'/assets/logo.svg'" :alt="`User ${user.name} Avatar Profile Picture`" class="w-32 h-32 rounded-full border-2 border-component_secondary_bcc mb-4 md:mb-0">
+        <img v-if="user"  :src="user.picture?website+`/${ user.picture}`:'/assets/logo.svg'" :alt="`User ${user.name} Avatar Profile Picture`" class="w-32 h-32 rounded-full border-2 border-component_secondary_bcc mb-4 md:mb-0">
         <div class="md:ml-4">
           <h1 v-if="user" class="text-4xl">{{user.name}}</h1>
           <p  v-if="user" class="text-content_text">{{user.email}}</p>
@@ -106,6 +106,7 @@ const newPassword = ref();
 const confNewPassword = ref();
 const profileImageFile = ref(null);
 const showDialogBox = ref(false);
+const website = import.meta.env.VITE_API_BASE_URL
 
 onMounted(() => {
   login();
@@ -129,7 +130,7 @@ function handleFileChange(event){
  * Performs the login request and sets the user data.
  */
 async function login(){
-  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/login', {
+  let test = await fetch(website+'/api/login', {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',
@@ -164,7 +165,7 @@ async function checkForm(){
  * Checks the form inputs and performs the profile update.
  */
 async function updateProfile(){
-  let test = await fetch(`https://cc221019-10110.node.fhstp.io/api/users/${user.value.id}`, {
+  let test = await fetch(website+`/api/users/${user.value.id}`, {
     method: 'PUT',
     redirect: 'follow',
     credentials: 'include',
@@ -203,7 +204,7 @@ async function updateProfilePicture(){
   const formData = new FormData();
   formData.append('image', profileImageFile.value);
 
-  let test = await fetch(`https://cc221019-10110.node.fhstp.io/api/users/${user.value.id}/picture`, {
+  let test = await fetch(website+`/api/users/${user.value.id}/picture`, {
     method: 'POST',
     redirect: 'follow',
     credentials: 'include',
@@ -225,7 +226,7 @@ async function updateProfilePicture(){
 async function deleteUserProfile(){
 
   showDialogBox.value = false;
-  let test = await fetch(`https://cc221019-10110.node.fhstp.io/api/users/${user.value.id}`, {
+  let test = await fetch(website+`/api/users/${user.value.id}`, {
     method: 'DELETE',
     redirect: 'follow',
     credentials: 'include',
@@ -244,7 +245,7 @@ async function deleteUserProfile(){
  * Performs the user logout.
  */
 async function logout(){
-  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/logout', {
+  let test = await fetch(website+'/api/logout', {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',

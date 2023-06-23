@@ -43,7 +43,7 @@
 
         <button :class="{ hidden: (!user) }" type="button" class="flex mr-3 text-sm rounded-full md:mr-0 focus:ring-4 focus:ring-component_secondary_bcc" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom" tabindex="8">
           <span class="sr-only">Open user menu</span>
-          <img v-if="user" class="w-12 h-12 rounded-full border-2 border-primary_bcc" :src="user.picture?`https://cc221019-10110.node.fhstp.io/${ user.picture}`:'/assets/logo.svg'" :alt="`${user.name} Avatar`">
+          <img v-if="user" class="w-12 h-12 rounded-full border-2 border-primary_bcc" :src="user.picture?website+`/${ user.picture}`:'/assets/logo.svg'" :alt="`${user.name} Avatar`">
         </button>
         <div :class="{ hidden: (!user) }" class="z-50 hidden my-4 text-base list-none divide-y divide-gray-100 rounded-lg shadow bg-component_secondary_bcc border-primary_bcc border-2" id="user-dropdown">
           <div class="px-4 py-3">
@@ -85,7 +85,7 @@ const route = useRoute()
 const router = useRouter()
 const errors = ref();
 const user = ref();
-
+const website = import.meta.env.VITE_API_BASE_URL
 
 watch(route, () => {
   // This will run every time the route changes.
@@ -102,7 +102,7 @@ onMounted(() => {
  * Performs the login request and sets the user data.
  */
 async function login(){
-  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/login', {
+  let test = await fetch(website+'/api/login', {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',
@@ -123,7 +123,7 @@ async function login(){
  * Performs the logout request and sets the user data.
  */
 async function logout(){
-  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/logout', {
+  let test = await fetch(website+'/api/logout', {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',

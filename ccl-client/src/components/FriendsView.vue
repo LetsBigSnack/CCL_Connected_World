@@ -16,6 +16,7 @@ import FriendsElement from "./FriendsElement.vue";
 const props = defineProps(['userID']);
 import {onMounted, ref} from "vue";
 
+const website = import.meta.env.VITE_API_BASE_URL
 const friends = ref();
 
 
@@ -29,7 +30,7 @@ onMounted(() => {
  * @returns {Promise<void>}
  */
 async function getFriends(){
-  let test = await fetch(`https://cc221019-10110.node.fhstp.io/api/friends/${props.userID}`, {
+  let test = await fetch(website+`/api/friends/${props.userID}`, {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',

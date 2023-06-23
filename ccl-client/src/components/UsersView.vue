@@ -21,6 +21,7 @@ const errors = ref();
 const users = ref();
 const filteredUsers = ref();
 const userInput = ref("");
+const website = import.meta.env.VITE_API_BASE_URL
 
 
 onMounted(() => {
@@ -43,7 +44,7 @@ function filterUsers(){
  * Retrieves the list of users from the API.
  */
 async function getUsers(){
-  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/users', {
+  let test = await fetch(website+'/api/users', {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/userFriendsController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/userFriendsController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//// Modules
+
+//// Models
+const userFriendModel = require("../models/userFriendModel");
+const userModel = require("../models/userModel");
+//// Functions
+
+/**
+ * Retrieves the friends of a specific user.
+ * @param {object} req - The HTTP request.
+ * @param {object} res - The HTTP response.
+ * @param {function} next - The next middleware function.
+ */
+function getFriends(req, res, next) {
+    userFriendModel.getFriends(parseInt(req.params.userID))
+        .then(friends => {
+            userModel.getUsers()
+                .then(users => {
+                    friends.forEach((element) => {
+                        let otherUserID = 0;
+                        if(element.userID_1 === parseInt(req.params.userID)){
+                           otherUserID = element.userID_2;
+
+                        }else{
+                            otherUserID = element.userID_1;
+                        }
+                        element.friendPicturePath = users.find(user => user.userID === otherUserID).userPicturePath;
+                        element.friendID = otherUserID;
+                        element.friendName = users.find(user => user.userID === otherUserID).userName;
+                    });
+                    let jsonReturnObject = {
+                        success : true,
+                        data: friends
+                    }
+                    res.status(200);
+                    res.send(jsonReturnObject);
+
+                })
+                .catch(error => {
+                    let jsonReturnObject = {
+                        success : false,
+                        error: error
+                    }
+                    res.status(500);
+                    res.send(jsonReturnObject);
+                });
+        })
+        .catch(error => {
+            let jsonReturnObject = {
+                success : false,
+                error: error
+            }
+            res.status(500);
+            res.send(jsonReturnObject);
+        });
+}
+
+/**
+ * Retrieves the friend requests of a specific user.
+ * @param {object} req - The HTTP request.
+ * @param {object} res - The HTTP response.
+ * @param {function} next - The next middleware function.
+ */
+function getRequest(req, res, next) {
+    userFriendModel.getRequest(parseInt(req.params.userID))
+        .then(request => {
+            userModel.getUsers()
+                .then(users =>  {
+                    request.forEach((element) => {
+                        element.requestID = element.userID_1;
+                        element.requestName = users.find(user => user.userID === element.userID_1).userName;
+                        element.requestPicturePath = users.find(user => user.userID === element.userID_1).userPicturePath;
+                    });
+                    let jsonReturnObject = {
+                        success : true,
+                        data: request
+                    }
+                    res.status(200);
+                    res.send(jsonReturnObject);
+
+                })
+                .catch(error => {
+                    let jsonReturnObject = {
+                        success : false,
+                        error: error
+                    }
+                    res.status(500);
+                    res.send(jsonReturnObject);
+                });
+
+        })
+        .catch(error => {
+            ;
+            let jsonReturnObject = {
+                success : false,
+                error: error
+            }
+            res.status(500);
+            res.send(jsonReturnObject);
+        });
+}
+
+/**
+ * Retrieves all friend requests of a specific user.
+ * @param {object} req - The HTTP request.
+ * @param {object} res - The HTTP response.
+ * @param {function} next - The next middleware function.
+ */
+function getAllRequest(req,res,next){
+
+    userFriendModel.getAllRequest(parseInt(req.params.userID)).then(response => {
+
+        let jsonReturnObject = {
+            success : true,
+            data: response
+        }
+        res.status(200);
+        res.send(jsonReturnObject);
+
+    })
+        .catch(error => {
+
+            let jsonReturnObject = {
+                success : false,
+                error: error
+            }
+            res.status(500);
+            res.send(jsonReturnObject);
+        });
+}
+
+/**
+ * Creates a friend request between two users.
+ * @param {object} req - The HTTP request.
+ * @param {object} res - The HTTP response.
+ * @param {function} next - The next middleware function.
+ */
+async function createRequest(req, res, next) {
+
+    if(parseInt(req.user.id) === parseInt(req.body.userID_1) &amp;&amp;  parseInt(req.user.id) === parseInt(req.body.userID_2)){
+        let jsonReturnObject = {
+            success : false,
+            error: "Can't add yourself as a friend"
+        }
+        res.status(500);
+        return res.send(jsonReturnObject);
+    }
+
+
+    await Promise.all([userFriendModel.getFriends(parseInt(req.user.id)),  userFriendModel.getAllRequest(parseInt(req.user.id))]).
+    then(values=> {
+        let friends = values[0].find(element =>
+            (element.userID_1 === parseInt(req.user.id) &amp;&amp;  element.userID_2 === parseInt(req.body.userID_2))
+            || (element.userID_2 === parseInt(req.user.id) &amp;&amp;  element.userID_1 === parseInt(req.body.userID_2)));
+
+        let request = values[1].find(element =>
+            (element.userID_1 === parseInt(req.user.id) &amp;&amp;  element.userID_2 === parseInt(req.body.userID_2))
+            || (element.userID_2 === parseInt(req.user.id) &amp;&amp;  element.userID_1 === parseInt(req.body.userID_2)));
+
+        if(friends || request){
+            ;
+            let jsonReturnObject = {
+                success : false,
+                error: "You are either already friends or there is a pending request"
+            }
+            res.status(500);
+            return res.send(jsonReturnObject);
+        }else{
+            userFriendModel.createRequest(req.body)
+                .then(response => {
+
+                    let jsonReturnObject = {
+                        success : true,
+                        data: response
+                    }
+                    res.status(200);
+                    res.send(jsonReturnObject);
+
+                })
+                .catch(error => {
+
+                    let jsonReturnObject = {
+                        success : false,
+                        error: error
+                    }
+                    res.status(500);
+                    res.send(jsonReturnObject);
+                });
+        }
+    })
+    .catch(error => {
+        ;
+        let jsonReturnObject = {
+            success : false,
+            error: error
+        }
+        res.status(500);
+        return res.send(jsonReturnObject);
+    });
+
+
+}
+
+
+/**
+ * Accepts a friend request.
+ * @param {object} req - The HTTP request.
+ * @param {object} res - The HTTP response.
+ * @param {function} next - The next middleware function.
+ */
+function acceptRequest(req, res, next) {
+    userFriendModel.acceptRequest(req.body)
+        .then(response => {
+            let jsonReturnObject = {
+                success : true,
+                data: response
+            }
+            res.status(200);
+            res.send(jsonReturnObject);
+
+        })
+        .catch(error => {
+            let jsonReturnObject = {
+                success : false,
+                error: error
+            }
+            res.status(500);
+            res.send(jsonReturnObject);
+        });
+}
+
+
+
+//// Exports
+module.exports = {
+    getFriends,
+    getRequest,
+    createRequest,
+    acceptRequest,
+    getAllRequest
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#acceptRequest">acceptRequest</a></li><li><a href="global.html#addFunds">addFunds</a></li><li><a href="global.html#authenticateJWT">authenticateJWT</a></li><li><a href="global.html#authenticateUser">authenticateUser</a></li><li><a href="global.html#buyChampion">buyChampion</a></li><li><a href="global.html#changeAmount">changeAmount</a></li><li><a href="global.html#checkAccess">checkAccess</a></li><li><a href="global.html#checkFunds">checkFunds</a></li><li><a href="global.html#checkPassword">checkPassword</a></li><li><a href="global.html#createRequest">createRequest</a></li><li><a href="global.html#createTransaction">createTransaction</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#createUserChampion">createUserChampion</a></li><li><a href="global.html#createWallet">createWallet</a></li><li><a href="global.html#deleteTransactions">deleteTransactions</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#deleteUserChampions">deleteUserChampions</a></li><li><a href="global.html#deleteUserFriends">deleteUserFriends</a></li><li><a href="global.html#deleteUserPictures">deleteUserPictures</a></li><li><a href="global.html#deleteUserWallet">deleteUserWallet</a></li><li><a href="global.html#deleteUserWalletTransactions">deleteUserWalletTransactions</a></li><li><a href="global.html#generatePicture">generatePicture</a></li><li><a href="global.html#getAbilities">getAbilities</a></li><li><a href="global.html#getAllRequest">getAllRequest</a></li><li><a href="global.html#getChampion">getChampion</a></li><li><a href="global.html#getChampionAbilities">getChampionAbilities</a></li><li><a href="global.html#getChampions">getChampions</a></li><li><a href="global.html#getFriends">getFriends</a></li><li><a href="global.html#getNews">getNews</a></li><li><a href="global.html#getPatchnotes">getPatchnotes</a></li><li><a href="global.html#getRequest">getRequest</a></li><li><a href="global.html#getTransactions">getTransactions</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUserChampion">getUserChampion</a></li><li><a href="global.html#getUserChampions">getUserChampions</a></li><li><a href="global.html#getUserPictures">getUserPictures</a></li><li><a href="global.html#getUserWallet">getUserWallet</a></li><li><a href="global.html#getUsers">getUsers</a></li><li><a href="global.html#handleDisconnect">handleDisconnect</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#ownership">ownership</a></li><li><a href="global.html#saveSvg">saveSvg</a></li><li><a href="global.html#updateJWT">updateJWT</a></li><li><a href="global.html#updateUser">updateUser</a></li><li><a href="global.html#uploadImage">uploadImage</a></li><li><a href="global.html#uploadPicture">uploadPicture</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Fri Jun 23 2023 16:03:50 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

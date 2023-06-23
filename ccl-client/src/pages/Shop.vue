@@ -50,6 +50,8 @@
 import ChampionElement from "../components/ChampionElement.vue";
 import {onMounted, ref} from "vue";
 
+const website = import.meta.env.VITE_API_BASE_URL
+
 /**
  * The champion data.
  * @type {import("vue").Ref<Object>}
@@ -116,7 +118,7 @@ function filterChampions(){
  * Fetches the champion data from the server.
  */
 async function getChampions(){
-  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/champions/', {
+  let test = await fetch(website+'/api/champions/', {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',

@@ -49,6 +49,7 @@ const router = useRouter()
 const username = ref("");
 const password = ref("");
 const errors = ref();
+const website = import.meta.env.VITE_API_BASE_URL
 
 /**
  * The currently logged-in user data.
@@ -65,7 +66,7 @@ onMounted(() => {
  * @returns {Promise<void>}
  */
 async function loginGET(){
-  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/login', {
+  let test = await fetch(website+'/api/login', {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',
@@ -82,7 +83,7 @@ async function loginGET(){
  * @returns {Promise<void>}
  */
 async function login(){
-  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/login', {
+  let test = await fetch(website+'/api/login', {
     method: 'POST',
     redirect: 'follow',
     credentials: 'include',

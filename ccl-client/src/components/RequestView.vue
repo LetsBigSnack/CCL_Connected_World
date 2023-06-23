@@ -14,7 +14,7 @@ import {onMounted, ref} from "vue";
 import RequestElement from "./RequestElement.vue";
 
 const requests = ref();
-
+const website = import.meta.env.VITE_API_BASE_URL
 
 onMounted(() => {
   getRequests();
@@ -24,7 +24,7 @@ onMounted(() => {
  * Retrieves the friend requests from the API.
  */
 async function getRequests(){
-  let test = await fetch(`https://cc221019-10110.node.fhstp.io/api/friends/${props.userID}/open`, {
+  let test = await fetch(website+`/api/friends/${props.userID}/open`, {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',

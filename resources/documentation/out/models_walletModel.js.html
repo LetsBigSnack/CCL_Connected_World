@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/walletModel.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/walletModel.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//// Modules
+const transactionModel = require('../models/transactionModel');
+//// Services
+const db = require('../services/database.js').config;
+
+//// Functions
+
+/**
+ * Retrieves the wallet of a specific user from the database.
+ * @param {number} userID - The ID of the user.
+ * @returns {Promise&lt;Object>} A promise that resolves to the user wallet object.
+ * @rejects {Object} An object containing the status and error message if an error occurs during the retrieval process or if no user wallet with the specified ID is found.
+ */
+
+let getUserWallet = (userID) => new Promise((resolve, reject) => {
+    let sql = "SELECT * FROM userWallets WHERE userID = "+db.escape(userID);
+
+    db.query(sql, function (err, userWallets, fields) {
+        if (err) {
+            return reject({
+                status: 500,
+                msg: err
+            });
+        }else{
+            if(userWallets[0]){
+                resolve(userWallets[0])
+            }else{
+                reject({
+                    status: 404,
+                    msg: "No userWallet with that ID was found"
+                });
+            }
+        }
+    })
+});
+
+
+/**
+ * Changes the amount of a user's wallet in the database.
+ * @param {Object} buyData - The data for the wallet amount change.
+ * @param {number} buyData.userID - The ID of the user.
+ * @param {number} buyData.walletAmount - The new wallet amount.
+ * @returns {Promise&lt;Object>} A promise that resolves to the updated buyData object.
+ * @rejects {Object} An object containing the status and error message if an error occurs during the update process.
+ */
+
+let changeAmount = (buyData) => new Promise((resolve, reject) => {
+    let sql = "UPDATE userWallets " +
+        "SET userWalletAmount = "+ db.escape(parseInt(buyData.walletAmount))+" "+
+        "WHERE userID = "+ db.escape(parseInt(buyData.userID));
+
+    db.query(sql, function (err, result, fields){
+        if(err) {
+            reject({
+                status: 500,
+                msg: err
+            });
+        }else{
+            resolve(buyData);
+        }
+    })
+});
+
+/**
+ * Creates a new wallet for a user in the database.
+ * @param {number} userID - The ID of the user.
+ * @returns {Promise&lt;Object>} A promise that resolves to the result of the wallet creation.
+ * @rejects {Object} An object containing the status and error message if an error occurs during the creation process.
+ */
+let createWallet = (userID) => new Promise((resolve, reject) => {
+    let sql = "INSERT INTO userWallets " +
+        "(userID, userWalletAmount) " +
+        "VALUES ("+db.escape(userID)+", 500);"
+
+    db.query(sql, function (err, result, fields){
+        if(err) {
+            reject({
+                status: 500,
+                msg: err
+            });
+        }else{
+            resolve(result);
+        }
+    })
+});
+
+/**
+ * Deletes wallet transactions and the user wallet for a specific user from the database.
+ * @param {number} userID - The ID of the user.
+ * @returns {Promise&lt;Object>} A promise that resolves to the deleted wallet transactions.
+ * @rejects {Object} An object containing the status and error message if an error occurs during the deletion process or if no user wallet with the specified ID is found.
+ */
+let deleteUserWalletTransactions = (userID) => new Promise(async (resolve, reject) => {
+    let sql = "SELECT * FROM userWallets WHERE userID = " + db.escape(userID);
+    let userWallet = {};
+    await db.query(sql, function (err, userWallets, fields) {
+        if (err) {
+            return reject({
+                status: 500,
+                msg: err
+            });
+        } else {
+            if (userWallets[0]) {
+                userWallet = userWallets[0];
+                transactionModel.deleteTransactions(userWallet.userWalletID).then(async data => {
+                    await deleteUserWallet(userID)
+                    resolve(data)
+                }).catch(error => reject({
+                    status: 500,
+                    msg: error
+                }));
+            } else {
+                reject({
+                    status: 404,
+                    msg: "No userWallet with that ID was found"
+                });
+            }
+        }
+    })
+
+});
+
+/**
+ * Deletes the user wallet for a specific user from the database.
+ * @param {number} userID - The ID of the user.
+ * @returns {Promise&lt;Object>} A promise that resolves to the deleted user wallet object.
+ * @rejects {Object} An object containing the status and error message if an error occurs during the deletion process or if no user wallet with the specified ID is found.
+ */
+let deleteUserWallet = (userID) => new Promise(async (resolve, reject) => {
+    let sql = "DELETE FROM userWallets WHERE userID = " + db.escape(userID);
+    db.query(sql, function (err, userWallets, fields) {
+        if (err) {
+            return reject({
+                status: 500,
+                msg: err
+            });
+        } else {
+            resolve(userWallets)
+        }
+    })
+});
+
+
+//// Exports
+module.exports = {
+    getUserWallet,
+    changeAmount,
+    createWallet,
+    deleteUserWalletTransactions,
+    deleteUserWallet
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#acceptRequest">acceptRequest</a></li><li><a href="global.html#addFunds">addFunds</a></li><li><a href="global.html#authenticateJWT">authenticateJWT</a></li><li><a href="global.html#authenticateUser">authenticateUser</a></li><li><a href="global.html#buyChampion">buyChampion</a></li><li><a href="global.html#changeAmount">changeAmount</a></li><li><a href="global.html#checkAccess">checkAccess</a></li><li><a href="global.html#checkFunds">checkFunds</a></li><li><a href="global.html#checkPassword">checkPassword</a></li><li><a href="global.html#createRequest">createRequest</a></li><li><a href="global.html#createTransaction">createTransaction</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#createUserChampion">createUserChampion</a></li><li><a href="global.html#createWallet">createWallet</a></li><li><a href="global.html#deleteTransactions">deleteTransactions</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#deleteUserChampions">deleteUserChampions</a></li><li><a href="global.html#deleteUserFriends">deleteUserFriends</a></li><li><a href="global.html#deleteUserPictures">deleteUserPictures</a></li><li><a href="global.html#deleteUserWallet">deleteUserWallet</a></li><li><a href="global.html#deleteUserWalletTransactions">deleteUserWalletTransactions</a></li><li><a href="global.html#generatePicture">generatePicture</a></li><li><a href="global.html#getAbilities">getAbilities</a></li><li><a href="global.html#getAllRequest">getAllRequest</a></li><li><a href="global.html#getChampion">getChampion</a></li><li><a href="global.html#getChampionAbilities">getChampionAbilities</a></li><li><a href="global.html#getChampions">getChampions</a></li><li><a href="global.html#getFriends">getFriends</a></li><li><a href="global.html#getNews">getNews</a></li><li><a href="global.html#getPatchnotes">getPatchnotes</a></li><li><a href="global.html#getRequest">getRequest</a></li><li><a href="global.html#getTransactions">getTransactions</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUserChampion">getUserChampion</a></li><li><a href="global.html#getUserChampions">getUserChampions</a></li><li><a href="global.html#getUserPictures">getUserPictures</a></li><li><a href="global.html#getUserWallet">getUserWallet</a></li><li><a href="global.html#getUsers">getUsers</a></li><li><a href="global.html#handleDisconnect">handleDisconnect</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#ownership">ownership</a></li><li><a href="global.html#saveSvg">saveSvg</a></li><li><a href="global.html#updateJWT">updateJWT</a></li><li><a href="global.html#updateUser">updateUser</a></li><li><a href="global.html#uploadImage">uploadImage</a></li><li><a href="global.html#uploadPicture">uploadPicture</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Fri Jun 23 2023 16:03:50 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

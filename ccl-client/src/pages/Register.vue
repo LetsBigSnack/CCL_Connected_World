@@ -76,7 +76,7 @@ const conf_password = ref("");
 const terms_conditions = ref();
 const errors = ref();
 
-
+const website = import.meta.env.VITE_API_BASE_URL
 
 
 /**
@@ -94,7 +94,7 @@ onMounted(() => {
  * @returns {Promise<void>}
  */
 async function login(){
-  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/login', {
+  let test = await fetch(website+'/api/login', {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',
@@ -137,7 +137,7 @@ async function checkForm(){
  * Performs the registration process.
  */
 async function register(){
-  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/users', {
+  let test = await fetch(website+'/api/users', {
     method: 'POST',
     redirect: 'follow',
     credentials: 'include',

@@ -103,7 +103,7 @@ const filteredTransactions = ref();
  * @type {import("vue-router").Router}
  */
 const router = useRouter();
-
+const website = import.meta.env.VITE_API_BASE_URL
 
 onMounted(async () => {
   initTE();
@@ -119,7 +119,7 @@ onMounted(async () => {
  * @returns {Promise<void>}
  */
 async function login(){
-  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/login', {
+  let test = await fetch(website+'/api/login', {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',
@@ -137,7 +137,7 @@ async function login(){
  * @returns {Promise<void>}
  */
 async function getWallet(){
-  let test = await fetch(`https://cc221019-10110.node.fhstp.io/api/wallet/${loggedInUser.value.id}`, {
+  let test = await fetch(website+`/api/wallet/${loggedInUser.value.id}`, {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',
@@ -155,7 +155,7 @@ async function getWallet(){
  * @returns {Promise<void>}
  */
 async function getTransaction(){
-  let test = await fetch(`https://cc221019-10110.node.fhstp.io/api/wallet/transactions/${wallet.value.userWalletID}`, {
+  let test = await fetch(website+`/api/wallet/transactions/${wallet.value.userWalletID}`, {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',
@@ -241,7 +241,7 @@ function applyFilter(){
  * @returns {Promise<void>}
  */
 async function addFunds(amount){
-  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/wallet/add', {
+  let test = await fetch(website+'/api/wallet/add', {
     method: 'POST',
     redirect: 'follow',
     credentials: 'include',

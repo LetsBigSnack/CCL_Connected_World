@@ -20,6 +20,7 @@ import FriendsView from "../components/FriendsView.vue";
 import RequestView from "../components/RequestView.vue";
 import UsersView from "../components/UsersView.vue";
 import {onMounted, ref} from "vue";
+const website = import.meta.env.VITE_API_BASE_URL
 
 
 /**
@@ -43,7 +44,7 @@ onMounted(() => {
  * @returns {Promise<void>}
  */
 async function login(){
-  let test = await fetch('https://cc221019-10110.node.fhstp.io/api/login', {
+  let test = await fetch(website+'/api/login', {
     method: 'GET',
     redirect: 'follow',
     credentials: 'include',

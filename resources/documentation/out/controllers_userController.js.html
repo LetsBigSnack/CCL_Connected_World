@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/userController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/userController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//// Modules
+const { validationResult } = require('express-validator');
+//// Models
+const userModel = require("../models/userModel");
+const userChampionModel = require("../models/userChampionModel");
+const userPictureModel = require("../models/userPictureModel");
+const userWalletModel = require("../models/walletModel");
+const userFriendModel = require("../models/userFriendModel");
+const {authenticateUser, updateJWT, checkAccess} = require("../services/authentification");
+//// Functions
+
+/**
+ * Retrieves all users from the database.
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @param {function} next - The possible middleware callback.
+ */
+function getUsers(req, res, next) {
+    userModel.getUsers()
+        .then(users => {
+            let jsonReturnObject = {
+                success : true,
+                data: users
+            }
+            res.status(200);
+            res.send(jsonReturnObject);
+
+        })
+        .catch(error => {
+            let jsonReturnObject = {
+                success : false,
+                error: error
+            }
+            res.status(500);
+            res.send(jsonReturnObject);
+        });
+}
+
+/**
+ * Retrieves a specific user from the database.
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @param {function} next - The possible middleware callback.
+ */
+function getUser(req, res, next) {
+    let userID = parseInt(req.params.userID);
+    userModel.getUser(userID)
+        .then(user => {
+            let jsonReturnObject = {
+                success : true,
+                data: user
+            }
+            res.status(200);
+            res.send(jsonReturnObject);
+
+        })
+        .catch(error => {
+            let jsonReturnObject = {
+                success : false,
+                error: error.msg
+            }
+            res.status(error.status);
+            res.send(jsonReturnObject);
+        });
+}
+
+/**
+ * Creates a new user in the database.
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @param {function} next - The possible middleware callback.
+ */
+function createUser(req, res, next) {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        let jsonReturnObject = {
+            success : false,
+            error: errors.errors
+        }
+        res.status(400);
+        return res.send(jsonReturnObject);
+    }
+
+    userModel.createUser(req.body)
+        .then(async userID => {
+
+            await userModel.generatePicture(userID).then();
+            await userPictureModel.uploadPicture(userID, `userImages/${userID}.svg`).then();
+            await userWalletModel.createWallet(userID).then();
+
+            userModel.getUsers()
+                .then(async users => {
+                    ;
+                    await authenticateUser(req.body, users, res)
+                })
+                .catch(error => {
+                    let jsonReturnObject = {
+                        success: false,
+                        error: error.msg
+                    }
+                    res.status(error.status);
+                    res.send(jsonReturnObject);
+                });
+        })
+        .catch(error => {
+            let jsonReturnObject = {
+                success : false,
+                error: error.msg
+            }
+            res.status(error.status);
+            res.send(jsonReturnObject);
+        });
+}
+
+
+/**
+ * Updates a user in the database.
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @param {function} next - The possible middleware callback.
+ */
+function updateUser(req,res,next){
+
+    if(!req.user){
+        let jsonReturnObject = {
+            success : false,
+            error: "No User"
+        }
+        res.status(402);
+        return res.send(jsonReturnObject);
+    }
+
+    let hasAccess = checkAccess(req.user.role, parseInt(req.user.id), parseInt(req.params.userID));
+
+    if(!hasAccess){
+        let jsonReturnObject = {
+            success : false,
+            error: "No Access"
+        }
+        res.status(403);
+        return res.send(jsonReturnObject);
+    }
+
+    userModel.updateUser(req.body, parseInt(req.params.userID))
+        .then(async users => {
+            ;
+            userModel.getUser(parseInt(req.params.userID)).then(user => {
+                    updateJWT(res, user)
+                    let jsonReturnObject = {
+                        success : true,
+                        data: "User updated"
+                    }
+                    res.status(200);
+                    res.send(jsonReturnObject);
+                }
+            ).catch(error => {
+                ;
+                let jsonReturnObject = {
+                    success : false,
+                    error: error.msg
+                }
+                res.status(error.status);
+                res.send(jsonReturnObject);
+            })
+        })
+        .catch(error => {
+            ;
+            let jsonReturnObject = {
+                success : false,
+                error: error.msg
+            }
+            res.status(error.status);
+            res.send(jsonReturnObject);
+        });
+}
+
+/**
+ * Deletes a user from the database.
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @param {function} next - The possible middleware callback.
+ */
+function deleteUser(req,res,next){
+
+    if(!req.user){
+        let jsonReturnObject = {
+            success : false,
+            error: "No User"
+        }
+        res.status(402);
+        return res.send(jsonReturnObject);
+    }
+
+    let hasAccess = checkAccess(req.user.role, parseInt(req.user.id), parseInt(req.params.userID));
+
+    if(!hasAccess){
+        let jsonReturnObject = {
+            success : false,
+            error: "No Access"
+        }
+        res.status(403);
+        return res.send(jsonReturnObject);
+    }
+
+
+    let userID = parseInt(req.params.userID);
+
+    Promise.all([
+        userPictureModel.deleteUserPictures(userID),
+        userFriendModel.deleteUserFriends(userID),
+        userChampionModel.deleteUserChampions(userID),
+        userWalletModel.deleteUserWalletTransactions(userID)
+    ])
+        .then((values) => {
+            userModel.deleteUser(userID)
+                .then(msg => {
+                    let jsonReturnObject = {
+                        success : true,
+                        data: msg
+                    }
+                    res.status(200);
+                    res.send(jsonReturnObject);
+
+                })
+                .catch(error => {
+                    let jsonReturnObject = {
+                        success : false,
+                        error: error.msg
+                    }
+                    res.status(error.status);
+                    res.send(jsonReturnObject);
+                });
+        } )
+        .catch(error => {
+            let jsonReturnObject = {
+                success : false,
+                error: error.msg
+            }
+            res.status(error.status);
+            res.send(jsonReturnObject);
+        });
+}
+
+/**
+ * Uploads an image for a user.
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @param {function} next - The possible middleware callback.
+ */
+
+async function uploadImage(req,res,next){
+    try{
+        if(!req.files){
+            let jsonReturnObject = {
+                success : false,
+                error: "No file was send"
+            }
+            res.status(400);
+            res.send(jsonReturnObject);
+        }else{
+            let image = req.files.image;
+            if(!image){
+                let jsonReturnObject = {
+                    success : false,
+                    error: "No picture was specified"
+                }
+                res.status(400);
+                res.send(jsonReturnObject);
+            }else{
+                const validImageTypes = ['image/gif', 'image/jpeg', 'image/png']
+                if(validImageTypes.includes(image.mimetype)){
+                    //TODO change file extension
+                    let filename = './public/userImages/'+req.params.userID + '.jpg';
+                    await image.mv(filename);
+                    ;
+                    userPictureModel.uploadPicture(parseInt(req.params.userID), "userImages/"+req.params.userID + ".jpg")
+                        .then(userPicture => {
+                            res.send({
+                                success : true,
+                                data: {
+                                    name: filename,
+                                    size: image.size
+                                }
+                            });
+                        })
+                        .catch(error => {
+                            let jsonReturnObject = {
+                                success : false,
+                                error: error
+                            }
+                            res.status(500);
+                            res.send(jsonReturnObject);
+                        });
+
+                }else{
+                    let jsonReturnObject = {
+                        success : false,
+                        error: "Picture was the wrong file extension"
+                    }
+                    res.status(400);
+                    res.send(jsonReturnObject);
+                }
+            }
+        }
+    }catch (error){
+        let jsonReturnObject = {
+            success : false,
+            error: error
+        }
+        res.status(500);
+        res.send(jsonReturnObject);
+    }
+
+}
+
+/**
+ * Authenticates a user and generates a JWT token.
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @param {function} next - The possible middleware callback.
+ */
+function login(req,res,next){
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        let jsonReturnObject = {
+            success : false,
+            error: errors.errors
+        }
+        res.status(400);
+
+        return res.send(jsonReturnObject);
+    }else{
+        ;
+        userModel.getUsers().then( (users) => {
+            authenticateUser(req.body, users, res);
+        }).catch(error => {
+            let jsonReturnObject = {
+                success : false,
+                error: error
+            }
+            res.status(500);
+            res.send(jsonReturnObject);
+        });
+    }
+}
+
+
+//// Exports
+module.exports = {
+    getUsers,
+    getUser,
+    createUser,
+    updateUser,
+    deleteUser,
+    uploadImage,
+    login
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#acceptRequest">acceptRequest</a></li><li><a href="global.html#addFunds">addFunds</a></li><li><a href="global.html#authenticateJWT">authenticateJWT</a></li><li><a href="global.html#authenticateUser">authenticateUser</a></li><li><a href="global.html#buyChampion">buyChampion</a></li><li><a href="global.html#changeAmount">changeAmount</a></li><li><a href="global.html#checkAccess">checkAccess</a></li><li><a href="global.html#checkFunds">checkFunds</a></li><li><a href="global.html#checkPassword">checkPassword</a></li><li><a href="global.html#createRequest">createRequest</a></li><li><a href="global.html#createTransaction">createTransaction</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#createUserChampion">createUserChampion</a></li><li><a href="global.html#createWallet">createWallet</a></li><li><a href="global.html#deleteTransactions">deleteTransactions</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#deleteUserChampions">deleteUserChampions</a></li><li><a href="global.html#deleteUserFriends">deleteUserFriends</a></li><li><a href="global.html#deleteUserPictures">deleteUserPictures</a></li><li><a href="global.html#deleteUserWallet">deleteUserWallet</a></li><li><a href="global.html#deleteUserWalletTransactions">deleteUserWalletTransactions</a></li><li><a href="global.html#generatePicture">generatePicture</a></li><li><a href="global.html#getAbilities">getAbilities</a></li><li><a href="global.html#getAllRequest">getAllRequest</a></li><li><a href="global.html#getChampion">getChampion</a></li><li><a href="global.html#getChampionAbilities">getChampionAbilities</a></li><li><a href="global.html#getChampions">getChampions</a></li><li><a href="global.html#getFriends">getFriends</a></li><li><a href="global.html#getNews">getNews</a></li><li><a href="global.html#getPatchnotes">getPatchnotes</a></li><li><a href="global.html#getRequest">getRequest</a></li><li><a href="global.html#getTransactions">getTransactions</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUserChampion">getUserChampion</a></li><li><a href="global.html#getUserChampions">getUserChampions</a></li><li><a href="global.html#getUserPictures">getUserPictures</a></li><li><a href="global.html#getUserWallet">getUserWallet</a></li><li><a href="global.html#getUsers">getUsers</a></li><li><a href="global.html#handleDisconnect">handleDisconnect</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#ownership">ownership</a></li><li><a href="global.html#saveSvg">saveSvg</a></li><li><a href="global.html#updateJWT">updateJWT</a></li><li><a href="global.html#updateUser">updateUser</a></li><li><a href="global.html#uploadImage">uploadImage</a></li><li><a href="global.html#uploadPicture">uploadPicture</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Fri Jun 23 2023 16:03:50 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
